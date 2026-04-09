@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/fee_provider.dart';
 import '../../../core/providers/student_provider.dart';
@@ -20,6 +21,7 @@ class FeeHistoryScreen extends StatefulWidget {
 class _FeeHistoryScreenState extends State<FeeHistoryScreen> {
   String? _selectedStudentId;
   String _search = '';
+  bool _showFuture = false;
 
   @override
   void initState() {
@@ -38,22 +40,24 @@ class _FeeHistoryScreenState extends State<FeeHistoryScreen> {
     final fees = context.read<FeeProvider>();
     final bundle = FeeCalculator.buildPaymentBundle(due, fees.dues);
 
+    // Show payment bottom sheet
     final confirmed = await showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
-      builder: (ctx) => _PaymentSheet(bundle: bundle),
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => _PaymentSheet(bundle: bundle, studentName: due.studentName ?? ''),
     );
 
     if (confirmed == true) {
-      // Simulate payment (in production: integrate PayU/UPI)
       final txnId = 'TXN-${DateTime.now().millisecondsSinceEpoch}';
       for (final id in bundle.dueIds) {
         await fees.recordPayment(id, transactionId: txnId);
       }
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Payment successful!'), backgroundColor: AppColors.success),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('PAYMENT SUCCESSFUL — $txnId'),
+          backgroundColor: AppColors.success,
+        ));
       }
     }
   }
@@ -78,6 +82,12 @@ class _FeeHistoryScreenState extends State<FeeHistoryScreen> {
     final unpaid = dues.where((d) => !d.isPaid).toList();
     final totalCleared = paid.fold<double>(0, (s, d) => s + d.totalDue);
     final outstanding = unpaid.fold<double>(0, (s, d) => s + d.totalDue);
+    final overdueCount = unpaid.where((d) => d.isOverdue).length;
+
+    // Separate future scheduled
+    final now = DateTime.now();
+    final futureDues = unpaid.where((d) => d.dueDate.isAfter(now)).toList();
+    final actionableDues = dues.where((d) => d.isPaid || (d.dueDate.isBefore(now) || d.dueDate.isAtSameMomentAs(now))).toList();
 
     return RefreshIndicator(
       onRefresh: _load,
@@ -85,203 +95,468 @@ class _FeeHistoryScreenState extends State<FeeHistoryScreen> {
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.all(16),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          // Stats
+          // ===== STATS =====
           Row(children: [
-            Expanded(child: _stat('Cleared', Formatters.currency(totalCleared), AppColors.success)),
+            Expanded(child: _statCard('TOTAL CLEARED', Formatters.currency(totalCleared), AppColors.emerald600)),
             const SizedBox(width: 8),
-            Expanded(child: _stat('Outstanding', Formatters.currency(outstanding), AppColors.error)),
+            Expanded(child: _statCard('OUTSTANDING', Formatters.currency(outstanding), AppColors.primary)),
             const SizedBox(width: 8),
-            Expanded(child: _stat('Overdue', '${unpaid.where((d) => d.isOverdue).length}', AppColors.warning)),
+            Expanded(child: _statCard('OVERDUE', '$overdueCount', AppColors.red500)),
           ]),
           const SizedBox(height: 16),
 
-          // Filters
-          if (students.length > 1)
-            DropdownButtonFormField<String>(
-              value: _selectedStudentId,
-              decoration: const InputDecoration(labelText: 'Filter by Student', isDense: true),
-              items: [
-                const DropdownMenuItem(value: null, child: Text('All Students')),
-                ...students.map((s) => DropdownMenuItem(value: s.id, child: Text(s.fullName))),
-              ],
-              onChanged: (v) => setState(() => _selectedStudentId = v),
-            ),
-          const SizedBox(height: 12),
-          TextField(
-            onChanged: (v) => setState(() => _search = v),
-            decoration: const InputDecoration(hintText: 'Search...', prefixIcon: Icon(Icons.search), isDense: true),
-          ),
-          const SizedBox(height: 16),
+          // ===== FILTERS =====
+          Container(
+            decoration: AppTheme.cardLargeDecoration,
+            child: Column(children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+                child: Row(children: [
+                  // Student dropdown
+                  if (students.length > 1) ...[
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        decoration: BoxDecoration(
+                          color: AppColors.slate50,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: AppColors.slate200),
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            value: _selectedStudentId,
+                            isExpanded: true,
+                            hint: Text('ALL STUDENTS', style: AppTheme.labelSmall.copyWith(color: AppColors.slate500)),
+                            style: GoogleFonts.plusJakartaSans(fontSize: 11, fontWeight: FontWeight.w900, color: AppColors.slate800),
+                            items: [
+                              DropdownMenuItem(value: null, child: Text('ALL STUDENTS', style: GoogleFonts.plusJakartaSans(
+                                fontSize: 11, fontWeight: FontWeight.w900, color: AppColors.slate800))),
+                              ...students.map((s) => DropdownMenuItem(value: s.id,
+                                  child: Text(s.fullName.toUpperCase(), style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 11, fontWeight: FontWeight.w900, color: AppColors.slate800)))),
+                            ],
+                            onChanged: (v) => setState(() => _selectedStudentId = v),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                  ],
+                  // Search
+                  Expanded(
+                    child: TextField(
+                      onChanged: (v) => setState(() => _search = v),
+                      style: GoogleFonts.plusJakartaSans(fontSize: 13, fontWeight: FontWeight.w700),
+                      decoration: InputDecoration(
+                        hintText: 'Search...',
+                        hintStyle: GoogleFonts.plusJakartaSans(fontSize: 12, color: AppColors.slate400),
+                        prefixIcon: const Icon(Icons.search_rounded, color: AppColors.slate400, size: 20),
+                        filled: true,
+                        fillColor: AppColors.primary.withOpacity(0.05),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide(color: AppColors.primary.withOpacity(0.2)),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide(color: AppColors.primary.withOpacity(0.2)),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                        isDense: true,
+                      ),
+                    ),
+                  ),
+                ]),
+              ),
+              const SizedBox(height: 12),
 
-          // Fee List
-          if (fees.isLoading)
-            const Center(child: Padding(padding: EdgeInsets.all(40), child: CircularProgressIndicator()))
-          else if (dues.isEmpty)
-            const EmptyState(icon: Icons.receipt_long_outlined, title: 'No fees found')
-          else
-            ...dues.map((d) => _feeCard(d, fees.dues)),
+              // ===== DUES LIST =====
+              if (fees.isLoading)
+                const Padding(padding: EdgeInsets.all(40), child: MiniLoader())
+              else if (actionableDues.isEmpty)
+                const Padding(padding: EdgeInsets.all(32), child: EmptyState(icon: Icons.receipt_long_outlined, title: 'NO FEES FOUND'))
+              else
+                ...actionableDues.map((d) => _dueCard(d, fees.dues)),
+
+              // ===== FUTURE SCHEDULED =====
+              if (futureDues.isNotEmpty) ...[
+                const Divider(height: 1),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(children: [
+                    GestureDetector(
+                      onTap: () => setState(() => _showFuture = !_showFuture),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        decoration: BoxDecoration(
+                          color: AppColors.slate50,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: AppColors.slate200),
+                        ),
+                        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                          Text('FUTURE SCHEDULED (${futureDues.length})', style: AppTheme.labelSmall.copyWith(color: AppColors.slate600)),
+                          Icon(_showFuture ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.slate400),
+                        ]),
+                      ),
+                    ),
+                    if (_showFuture) ...[
+                      const SizedBox(height: 8),
+                      ...futureDues.map((d) => Container(
+                        margin: const EdgeInsets.only(bottom: 6),
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: AppColors.slate200),
+                        ),
+                        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                            Text(d.fullMonthLabel.toUpperCase(), style: GoogleFonts.plusJakartaSans(
+                              fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: -0.3, color: AppColors.slate800)),
+                            Text('DUE: ${Formatters.date(d.dueDate)}', style: AppTheme.labelXs.copyWith(color: AppColors.slate400)),
+                          ]),
+                          Text(Formatters.currencyFull(d.amount), style: GoogleFonts.plusJakartaSans(
+                            fontSize: 13, fontWeight: FontWeight.w900, letterSpacing: -0.5, color: AppColors.slate600)),
+                        ]),
+                      )),
+                    ],
+                  ]),
+                ),
+              ],
+            ]),
+          ),
         ]),
       ),
     );
   }
 
-  Widget _stat(String label, String value, Color color) {
+  Widget _statCard(String label, String value, Color color) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.08),
-        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.slate100),
       ),
       child: Column(children: [
-        Text(value, style: TextStyle(fontWeight: FontWeight.w800, color: color, fontSize: 14)),
-        const SizedBox(height: 2),
-        Text(label, style: TextStyle(fontSize: 11, color: color.withOpacity(0.8))),
+        Text(label, style: AppTheme.labelXs),
+        const SizedBox(height: 4),
+        Text(value, style: GoogleFonts.plusJakartaSans(
+          fontSize: 20, fontWeight: FontWeight.w900, letterSpacing: -1, color: color)),
       ]),
     );
   }
 
-  Widget _feeCard(MonthlyDue d, List<MonthlyDue> allDues) {
-    final isPayable = d.isPaid ? false : FeeCalculator.isMonthPayable(d, allDues);
+  Widget _dueCard(MonthlyDue d, List<MonthlyDue> allDues) {
+    final isPayable = !d.isPaid && FeeCalculator.isMonthPayable(d, allDues);
     final isLocked = !d.isPaid && !isPayable;
 
-    return Card(
-      margin: const EdgeInsets.only(bottom: 8),
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Column(children: [
-          Row(children: [
-            Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(d.fullMonthLabel, style: const TextStyle(fontWeight: FontWeight.w600)),
-              if (d.studentName != null)
-                Text(d.studentName!, style: const TextStyle(fontSize: 12, color: AppColors.textSecondary)),
-            ])),
+    return Opacity(
+      opacity: isLocked ? 0.6 : 1.0,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+        decoration: const BoxDecoration(
+          border: Border(bottom: BorderSide(color: AppColors.slate50)),
+        ),
+        child: Row(children: [
+          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(d.fullMonthLabel.toUpperCase(), style: GoogleFonts.plusJakartaSans(
+              fontSize: 13, fontWeight: FontWeight.w900, letterSpacing: -0.3, color: AppColors.slate800)),
+            if (d.studentName != null)
+              Text(d.studentName!.toUpperCase(), style: AppTheme.labelXs.copyWith(color: AppColors.slate400)),
+            const SizedBox(height: 4),
             StatusBadge.fromStatus(d.isPaid ? 'PAID' : d.isOverdue ? 'OVERDUE' : 'PENDING'),
-          ]),
-          const Divider(height: 16),
-          Row(children: [
-            _info('Base', Formatters.currencyFull(d.amount)),
-            if (d.lateFee > 0) _info('Late', Formatters.currencyFull(d.lateFee), color: AppColors.error),
-            _info('Total', Formatters.currencyFull(d.totalDue), bold: true),
-          ]),
-          if (!d.isPaid) ...[
-            const SizedBox(height: 10),
-            Row(children: [
-              if (isLocked)
-                Expanded(
+            if (!d.isPaid && d.lateFee > 0)
+              Padding(
+                padding: const EdgeInsets.only(top: 3),
+                child: Text('LATE: ${Formatters.currencyFull(d.lateFee)}',
+                  style: GoogleFonts.plusJakartaSans(fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 1, color: AppColors.danger)),
+              ),
+          ])),
+          Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+            Text(Formatters.currencyFull(d.totalDue), style: GoogleFonts.plusJakartaSans(
+              fontSize: 14, fontWeight: FontWeight.w900, color: AppColors.slate800)),
+            const SizedBox(height: 6),
+            if (d.isPaid)
+              Row(mainAxisSize: MainAxisSize.min, children: [
+                GestureDetector(
+                  onTap: () => _showReceiptOptions(d),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: AppColors.surface,
+                      color: AppColors.success.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      Icon(Icons.lock, size: 14, color: AppColors.textSecondary),
-                      SizedBox(width: 4),
-                      Text('Pay previous months first',
-                          style: TextStyle(fontSize: 12, color: AppColors.textSecondary)),
+                    child: Row(mainAxisSize: MainAxisSize.min, children: [
+                      const Icon(Icons.download_rounded, size: 12, color: AppColors.success),
+                      const SizedBox(width: 4),
+                      Text('RECEIPT', style: GoogleFonts.plusJakartaSans(
+                        fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 1, color: AppColors.success)),
                     ]),
                   ),
-                )
-              else
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () => _handlePay(d),
-                    child: const Text('Pay Now'),
-                  ),
                 ),
-            ]),
-          ] else ...[
-            const SizedBox(height: 8),
-            Row(children: [
-              const Icon(Icons.check_circle, size: 14, color: AppColors.success),
-              const SizedBox(width: 4),
-              Text('Paid ${d.paidAt != null ? Formatters.date(d.paidAt!) : ""}',
-                  style: const TextStyle(fontSize: 12, color: AppColors.success)),
-              const Spacer(),
-              TextButton.icon(
-                onPressed: () => ReceiptService.generateAndShareReceipt(
-                  due: d, studentName: d.studentName, admissionNumber: d.admissionNumber),
-                icon: const Icon(Icons.download, size: 16),
-                label: const Text('Receipt', style: TextStyle(fontSize: 12)),
-              ),
-            ]),
-          ],
+              ])
+            else if (isPayable)
+              GestureDetector(
+                onTap: () => _handlePay(d),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: AppTheme.primaryButtonShadow(),
+                  ),
+                  child: Text('PAY NOW', style: GoogleFonts.plusJakartaSans(
+                    fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2, color: Colors.white)),
+                ),
+              )
+            else
+              Row(mainAxisSize: MainAxisSize.min, children: [
+                const Icon(Icons.lock_rounded, size: 10, color: AppColors.slate400),
+                const SizedBox(width: 4),
+                Text('PAY PREVIOUS', style: GoogleFonts.plusJakartaSans(
+                  fontSize: 7, fontWeight: FontWeight.w900, letterSpacing: 1, color: AppColors.slate400)),
+              ]),
+          ]),
         ]),
       ),
     );
   }
 
-  Widget _info(String label, String value, {Color? color, bool bold = false}) {
-    return Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(label, style: const TextStyle(fontSize: 11, color: AppColors.textSecondary)),
-      Text(value, style: TextStyle(fontSize: 13, fontWeight: bold ? FontWeight.w700 : FontWeight.w500,
-          color: color ?? AppColors.textPrimary)),
-    ]));
+  void _showReceiptOptions(MonthlyDue d) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (ctx) => Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Text('DOWNLOAD RECEIPT', style: AppTheme.labelStyle.copyWith(color: AppColors.slate800)),
+          const SizedBox(height: 16),
+          _receiptOption(Icons.picture_as_pdf_rounded, 'PDF RECEIPT', () {
+            Navigator.pop(ctx);
+            ReceiptService.generateAndShareReceipt(due: d, studentName: d.studentName, admissionNumber: d.admissionNumber);
+          }),
+          _receiptOption(Icons.description_rounded, 'TAX INVOICE', () {
+            Navigator.pop(ctx);
+            ReceiptService.generateAndShareReceipt(due: d, studentName: d.studentName, admissionNumber: d.admissionNumber);
+          }),
+          _receiptOption(Icons.receipt_rounded, 'COMPACT RECEIPT', () {
+            Navigator.pop(ctx);
+            ReceiptService.generateAndShareReceipt(due: d, studentName: d.studentName, admissionNumber: d.admissionNumber);
+          }),
+        ]),
+      ),
+    );
+  }
+
+  Widget _receiptOption(IconData icon, String label, VoidCallback onTap) {
+    return ListTile(
+      leading: Container(
+        width: 36, height: 36,
+        decoration: BoxDecoration(color: AppColors.primary.withOpacity(0.05), borderRadius: BorderRadius.circular(10)),
+        child: Icon(icon, color: AppColors.primary, size: 18),
+      ),
+      title: Text(label, style: GoogleFonts.plusJakartaSans(fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1, color: AppColors.slate700)),
+      trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: AppColors.slate300),
+      onTap: onTap,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    );
   }
 }
 
+// ===== PAYMENT SHEET (matches PaymentPortal SELECT state) =====
 class _PaymentSheet extends StatelessWidget {
   final PaymentBundle bundle;
-  const _PaymentSheet({required this.bundle});
+  final String studentName;
+  const _PaymentSheet({required this.bundle, required this.studentName});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(24),
+      constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.85),
       decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
-      child: Column(mainAxisSize: MainAxisSize.min, children: [
-        Container(width: 40, height: 4, decoration: BoxDecoration(
-          color: AppColors.border, borderRadius: BorderRadius.circular(2))),
-        const SizedBox(height: 20),
-        const Text('Payment Summary', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-        const SizedBox(height: 16),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          // Handle
+          Container(width: 40, height: 4, decoration: BoxDecoration(
+            color: AppColors.slate200, borderRadius: BorderRadius.circular(2))),
+          const SizedBox(height: 20),
 
-        // Breakdown
-        ...bundle.items.map((item) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text(item.due.monthLabel),
-            Text(Formatters.currencyFull(item.total)),
-          ]),
-        )),
-        const Divider(height: 20),
-
-        if (bundle.totalLateFee > 0)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              const Text('Late Fees', style: TextStyle(color: AppColors.error)),
-              Text(Formatters.currencyFull(bundle.totalLateFee),
-                  style: const TextStyle(color: AppColors.error)),
+          // Amount display: bg-slate-50 rounded-3xl
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: AppColors.slate50,
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(color: AppColors.slate100),
+            ),
+            child: Column(children: [
+              Text('TOTAL PAYABLE', style: AppTheme.labelSmall),
+              const SizedBox(height: 8),
+              Text(Formatters.currencyFull(bundle.amount), style: GoogleFonts.plusJakartaSans(
+                fontSize: 36, fontWeight: FontWeight.w900, letterSpacing: -2, color: AppColors.slate800)),
             ]),
           ),
+          const SizedBox(height: 16),
 
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            const Text('Total', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18)),
-            Text(Formatters.currencyFull(bundle.amount),
-                style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 18)),
+          // Summary
+          if (bundle.explanation.isNotEmpty)
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.blue50.withOpacity(0.7),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.blue100),
+              ),
+              child: Text(bundle.explanation.toUpperCase(), textAlign: TextAlign.center,
+                style: GoogleFonts.plusJakartaSans(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2, color: AppColors.primary)),
+            ),
+          const SizedBox(height: 16),
+
+          // Breakdown stats
+          Row(children: [
+            _breakdownStat('MONTHS', '${bundle.monthsCount}'),
+            const SizedBox(width: 8),
+            _breakdownStat('BASE FEES', Formatters.currencyFull(bundle.totalBaseAmount)),
+            const SizedBox(width: 8),
+            _breakdownStat('LATE FEES', Formatters.currencyFull(bundle.totalLateFee),
+                color: bundle.totalLateFee > 0 ? AppColors.danger : null),
           ]),
-        ),
+          const SizedBox(height: 16),
 
-        if (bundle.explanation.isNotEmpty)
-          Text(bundle.explanation, style: const TextStyle(fontSize: 12, color: AppColors.textSecondary)),
-        const SizedBox(height: 20),
-
-        SizedBox(width: double.infinity, height: 52,
-          child: ElevatedButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text('Pay ${Formatters.currencyFull(bundle.amount)}'),
+          // Month-wise table
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppColors.slate200),
+            ),
+            child: Column(children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                decoration: const BoxDecoration(
+                  color: AppColors.slate50,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                  border: Border(bottom: BorderSide(color: AppColors.slate100)),
+                ),
+                child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                  Text('MONTH', style: AppTheme.labelXs),
+                  Text('AMOUNT', style: AppTheme.labelXs),
+                ]),
+              ),
+              ...bundle.items.map((item) => Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: AppColors.slate50))),
+                child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                  Text(item.due.monthLabel.toUpperCase(), style: GoogleFonts.plusJakartaSans(
+                    fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.slate700)),
+                  Text(Formatters.currencyFull(item.total), style: GoogleFonts.plusJakartaSans(
+                    fontSize: 12, fontWeight: FontWeight.w900, color: AppColors.slate800)),
+                ]),
+              )),
+            ]),
           ),
-        ),
-        const SizedBox(height: 8),
-        TextButton(onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel')),
-      ]),
+          const SizedBox(height: 24),
+
+          // UPI button (green)
+          SizedBox(
+            width: double.infinity, height: 56,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                gradient: const LinearGradient(colors: [Color(0xFF16A34A), AppColors.emerald600]),
+                boxShadow: [BoxShadow(color: const Color(0xFF16A34A).withOpacity(0.2), blurRadius: 20, offset: const Offset(0, 8))],
+              ),
+              child: ElevatedButton(
+                onPressed: () => Navigator.pop(context, true),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent, shadowColor: Colors.transparent),
+                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.white.withOpacity(0.2)),
+                    ),
+                    child: const Icon(Icons.phone_android_rounded, size: 16, color: Colors.white),
+                  ),
+                  const SizedBox(width: 12),
+                  Text('PAY VIA UPI APP', style: GoogleFonts.plusJakartaSans(
+                    fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2, color: Colors.white)),
+                ]),
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+
+          // Card/PayU button (dark)
+          SizedBox(
+            width: double.infinity, height: 56,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: AppColors.slate900,
+                boxShadow: [BoxShadow(color: AppColors.slate900.withOpacity(0.2), blurRadius: 20, offset: const Offset(0, 8))],
+              ),
+              child: ElevatedButton(
+                onPressed: () => Navigator.pop(context, true),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent, shadowColor: Colors.transparent),
+                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.white.withOpacity(0.1)),
+                    ),
+                    child: const Icon(Icons.credit_card_rounded, size: 16, color: Colors.white),
+                  ),
+                  const SizedBox(width: 12),
+                  Text('CARD / UPI / NETBANKING', style: GoogleFonts.plusJakartaSans(
+                    fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2, color: Colors.white)),
+                ]),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+
+          // SSL notice
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            const Icon(Icons.lock_rounded, size: 10, color: AppColors.slate400),
+            const SizedBox(width: 4),
+            Text('256-BIT SSL ENCRYPTED', style: GoogleFonts.plusJakartaSans(
+              fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 2, color: AppColors.slate400)),
+          ]),
+          const SizedBox(height: 8),
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text('CANCEL', style: AppTheme.labelSmall.copyWith(color: AppColors.slate400)),
+          ),
+        ]),
+      ),
     );
+  }
+
+  Widget _breakdownStat(String label, String value, {Color? color}) {
+    return Expanded(child: Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.slate200),
+      ),
+      child: Column(children: [
+        Text(label, style: AppTheme.labelXs),
+        const SizedBox(height: 4),
+        Text(value, style: GoogleFonts.plusJakartaSans(
+          fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: -0.5, color: color ?? AppColors.slate800)),
+      ]),
+    ));
   }
 }
