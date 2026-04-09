@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/navigation_provider.dart';
 import '../../../core/providers/notification_provider.dart';
@@ -59,59 +60,80 @@ class _AppShellState extends State<AppShell> {
     final notifications = context.watch<NotificationProvider>();
 
     if (auth.user == null) return const SizedBox.shrink();
-
     final isAdmin = auth.user!.isAdmin;
 
     return Scaffold(
+      backgroundColor: AppColors.slate50,
+      // Topbar: bg-white/80 backdrop-blur-md sticky border-b border-slate-100
       appBar: AppBar(
-        title: Text(_getTitle(nav.currentTab, isAdmin)),
+        backgroundColor: Colors.white.withOpacity(0.8),
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        leading: Builder(
+          builder: (ctx) => IconButton(
+            icon: const Icon(Icons.menu_rounded, color: AppColors.slate800),
+            onPressed: () => Scaffold.of(ctx).openDrawer(),
+          ),
+        ),
+        title: Row(children: [
+          // Status dot: w-2 h-2 bg-success rounded-full animate-pulse
+          Container(
+            width: 8, height: 8,
+            decoration: const BoxDecoration(color: AppColors.success, shape: BoxShape.circle),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            isAdmin ? 'GLOBAL FLEET' : 'MAIN PORTAL',
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 10, fontWeight: FontWeight.w900,
+              letterSpacing: 2, color: AppColors.slate400,
+            ),
+          ),
+          const SizedBox(width: 6),
+          Text('ONLINE', style: GoogleFonts.plusJakartaSans(
+            fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 2, color: AppColors.success)),
+        ]),
         actions: [
           // Notification bell
-          Stack(
-            children: [
-              IconButton(
-                icon: const Icon(Icons.notifications_outlined),
-                onPressed: () {
-                  nav.setTab(isAdmin ? 'notifications' : 'parent_notifications');
-                },
-              ),
-              if (notifications.unreadCount > 0)
-                Positioned(
-                  right: 6,
-                  top: 6,
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: const BoxDecoration(
-                      color: AppColors.error,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Text(
-                      notifications.unreadCount > 9
-                          ? '9+'
-                          : '${notifications.unreadCount}',
-                      style: const TextStyle(
-                          color: Colors.white, fontSize: 10,
-                          fontWeight: FontWeight.bold),
-                    ),
+          Stack(children: [
+            IconButton(
+              icon: const Icon(Icons.notifications_none_rounded, color: AppColors.slate400),
+              onPressed: () => nav.setTab(isAdmin ? 'notifications' : 'parent_notifications'),
+            ),
+            if (notifications.unreadCount > 0)
+              Positioned(
+                right: 8, top: 8,
+                child: Container(
+                  width: 16, height: 16,
+                  decoration: BoxDecoration(
+                    color: AppColors.red500,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 2),
                   ),
+                  child: Center(child: Text(
+                    notifications.unreadCount > 9 ? '9+' : '${notifications.unreadCount}',
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 8, fontWeight: FontWeight.w900, color: Colors.white),
+                  )),
                 ),
-            ],
-          ),
-          // User avatar
+              ),
+          ]),
+          // Avatar
           Padding(
             padding: const EdgeInsets.only(right: 12),
-            child: CircleAvatar(
-              radius: 16,
-              backgroundColor: AppColors.primary,
-              child: Text(
-                (auth.user!.fullName.isNotEmpty
-                        ? auth.user!.fullName[0]
-                        : 'U')
-                    .toUpperCase(),
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14),
+            child: Container(
+              width: 36, height: 36,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: AppColors.slate200, width: 2),
+              ),
+              child: CircleAvatar(
+                radius: 16,
+                backgroundColor: AppColors.slate900,
+                child: Text(
+                  (auth.user!.fullName.isNotEmpty ? auth.user!.fullName[0] : 'U').toUpperCase(),
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 13),
+                ),
               ),
             ),
           ),
@@ -120,14 +142,8 @@ class _AppShellState extends State<AppShell> {
       drawer: AppDrawer(
         user: auth.user!,
         currentTab: nav.currentTab,
-        onTabSelected: (tab) {
-          nav.setTab(tab);
-          Navigator.pop(context);
-        },
-        onLogout: () async {
-          await auth.logout();
-          nav.reset();
-        },
+        onTabSelected: (tab) { nav.setTab(tab); Navigator.pop(context); },
+        onLogout: () async { await auth.logout(); nav.reset(); },
       ),
       body: _buildBody(nav.currentTab, isAdmin),
       bottomNavigationBar: AppBottomNav(
@@ -170,32 +186,5 @@ class _AppShellState extends State<AppShell> {
         default: return const ParentDashboardScreen();
       }
     }
-  }
-
-  String _getTitle(String tab, bool isAdmin) {
-    final titles = {
-      'dashboard': isAdmin ? 'Operations Hub' : 'Family Hub',
-      'students': 'Students',
-      'buses': 'Fleet Management',
-      'routes': 'Routes',
-      'attendance': 'Attendance',
-      'payments': 'Payment Hub',
-      'notifications': 'Notifications',
-      'management': 'Access Control',
-      'tracking': 'Live Tracking',
-      'settings': 'Settings',
-      'reports': 'Reports',
-      'student_profile': 'Student Profile',
-      'fees': 'Fee Ledger',
-      'receipts': 'Receipts',
-      'attendance_history': 'Attendance History',
-      'parent_routes': 'Route Details',
-      'parent_tracking': 'Live Tracking',
-      'bus_camera': 'Bus Camera',
-      'parent_notifications': 'Alert Center',
-      'support': 'Support',
-      'parent_settings': 'Settings',
-    };
-    return titles[tab] ?? 'BusWay Pro';
   }
 }
