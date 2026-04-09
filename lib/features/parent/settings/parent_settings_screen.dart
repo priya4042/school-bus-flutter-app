@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/models/user_model.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../utils/formatters.dart';
 
 class ParentSettingsScreen extends StatefulWidget {
   const ParentSettingsScreen({super.key});
-
   @override
   State<ParentSettingsScreen> createState() => _ParentSettingsScreenState();
 }
 
-class _ParentSettingsScreenState extends State<ParentSettingsScreen>
-    with SingleTickerProviderStateMixin {
+class _ParentSettingsScreenState extends State<ParentSettingsScreen> with SingleTickerProviderStateMixin {
   late TabController _tabCtrl;
   final _nameCtrl = TextEditingController();
   final _emailCtrl = TextEditingController();
@@ -20,6 +20,7 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen>
   final _newPassCtrl = TextEditingController();
   final _confirmPassCtrl = TextEditingController();
   bool _obscure = true;
+  bool _obscureConfirm = true;
   String _selectedLang = 'en';
 
   @override
@@ -41,42 +42,29 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen>
       'email': _emailCtrl.text.trim(),
       'phone_number': _phoneCtrl.text.trim(),
     });
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Profile updated'), backgroundColor: AppColors.success),
-      );
-    }
+    if (mounted) ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Profile updated'), backgroundColor: AppColors.success));
   }
 
   Future<void> _changePassword() async {
     if (_newPassCtrl.text.length < 8) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Password must be at least 8 characters'), backgroundColor: AppColors.error),
-      );
+          const SnackBar(content: Text('Minimum 8 characters'), backgroundColor: AppColors.danger));
       return;
     }
     if (_newPassCtrl.text != _confirmPassCtrl.text) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Passwords do not match'), backgroundColor: AppColors.error),
-      );
+          const SnackBar(content: Text('Passwords do not match'), backgroundColor: AppColors.danger));
       return;
     }
-
     try {
       await context.read<AppAuthProvider>().changePassword(_newPassCtrl.text);
-      _newPassCtrl.clear();
-      _confirmPassCtrl.clear();
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Password updated'), backgroundColor: AppColors.success),
-        );
-      }
+      _newPassCtrl.clear(); _confirmPassCtrl.clear();
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Password updated'), backgroundColor: AppColors.success));
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e'), backgroundColor: AppColors.error),
-        );
-      }
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e'), backgroundColor: AppColors.danger));
     }
   }
 
@@ -85,119 +73,159 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen>
     final auth = context.watch<AppAuthProvider>();
 
     return Column(children: [
-      TabBar(controller: _tabCtrl, tabs: const [
-        Tab(text: 'Profile'),
-        Tab(text: 'Security'),
-        Tab(text: 'Language'),
-      ]),
+      // Tab bar
+      Container(
+        margin: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(color: AppColors.slate100, borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: AppColors.slate200.withOpacity(0.5))),
+        child: TabBar(
+          controller: _tabCtrl,
+          indicator: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10),
+              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)]),
+          indicatorSize: TabBarIndicatorSize.tab,
+          dividerColor: Colors.transparent,
+          labelStyle: GoogleFonts.plusJakartaSans(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
+          unselectedLabelStyle: GoogleFonts.plusJakartaSans(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
+          labelColor: AppColors.primary,
+          unselectedLabelColor: AppColors.slate400,
+          tabs: const [Tab(text: 'PROFILE'), Tab(text: 'SECURITY'), Tab(text: 'LANGUAGE')],
+        ),
+      ),
       Expanded(child: TabBarView(controller: _tabCtrl, children: [
-        // Profile
-        SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+        // ===== PROFILE TAB =====
+        SingleChildScrollView(padding: const EdgeInsets.all(16), child: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: AppTheme.cardXlDecoration,
           child: Column(children: [
-            // Avatar
-            Center(child: Column(children: [
-              CircleAvatar(
-                radius: 40,
-                backgroundColor: AppColors.primary,
-                child: Text(
-                  (auth.user?.fullName.isNotEmpty ?? false) ? auth.user!.fullName[0].toUpperCase() : 'U',
-                  style: const TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold),
+            // Avatar section
+            Row(children: [
+              Container(
+                width: 80, height: 80,
+                decoration: BoxDecoration(
+                  color: AppColors.slate50, borderRadius: BorderRadius.circular(24),
+                  border: Border.all(color: Colors.white, width: 4),
+                  boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 16)],
                 ),
+                child: Center(child: Text(
+                  (auth.user?.fullName.isNotEmpty ?? false) ? auth.user!.fullName[0].toUpperCase() : 'U',
+                  style: GoogleFonts.plusJakartaSans(fontSize: 28, fontWeight: FontWeight.w900, color: AppColors.slate300),
+                )),
               ),
-              const SizedBox(height: 8),
-              Text(auth.user?.fullName ?? '', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 18)),
-              Text(auth.user?.role == UserRole.parent ? 'Parent' : 'User',
-                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 13)),
-            ])),
+              const SizedBox(width: 16),
+              Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(auth.user?.fullName ?? '', style: GoogleFonts.plusJakartaSans(
+                  fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: -0.5, color: AppColors.slate900)),
+                Text('${auth.user?.isParent ?? true ? "PARENT" : "USER"} • SINCE ${auth.user?.createdAt != null ? Formatters.date(auth.user!.createdAt!).toUpperCase() : "N/A"}',
+                    style: AppTheme.labelXs.copyWith(color: AppColors.slate500)),
+              ])),
+            ]),
             const SizedBox(height: 24),
-
-            TextFormField(controller: _nameCtrl, decoration: const InputDecoration(labelText: 'Full Name', prefixIcon: Icon(Icons.person_outlined))),
-            const SizedBox(height: 16),
-            TextFormField(controller: _emailCtrl, decoration: const InputDecoration(labelText: 'Email', prefixIcon: Icon(Icons.email_outlined))),
-            const SizedBox(height: 16),
-            TextFormField(controller: _phoneCtrl, decoration: const InputDecoration(labelText: 'Phone Number', prefixIcon: Icon(Icons.phone_outlined)),
-                keyboardType: TextInputType.phone),
-            const SizedBox(height: 16),
-            TextFormField(
-              initialValue: auth.user?.admissionNumber,
-              decoration: const InputDecoration(labelText: 'Admission Number', prefixIcon: Icon(Icons.badge_outlined)),
+            const Divider(),
+            const SizedBox(height: 20),
+            // Form fields
+            _field('FULL NAME', _nameCtrl, Icons.person_rounded),
+            _field('EMAIL', _emailCtrl, Icons.email_rounded, inputType: TextInputType.emailAddress),
+            _field('PHONE NUMBER', _phoneCtrl, Icons.phone_rounded, inputType: TextInputType.phone),
+            TextField(
               readOnly: true,
-              style: const TextStyle(color: AppColors.textSecondary),
+              decoration: AppTheme.inputDecoration('ADMISSION NUMBER').copyWith(
+                prefixIcon: const Icon(Icons.badge_rounded, color: AppColors.slate400, size: 20)),
+              controller: TextEditingController(text: auth.user?.admissionNumber ?? ''),
+              style: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate400),
             ),
             const SizedBox(height: 24),
-            SizedBox(width: double.infinity, height: 48,
-              child: ElevatedButton(onPressed: _saveProfile, child: const Text('Save Changes'))),
+            SizedBox(width: double.infinity, height: 52, child: Container(
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), boxShadow: AppTheme.primaryButtonShadow()),
+              child: ElevatedButton.icon(
+                onPressed: _saveProfile, style: AppTheme.primaryButton,
+                icon: const Icon(Icons.check_rounded, size: 18),
+                label: Text('SAVE CHANGES', style: GoogleFonts.plusJakartaSans(fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
+              ),
+            )),
           ]),
-        ),
+        )),
 
-        // Security
-        SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+        // ===== SECURITY TAB =====
+        SingleChildScrollView(padding: const EdgeInsets.all(16), child: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: AppTheme.cardXlDecoration,
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            const Text('Change Password', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-            const SizedBox(height: 16),
-            TextFormField(
+            Text('CHANGE PASSWORD', style: AppTheme.headingSmall),
+            const SizedBox(height: 20),
+            TextField(
               controller: _newPassCtrl,
               obscureText: _obscure,
-              decoration: InputDecoration(
-                labelText: 'New Password',
-                prefixIcon: const Icon(Icons.lock_outlined),
+              style: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate800),
+              decoration: AppTheme.inputDecoration('NEW PASSWORD', icon: Icons.lock_rounded).copyWith(
                 suffixIcon: IconButton(
-                  icon: Icon(_obscure ? Icons.visibility_off : Icons.visibility),
+                  icon: Icon(_obscure ? Icons.visibility_off_rounded : Icons.visibility_rounded, color: AppColors.slate400, size: 20),
                   onPressed: () => setState(() => _obscure = !_obscure),
                 ),
               ),
             ),
             const SizedBox(height: 16),
-            TextFormField(
+            TextField(
               controller: _confirmPassCtrl,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Confirm Password',
-                prefixIcon: Icon(Icons.lock_outlined),
-              ),
-            ),
-            const SizedBox(height: 24),
-            SizedBox(width: double.infinity, height: 48,
-              child: ElevatedButton(onPressed: _changePassword, child: const Text('Update Password'))),
-          ]),
-        ),
-
-        // Language
-        SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            const Text('Select Language', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-            const SizedBox(height: 16),
-            ..._languages.map((l) => Card(
-              margin: const EdgeInsets.only(bottom: 8),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-                side: BorderSide(
-                  color: _selectedLang == l['code'] ? AppColors.primary : AppColors.border,
-                  width: _selectedLang == l['code'] ? 2 : 1,
+              obscureText: _obscureConfirm,
+              style: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate800),
+              decoration: AppTheme.inputDecoration('CONFIRM PASSWORD', icon: Icons.lock_rounded).copyWith(
+                suffixIcon: IconButton(
+                  icon: Icon(_obscureConfirm ? Icons.visibility_off_rounded : Icons.visibility_rounded, color: AppColors.slate400, size: 20),
+                  onPressed: () => setState(() => _obscureConfirm = !_obscureConfirm),
                 ),
               ),
-              child: ListTile(
-                leading: Text(l['flag']!, style: const TextStyle(fontSize: 24)),
-                title: Text(l['name']!, style: const TextStyle(fontWeight: FontWeight.w600)),
-                subtitle: l['available'] == 'true'
-                    ? null
-                    : const Text('Coming soon', style: TextStyle(fontSize: 11, color: AppColors.textSecondary)),
-                trailing: _selectedLang == l['code']
-                    ? const Icon(Icons.check_circle, color: AppColors.primary)
-                    : null,
-                onTap: l['available'] == 'true'
-                    ? () => setState(() => _selectedLang = l['code']!)
-                    : null,
-                enabled: l['available'] == 'true',
-              ),
+            ),
+            if (_confirmPassCtrl.text.isNotEmpty && _newPassCtrl.text != _confirmPassCtrl.text) ...[
+              const SizedBox(height: 6),
+              Text('PASSWORDS DO NOT MATCH', style: AppTheme.labelSmall.copyWith(color: AppColors.danger)),
+            ],
+            const SizedBox(height: 24),
+            SizedBox(width: double.infinity, height: 52, child: Container(
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), boxShadow: AppTheme.primaryButtonShadow()),
+              child: ElevatedButton(onPressed: _changePassword, style: AppTheme.primaryButton,
+                child: Text('UPDATE PASSWORD', style: GoogleFonts.plusJakartaSans(fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2))),
             )),
           ]),
-        ),
+        )),
+
+        // ===== LANGUAGE TAB =====
+        SingleChildScrollView(padding: const EdgeInsets.all(16), child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: _languages.map((l) => Container(
+            margin: const EdgeInsets.only(bottom: 8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: _selectedLang == l['code'] ? AppColors.primary : AppColors.slate100,
+                width: _selectedLang == l['code'] ? 2 : 1),
+              color: _selectedLang == l['code'] ? AppColors.primary.withOpacity(0.05) : Colors.white,
+              boxShadow: _selectedLang == l['code'] ? [BoxShadow(color: AppColors.primary.withOpacity(0.1), blurRadius: 8)] : null,
+            ),
+            child: ListTile(
+              leading: Text(l['flag']!, style: const TextStyle(fontSize: 24)),
+              title: Text(l['name']!, style: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.w900, color: AppColors.slate800)),
+              subtitle: l['available'] != 'true'
+                  ? Text('COMING SOON', style: AppTheme.labelXs.copyWith(color: AppColors.slate400))
+                  : null,
+              trailing: _selectedLang == l['code']
+                  ? const Icon(Icons.check_circle_rounded, color: AppColors.primary) : null,
+              onTap: l['available'] == 'true' ? () => setState(() => _selectedLang = l['code']!) : null,
+              enabled: l['available'] == 'true',
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            ),
+          )).toList(),
+        )),
       ])),
     ]);
+  }
+
+  Widget _field(String label, TextEditingController ctrl, IconData icon, {TextInputType inputType = TextInputType.text}) {
+    return Padding(padding: const EdgeInsets.only(bottom: 16), child: TextField(
+      controller: ctrl, keyboardType: inputType,
+      style: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate800),
+      decoration: AppTheme.inputDecoration(label, icon: icon),
+    ));
   }
 
   static const _languages = [
@@ -206,13 +234,12 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen>
     {'code': 'es', 'name': 'Español', 'flag': '🇪🇸', 'available': 'false'},
     {'code': 'fr', 'name': 'Français', 'flag': '🇫🇷', 'available': 'false'},
     {'code': 'ar', 'name': 'العربية', 'flag': '🇸🇦', 'available': 'false'},
+    {'code': 'pt', 'name': 'Português', 'flag': '🇧🇷', 'available': 'false'},
+    {'code': 'zh', 'name': '中文', 'flag': '🇨🇳', 'available': 'false'},
+    {'code': 'ja', 'name': '日本語', 'flag': '🇯🇵', 'available': 'false'},
   ];
 
   @override
-  void dispose() {
-    _tabCtrl.dispose(); _nameCtrl.dispose(); _emailCtrl.dispose();
-    _phoneCtrl.dispose(); _newPassCtrl.dispose(); _confirmPassCtrl.dispose();
-    super.dispose();
-  }
+  void dispose() { _tabCtrl.dispose(); _nameCtrl.dispose(); _emailCtrl.dispose();
+    _phoneCtrl.dispose(); _newPassCtrl.dispose(); _confirmPassCtrl.dispose(); super.dispose(); }
 }
-
