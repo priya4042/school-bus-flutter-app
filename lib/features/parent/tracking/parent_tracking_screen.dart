@@ -73,7 +73,7 @@ class _ParentTrackingScreenState extends State<ParentTrackingScreen> {
           const SizedBox(height: 16),
           Text('TRACKING ACCESS NOT ENABLED', style: AppTheme.labelStyle.copyWith(color: AppColors.slate600)),
           const SizedBox(height: 8),
-          Text('Contact admin to enable live tracking', style: TextStyle(fontFamily: 'PlusJakartaSans', 
+          Text('Contact admin to enable live tracking', style: TextStyle(fontFamily: 'Inter', 
             fontSize: 12, color: AppColors.slate400)),
         ],
       )));
@@ -94,7 +94,7 @@ class _ParentTrackingScreenState extends State<ParentTrackingScreen> {
                   color: i == _selectedChild ? AppColors.primary : AppColors.slate100,
                   borderRadius: BorderRadius.circular(12)),
                 child: Center(child: Text(students[i].fullName.split(' ').first.toUpperCase(),
-                  style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2,
+                  style: TextStyle(fontFamily: 'Inter', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2,
                       color: i == _selectedChild ? Colors.white : AppColors.slate500))),
               ),
             ),
@@ -129,7 +129,7 @@ class _ParentTrackingScreenState extends State<ParentTrackingScreen> {
             child: Row(mainAxisSize: MainAxisSize.min, children: [
               Container(width: 8, height: 8, decoration: const BoxDecoration(color: AppColors.success, shape: BoxShape.circle)),
               const SizedBox(width: 6),
-              Text('LIVE', style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2, color: Colors.white)),
+              Text('LIVE', style: TextStyle(fontFamily: 'Inter', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2, color: Colors.white)),
             ]),
           )),
 
@@ -143,7 +143,7 @@ class _ParentTrackingScreenState extends State<ParentTrackingScreen> {
             child: Row(children: [
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(students[_selectedChild.clamp(0, students.length - 1)].fullName.toUpperCase(),
-                    style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 13, fontWeight: FontWeight.w900, letterSpacing: -0.3, color: AppColors.slate800)),
+                    style: TextStyle(fontFamily: 'Inter', fontSize: 13, fontWeight: FontWeight.w900, letterSpacing: -0.3, color: AppColors.slate800)),
                 Text(students[_selectedChild.clamp(0, students.length - 1)].busNumber?.toUpperCase() ?? 'NO BUS',
                     style: AppTheme.labelXs.copyWith(color: AppColors.slate400)),
               ]),
@@ -155,7 +155,7 @@ class _ParentTrackingScreenState extends State<ParentTrackingScreen> {
                   child: Row(children: [
                     const Icon(Icons.speed_rounded, size: 14, color: AppColors.success),
                     const SizedBox(width: 4),
-                    Text('${_speed.toStringAsFixed(0)} KM/H', style: TextStyle(fontFamily: 'PlusJakartaSans', 
+                    Text('${_speed.toStringAsFixed(0)} KM/H', style: TextStyle(fontFamily: 'Inter', 
                       fontSize: 11, fontWeight: FontWeight.w900, color: AppColors.success)),
                   ]),
                 )
@@ -173,7 +173,7 @@ class _ParentTrackingScreenState extends State<ParentTrackingScreen> {
             child: Row(mainAxisSize: MainAxisSize.min, children: [
               const Icon(Icons.videocam_rounded, size: 14, color: AppColors.primary),
               const SizedBox(width: 4),
-              Text('CAMERA', style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 1, color: AppColors.primary)),
+              Text('CAMERA', style: TextStyle(fontFamily: 'Inter', fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 1, color: AppColors.primary)),
             ]),
           )),
       ])),

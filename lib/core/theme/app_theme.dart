@@ -96,56 +96,88 @@ class AppColors {
 }
 
 class AppTheme {
-  // Use bundled PlusJakartaSans font (loaded from assets/fonts/)
-  // This works offline and never fails - same font as React app
-  static const String fontFamily = 'PlusJakartaSans';
+  // Inter is a modern professional font (used by GitHub, Vercel, Stripe, Linear)
+  // Bundled in assets/fonts/ - works offline
+  static const String fontFamily = 'Inter';
 
-  static const TextStyle _baseTextStyle = TextStyle(fontFamily: fontFamily);
+  static const TextStyle _baseTextStyle = TextStyle(
+    fontFamily: fontFamily,
+    fontFamilyFallback: ['Helvetica', 'Arial', 'sans-serif'],
+  );
 
-  // Exact label style: text-[10px] font-black uppercase tracking-widest
+  // Refined label styles - more readable with proper weight + sizing
+  // text-[11px] semibold uppercase tracking-wide (improved from 10px black)
   static TextStyle get labelStyle => _baseTextStyle.copyWith(
-    fontSize: 10,
-    fontWeight: FontWeight.w900,
-    letterSpacing: 2.0,
-    color: AppColors.slate400,
+    fontSize: 11,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 1.2,
+    color: AppColors.slate500,
+    height: 1.4,
   );
 
-  // text-[9px] font-black uppercase tracking-widest
+  // text-[10px] semibold uppercase tracking-wide
   static TextStyle get labelSmall => _baseTextStyle.copyWith(
-    fontSize: 9,
-    fontWeight: FontWeight.w900,
-    letterSpacing: 2.0,
-    color: AppColors.slate400,
+    fontSize: 10,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 1.0,
+    color: AppColors.slate500,
+    height: 1.4,
   );
 
-  // text-[8px] font-black uppercase tracking-widest
+  // text-[9px] semibold uppercase
   static TextStyle get labelXs => _baseTextStyle.copyWith(
-    fontSize: 8,
-    fontWeight: FontWeight.w900,
-    letterSpacing: 2.0,
+    fontSize: 9,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 0.8,
     color: AppColors.slate400,
+    height: 1.4,
   );
 
-  // Heading: font-black tracking-tighter
+  // Headings - tighter letter spacing for premium feel
   static TextStyle get headingLarge => _baseTextStyle.copyWith(
     fontSize: 28,
-    fontWeight: FontWeight.w900,
-    letterSpacing: -1.5,
-    color: AppColors.slate800,
+    fontWeight: FontWeight.w800,
+    letterSpacing: -0.8,
+    color: AppColors.slate900,
+    height: 1.2,
   );
 
   static TextStyle get headingMedium => _baseTextStyle.copyWith(
     fontSize: 22,
-    fontWeight: FontWeight.w900,
-    letterSpacing: -1.0,
-    color: AppColors.slate800,
+    fontWeight: FontWeight.w800,
+    letterSpacing: -0.6,
+    color: AppColors.slate900,
+    height: 1.25,
   );
 
   static TextStyle get headingSmall => _baseTextStyle.copyWith(
     fontSize: 18,
-    fontWeight: FontWeight.w900,
-    letterSpacing: -0.5,
+    fontWeight: FontWeight.w700,
+    letterSpacing: -0.4,
+    color: AppColors.slate900,
+    height: 1.3,
+  );
+
+  // Body text styles
+  static TextStyle get bodyLarge => _baseTextStyle.copyWith(
+    fontSize: 15,
+    fontWeight: FontWeight.w500,
     color: AppColors.slate800,
+    height: 1.5,
+  );
+
+  static TextStyle get bodyMedium => _baseTextStyle.copyWith(
+    fontSize: 13,
+    fontWeight: FontWeight.w500,
+    color: AppColors.slate700,
+    height: 1.5,
+  );
+
+  static TextStyle get bodySmall => _baseTextStyle.copyWith(
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+    color: AppColors.slate600,
+    height: 1.5,
   );
 
   // Premium shadow
@@ -281,7 +313,7 @@ class AppTheme {
   );
 
   static ThemeData get lightTheme {
-    // Use bundled PlusJakartaSans font from assets/fonts/
+    // Use bundled Inter font from assets/fonts/
     return ThemeData(
       useMaterial3: true,
       fontFamily: fontFamily,
@@ -350,7 +382,7 @@ class AppTheme {
       chipTheme: ChipThemeData(
         backgroundColor: AppColors.slate100,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        labelStyle: TextStyle(fontFamily: 'PlusJakartaSans', 
+        labelStyle: TextStyle(fontFamily: 'Inter', 
           fontSize: 10,
           fontWeight: FontWeight.w900,
           letterSpacing: 2.0,

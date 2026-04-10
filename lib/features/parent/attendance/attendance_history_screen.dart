@@ -93,7 +93,7 @@ class _AttendanceHistoryScreenState extends State<AttendanceHistoryScreen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Center(child: Text(students[i].fullName.split(' ').first.toUpperCase(),
-                      style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2,
+                      style: TextStyle(fontFamily: 'Inter', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2,
                           color: sel ? AppColors.primary : AppColors.slate400))),
                   ),
                 ));
@@ -121,9 +121,9 @@ class _AttendanceHistoryScreenState extends State<AttendanceHistoryScreen> {
                 border: Border.all(color: AppColors.slate200)),
             child: Column(children: [
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Text('OVERALL ATTENDANCE', style: TextStyle(fontFamily: 'PlusJakartaSans', 
+                Text('OVERALL ATTENDANCE', style: TextStyle(fontFamily: 'Inter', 
                     fontSize: 11, fontWeight: FontWeight.w900, color: AppColors.slate800)),
-                Text('${rate.toStringAsFixed(1)}%', style: TextStyle(fontFamily: 'PlusJakartaSans', 
+                Text('${rate.toStringAsFixed(1)}%', style: TextStyle(fontFamily: 'Inter', 
                     fontSize: 14, fontWeight: FontWeight.w900,
                     color: rate > 80 ? AppColors.success : rate > 50 ? AppColors.warning : AppColors.danger)),
               ]),
@@ -232,7 +232,7 @@ class _AttendanceHistoryScreenState extends State<AttendanceHistoryScreen> {
                   const SizedBox(width: 10),
                   Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     Text('${r.type} — ${r.isPresent ? "PRESENT" : "ABSENT"}',
-                        style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 12, fontWeight: FontWeight.w900, color: AppColors.slate800)),
+                        style: TextStyle(fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w900, color: AppColors.slate800)),
                     Text(Formatters.timeOnly(r.createdAt), style: AppTheme.labelXs.copyWith(color: AppColors.slate400)),
                   ])),
                   Container(
@@ -240,7 +240,7 @@ class _AttendanceHistoryScreenState extends State<AttendanceHistoryScreen> {
                     decoration: BoxDecoration(
                       color: r.isPickup ? AppColors.blue50 : AppColors.indigo500.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8)),
-                    child: Text(r.type, style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 1,
+                    child: Text(r.type, style: TextStyle(fontFamily: 'Inter', fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 1,
                         color: r.isPickup ? AppColors.blue600 : AppColors.indigo500)),
                   ),
                 ]),
@@ -256,8 +256,8 @@ class _AttendanceHistoryScreenState extends State<AttendanceHistoryScreen> {
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(color: color.withOpacity(0.08), borderRadius: BorderRadius.circular(12)),
       child: Column(children: [
-        Text(value, style: TextStyle(fontFamily: 'PlusJakartaSans', fontWeight: FontWeight.w900, fontSize: 16, color: color)),
-        Text(label, style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 7, fontWeight: FontWeight.w900, letterSpacing: 1, color: color.withOpacity(0.7))),
+        Text(value, style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w900, fontSize: 16, color: color)),
+        Text(label, style: TextStyle(fontFamily: 'Inter', fontSize: 7, fontWeight: FontWeight.w900, letterSpacing: 1, color: color.withOpacity(0.7))),
       ]),
     ));
   }
@@ -274,7 +274,7 @@ class _AttendanceHistoryScreenState extends State<AttendanceHistoryScreen> {
             color: sel ? AppColors.primary : AppColors.slate100,
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Text(type, style: TextStyle(fontFamily: 'PlusJakartaSans', 
+          child: Text(type, style: TextStyle(fontFamily: 'Inter', 
             fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2,
             color: sel ? Colors.white : AppColors.slate500)),
         ),

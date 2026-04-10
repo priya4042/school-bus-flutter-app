@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../core/models/user_model.dart';
+import '../../../core/providers/locale_provider.dart';
 import '../../../core/theme/app_theme.dart';
 
 /// Sidebar matching React app exactly
@@ -46,6 +48,9 @@ class _AppDrawerState extends State<AppDrawer> {
 
   @override
   Widget build(BuildContext context) {
+    // Watch locale provider so menu items rebuild on language change
+    context.watch<LocaleProvider>();
+
     return Drawer(
       backgroundColor: AppColors.slate950,
       shape: const RoundedRectangleBorder(),
@@ -66,12 +71,22 @@ class _AppDrawerState extends State<AppDrawer> {
               ),
               const SizedBox(width: 12),
               Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                const Text('BUSWAY PRO',
-                    style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 13,
-                      fontWeight: FontWeight.w900, letterSpacing: -0.3, color: Colors.white)),
-                Text('ENTERPRISE FLEET',
-                    style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 7,
-                      fontWeight: FontWeight.w900, letterSpacing: 3, color: AppColors.primary.withOpacity(0.9))),
+                const Text('BusWay Pro',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: -0.4,
+                      color: Colors.white,
+                    )),
+                Text(context.read<LocaleProvider>().t('enterprise_fleet'),
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 10,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.5,
+                      color: AppColors.primary.withOpacity(0.9),
+                    )),
               ])),
             ]),
           ),
@@ -104,18 +119,18 @@ class _AppDrawerState extends State<AppDrawer> {
                   Navigator.pop(context);
                   showDialog(context: context, builder: (ctx) => AlertDialog(
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                    title: const Text('SIGN OUT', style: TextStyle(fontFamily: 'PlusJakartaSans',
+                    title: const Text('SIGN OUT', style: TextStyle(fontFamily: 'Inter',
                       fontSize: 16, fontWeight: FontWeight.w900, color: AppColors.slate800)),
                     content: const Text('Are you sure you want to sign out?',
-                      style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 13)),
+                      style: TextStyle(fontFamily: 'Inter', fontSize: 13)),
                     actions: [
                       TextButton(onPressed: () => Navigator.pop(ctx),
-                        child: const Text('CANCEL', style: TextStyle(fontFamily: 'PlusJakartaSans',
+                        child: const Text('CANCEL', style: TextStyle(fontFamily: 'Inter',
                           fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2, color: AppColors.slate500))),
                       ElevatedButton(
                         onPressed: () { Navigator.pop(ctx); widget.onLogout(); },
                         style: ElevatedButton.styleFrom(backgroundColor: AppColors.danger),
-                        child: const Text('SIGN OUT', style: TextStyle(fontFamily: 'PlusJakartaSans',
+                        child: const Text('SIGN OUT', style: TextStyle(fontFamily: 'Inter',
                           fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
                       ),
                     ],
@@ -131,8 +146,8 @@ class _AppDrawerState extends State<AppDrawer> {
                       child: const Icon(Icons.logout_rounded, color: AppColors.red400, size: 16),
                     ),
                     const SizedBox(width: 12),
-                    const Text('SIGN OUT', style: TextStyle(fontFamily: 'PlusJakartaSans',
-                      fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2, color: AppColors.slate500)),
+                    Text(context.read<LocaleProvider>().t('sign_out'), style: const TextStyle(fontFamily: 'Inter',
+                      fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 0.5, color: AppColors.slate500)),
                   ]),
                 ),
               ),
@@ -143,54 +158,58 @@ class _AppDrawerState extends State<AppDrawer> {
     );
   }
 
-  // ===== ADMIN MENU (matches React Sidebar.tsx Lines 32-43) =====
-  List<Widget> _adminItems() => [
-    _navItem(Icons.pie_chart_rounded, 'DASHBOARD', 'dashboard'),
-    _navItem(Icons.school_rounded, 'STUDENTS', 'students'),
-    _navItem(Icons.fact_check_rounded, 'ATTENDANCE', 'attendance'),
-    _navItem(Icons.directions_bus_rounded, 'BUSES', 'buses'),
-    _navItem(Icons.gps_fixed_rounded, 'LIVE TRACKING', 'tracking'),
-    _navItem(Icons.credit_card_rounded, 'PAYMENTS', 'payments'),
-    _navItem(Icons.bar_chart_rounded, 'REPORTS', 'reports'),
-    _navItem(Icons.campaign_rounded, 'NOTIFICATIONS', 'notifications'),
-    if (widget.user.isSuperAdmin)
-      _navItem(Icons.admin_panel_settings_rounded, 'BUS ADMINS', 'management'),
-    _navItem(Icons.settings_rounded, 'SETTINGS', 'settings'),
-    _navItem(Icons.headset_mic_rounded, 'SUPPORT', 'support'),
-  ];
+  // ===== ADMIN MENU (with translations) =====
+  List<Widget> _adminItems() {
+    final t = context.read<LocaleProvider>().t;
+    return [
+      _navItem(Icons.pie_chart_rounded, t('dashboard'), 'dashboard'),
+      _navItem(Icons.school_rounded, t('students'), 'students'),
+      _navItem(Icons.fact_check_rounded, t('attendance'), 'attendance'),
+      _navItem(Icons.directions_bus_rounded, t('buses'), 'buses'),
+      _navItem(Icons.gps_fixed_rounded, t('live_tracking'), 'tracking'),
+      _navItem(Icons.credit_card_rounded, t('payments'), 'payments'),
+      _navItem(Icons.bar_chart_rounded, t('reports'), 'reports'),
+      _navItem(Icons.campaign_rounded, t('notifications'), 'notifications'),
+      if (widget.user.isSuperAdmin)
+        _navItem(Icons.admin_panel_settings_rounded, t('bus_admins'), 'management'),
+      _navItem(Icons.settings_rounded, t('settings'), 'settings'),
+      _navItem(Icons.headset_mic_rounded, t('support'), 'support'),
+    ];
+  }
 
-  // ===== PARENT MENU (matches React Sidebar.tsx Lines 45-75) =====
+  // ===== PARENT MENU (with translations) =====
   List<Widget> _parentItems() {
+    final t = context.read<LocaleProvider>().t;
     final hasTracking = widget.user.preferences.tracking == true;
     final hasCamera = widget.user.preferences.camera == true;
 
     return [
-      _navItem(Icons.home_rounded, 'DASHBOARD', 'dashboard'),
-      _navItem(Icons.school_rounded, 'STUDENT PROFILE', 'student_profile'),
-      _navItem(Icons.fact_check_rounded, 'ATTENDANCE HISTORY', 'attendance_history'),
-      _navItem(Icons.route_rounded, 'ROUTES', 'parent_routes'),
-      if (hasTracking) _navItem(Icons.gps_fixed_rounded, 'LIVE TRACKING', 'parent_tracking'),
-      if (hasCamera) _navItem(Icons.videocam_rounded, 'BUS CAMERA', 'bus_camera'),
+      _navItem(Icons.home_rounded, t('dashboard'), 'dashboard'),
+      _navItem(Icons.school_rounded, t('student_profile'), 'student_profile'),
+      _navItem(Icons.fact_check_rounded, t('attendance_history'), 'attendance_history'),
+      _navItem(Icons.route_rounded, t('routes'), 'parent_routes'),
+      if (hasTracking) _navItem(Icons.gps_fixed_rounded, t('live_tracking'), 'parent_tracking'),
+      if (hasCamera) _navItem(Icons.videocam_rounded, t('bus_camera'), 'bus_camera'),
 
       // PAYMENTS submenu
-      _submenu(Icons.credit_card_rounded, 'PAYMENTS', 'payments_parent', [
-        _subItem(Icons.receipt_long_rounded, 'FEES', 'fees'),
-        _subItem(Icons.receipt_rounded, 'RECEIPTS', 'receipts'),
+      _submenu(Icons.credit_card_rounded, t('payments'), 'payments_parent', [
+        _subItem(Icons.receipt_long_rounded, t('fee_history'), 'fees'),
+        _subItem(Icons.receipt_rounded, t('receipts'), 'receipts'),
       ]),
 
-      _navItem(Icons.notifications_rounded, 'NOTIFICATIONS', 'parent_notifications'),
+      _navItem(Icons.notifications_rounded, t('notifications'), 'parent_notifications'),
 
       // PROFILE submenu
-      _submenu(Icons.person_rounded, 'PROFILE', 'profile_parent', [
-        _subItem(Icons.edit_rounded, 'EDIT PROFILE', 'parent_settings'),
-        _subItem(Icons.lock_rounded, 'PASSWORD RESET', 'parent_settings_password'),
-        _subItem(Icons.language_rounded, 'LANGUAGE', 'parent_settings_lang'),
+      _submenu(Icons.person_rounded, t('profile'), 'profile_parent', [
+        _subItem(Icons.edit_rounded, t('edit_profile'), 'parent_settings'),
+        _subItem(Icons.lock_rounded, t('password_reset'), 'parent_settings_password'),
+        _subItem(Icons.language_rounded, t('language'), 'parent_settings_lang'),
       ]),
 
       // SUPPORT submenu
-      _submenu(Icons.headset_mic_rounded, 'SUPPORT', 'support_parent', [
-        _subItem(Icons.confirmation_number_rounded, 'SUBMIT TICKET', 'support'),
-        _subItem(Icons.help_rounded, 'FAQ', 'support_faq'),
+      _submenu(Icons.headset_mic_rounded, t('support'), 'support_parent', [
+        _subItem(Icons.confirmation_number_rounded, t('submit_ticket'), 'support'),
+        _subItem(Icons.help_rounded, t('faq'), 'support_faq'),
       ]),
     ];
   }
@@ -198,27 +217,31 @@ class _AppDrawerState extends State<AppDrawer> {
   Widget _navItem(IconData icon, String label, String tab) {
     final isActive = widget.currentTab == tab;
     return Padding(
-      padding: const EdgeInsets.only(bottom: 2),
+      padding: const EdgeInsets.only(bottom: 3),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(12),
           onTap: () => widget.onTabSelected(tab),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
             decoration: BoxDecoration(
               color: isActive ? AppColors.primary : Colors.transparent,
-              borderRadius: BorderRadius.circular(14),
-              boxShadow: isActive ? [BoxShadow(color: AppColors.primary.withOpacity(0.3),
-                blurRadius: 12, offset: const Offset(0, 4))] : null,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: isActive ? [BoxShadow(color: AppColors.primary.withOpacity(0.35),
+                blurRadius: 14, offset: const Offset(0, 4))] : null,
             ),
             child: Row(children: [
-              Icon(icon, size: 16, color: isActive ? Colors.white : AppColors.slate500),
-              const SizedBox(width: 12),
-              Expanded(child: Text(label, style: TextStyle(fontFamily: 'PlusJakartaSans',
-                fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 1.5,
-                color: isActive ? Colors.white : AppColors.slate500))),
+              Icon(icon, size: 18, color: isActive ? Colors.white : AppColors.slate400),
+              const SizedBox(width: 14),
+              Expanded(child: Text(label, style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 13,
+                fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+                letterSpacing: 0.1,
+                color: isActive ? Colors.white : AppColors.slate300,
+              ))),
             ]),
           ),
         ),
@@ -230,31 +253,35 @@ class _AppDrawerState extends State<AppDrawer> {
     final hasActiveChild = _isInGroup(widget.currentTab, groupKey);
     final expanded = _isExpanded(groupKey);
     return Padding(
-      padding: const EdgeInsets.only(bottom: 2),
+      padding: const EdgeInsets.only(bottom: 3),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Material(
           color: Colors.transparent,
           child: InkWell(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(12),
             onTap: () => _toggle(groupKey),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
               decoration: BoxDecoration(
-                color: hasActiveChild ? Colors.white.withOpacity(0.05) : Colors.transparent,
-                borderRadius: BorderRadius.circular(14),
+                color: hasActiveChild ? Colors.white.withOpacity(0.06) : Colors.transparent,
+                borderRadius: BorderRadius.circular(12),
               ),
               child: Row(children: [
-                Icon(icon, size: 16, color: hasActiveChild ? Colors.white : AppColors.slate500),
-                const SizedBox(width: 12),
-                Expanded(child: Text(label, style: TextStyle(fontFamily: 'PlusJakartaSans',
-                  fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 1.5,
-                  color: hasActiveChild ? Colors.white : AppColors.slate500))),
+                Icon(icon, size: 18, color: hasActiveChild ? Colors.white : AppColors.slate400),
+                const SizedBox(width: 14),
+                Expanded(child: Text(label, style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 13,
+                  fontWeight: hasActiveChild ? FontWeight.w600 : FontWeight.w500,
+                  letterSpacing: 0.1,
+                  color: hasActiveChild ? Colors.white : AppColors.slate300,
+                ))),
                 AnimatedRotation(
                   turns: expanded ? 0.25 : 0,
                   duration: const Duration(milliseconds: 200),
-                  child: Icon(Icons.chevron_right_rounded, size: 16,
-                    color: hasActiveChild ? Colors.white : AppColors.slate500),
+                  child: Icon(Icons.chevron_right_rounded, size: 18,
+                    color: hasActiveChild ? Colors.white : AppColors.slate400),
                 ),
               ]),
             ),
@@ -262,8 +289,8 @@ class _AppDrawerState extends State<AppDrawer> {
         ),
         if (expanded)
           Container(
-            margin: const EdgeInsets.only(left: 22, top: 4, bottom: 4),
-            padding: const EdgeInsets.only(left: 8),
+            margin: const EdgeInsets.only(left: 26, top: 4, bottom: 6),
+            padding: const EdgeInsets.only(left: 10),
             decoration: const BoxDecoration(border: Border(left: BorderSide(color: Colors.white12, width: 1))),
             child: Column(children: children),
           ),
@@ -281,16 +308,16 @@ class _AppDrawerState extends State<AppDrawer> {
           borderRadius: BorderRadius.circular(10),
           onTap: () => widget.onTabSelected(tab),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
             decoration: BoxDecoration(
               color: isActive ? AppColors.primary.withOpacity(0.2) : Colors.transparent,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Row(children: [
-              Icon(icon, size: 13, color: isActive ? AppColors.primary : AppColors.slate500),
-              const SizedBox(width: 10),
-              Expanded(child: Text(label, style: TextStyle(fontFamily: 'PlusJakartaSans',
-                fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 1.5,
+              Icon(icon, size: 14, color: isActive ? AppColors.primary : AppColors.slate400),
+              const SizedBox(width: 12),
+              Expanded(child: Text(label, style: TextStyle(fontFamily: 'Inter',
+                fontSize: 12, fontWeight: isActive ? FontWeight.w600 : FontWeight.w500, letterSpacing: 0.1,
                 color: isActive ? AppColors.primary : AppColors.slate500))),
             ]),
           ),
