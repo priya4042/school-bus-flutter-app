@@ -9,7 +9,9 @@ import '../../shared/widgets/stat_card.dart';
 
 class SupportScreen extends StatefulWidget {
   final int initialTab;
-  const SupportScreen({super.key, this.initialTab = 0});
+  /// When true, only the selected tab's content is shown (no tab bar)
+  final bool singleTab;
+  const SupportScreen({super.key, this.initialTab = 0, this.singleTab = false});
   @override
   State<SupportScreen> createState() => _SupportScreenState();
 }
@@ -52,7 +54,8 @@ class _SupportScreenState extends State<SupportScreen> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      Container(
+      // Tab bar — hidden in singleTab mode (when accessed from sidebar submenu)
+      if (!widget.singleTab) Container(
         margin: const EdgeInsets.fromLTRB(16, 8, 16, 0),
         padding: const EdgeInsets.all(4),
         decoration: BoxDecoration(color: AppColors.slate100, borderRadius: BorderRadius.circular(14),
@@ -68,7 +71,39 @@ class _SupportScreenState extends State<SupportScreen> with SingleTickerProvider
           tabs: const [Tab(text: 'CONTACT'), Tab(text: 'FAQ')],
         ),
       ),
-      Expanded(child: TabBarView(controller: _tabCtrl, children: [
+      // Page title (only shown in singleTab mode)
+      if (widget.singleTab) Padding(
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 4),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(
+            widget.initialTab == 0 ? 'SUBMIT TICKET' : 'FAQ',
+            style: const TextStyle(
+              fontFamily: 'PlusJakartaSans',
+              fontSize: 22,
+              fontWeight: FontWeight.w900,
+              letterSpacing: -0.5,
+              color: AppColors.slate800,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            widget.initialTab == 0
+                ? 'GET HELP FROM OUR TEAM'
+                : 'FREQUENTLY ASKED QUESTIONS',
+            style: const TextStyle(
+              fontFamily: 'PlusJakartaSans',
+              fontSize: 9,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 2,
+              color: AppColors.slate400,
+            ),
+          ),
+        ]),
+      ),
+      Expanded(child: TabBarView(
+        controller: _tabCtrl,
+        physics: widget.singleTab ? const NeverScrollableScrollPhysics() : null,
+        children: [
         // ===== CONTACT TAB =====
         SingleChildScrollView(padding: const EdgeInsets.all(16), child: Column(children: [
           // Success banner
