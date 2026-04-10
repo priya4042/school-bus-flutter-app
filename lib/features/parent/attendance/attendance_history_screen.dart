@@ -7,6 +7,7 @@ import '../../../core/providers/attendance_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../utils/formatters.dart';
 import '../../shared/widgets/stat_card.dart';
+import '../../shared/widgets/stylish_loader.dart';
 
 class AttendanceHistoryScreen extends StatefulWidget {
   const AttendanceHistoryScreen({super.key});
@@ -41,10 +42,22 @@ class _AttendanceHistoryScreenState extends State<AttendanceHistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final students = context.watch<StudentProvider>().students;
+    final studentProv = context.watch<StudentProvider>();
+    final students = studentProv.students;
     final attendance = context.watch<AttendanceProvider>();
 
-    if (students.isEmpty) return const EmptyState(icon: Icons.fact_check_outlined, title: 'NO STUDENTS');
+    // Show loader while initial data loads
+    if (studentProv.isLoading) {
+      return const Center(child: StylishLoader(label: 'Loading attendance...', size: 64));
+    }
+
+    if (students.isEmpty) {
+      return const EmptyState(
+        icon: Icons.fact_check_outlined,
+        title: 'No students linked',
+        subtitle: 'Contact admin to link your child',
+      );
+    }
 
     var records = attendance.records.toList();
     if (_typeFilter != 'ALL') records = records.where((r) => r.type == _typeFilter).toList();

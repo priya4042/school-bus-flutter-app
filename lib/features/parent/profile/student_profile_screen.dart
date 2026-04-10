@@ -10,6 +10,7 @@ import '../../../core/models/student_model.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../utils/formatters.dart';
 import '../../shared/widgets/stat_card.dart';
+import '../../shared/widgets/stylish_loader.dart';
 
 class StudentProfileScreen extends StatefulWidget {
   const StudentProfileScreen({super.key});
@@ -69,15 +70,22 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final students = context.watch<StudentProvider>().students;
+    final studentProv = context.watch<StudentProvider>();
+    final students = studentProv.students;
     final fees = context.watch<FeeProvider>();
     final attendance = context.watch<AttendanceProvider>();
+
+    // Show loader while loading initial data
+    if (studentProv.isLoading) {
+      return const Center(child: StylishLoader(label: 'Loading profile...', size: 64));
+    }
 
     if (students.isEmpty) {
       return RefreshIndicator(onRefresh: _load, child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         child: SizedBox(height: MediaQuery.of(context).size.height * 0.6,
-          child: const EmptyState(icon: Icons.person_outlined, title: 'NO STUDENTS LINKED')),
+          child: const EmptyState(icon: Icons.person_outlined, title: 'No students linked',
+            subtitle: 'Contact admin to link your child')),
       ));
     }
 

@@ -11,6 +11,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../utils/formatters.dart';
 import '../../../utils/fee_calculator.dart';
 import '../../shared/widgets/stat_card.dart';
+import '../../shared/widgets/stylish_loader.dart';
 
 class FeeHistoryScreen extends StatefulWidget {
   const FeeHistoryScreen({super.key});
@@ -69,8 +70,14 @@ class _FeeHistoryScreenState extends State<FeeHistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final students = context.watch<StudentProvider>().students;
+    final studentProv = context.watch<StudentProvider>();
+    final students = studentProv.students;
     final fees = context.watch<FeeProvider>();
+
+    // Show loader while loading initial data
+    if (studentProv.isLoading || fees.isLoading) {
+      return const Center(child: StylishLoader(label: 'Loading fees...', size: 64));
+    }
 
     var dues = fees.dues.toList();
     if (_selectedStudentId != null) {

@@ -39,9 +39,15 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> {
   @override
   Widget build(BuildContext context) {
     final nav = context.read<NavigationProvider>();
-    final students = context.watch<StudentProvider>().students;
+    final studentProv = context.watch<StudentProvider>();
+    final students = studentProv.students;
     final fees = context.watch<FeeProvider>();
     final t = context.watch<LocaleProvider>().t;
+
+    // Show loader while fetching initial data
+    if (studentProv.isLoading || fees.isLoading) {
+      return Center(child: StylishLoader(label: t('loading'), size: 64));
+    }
 
     if (students.isEmpty) {
       return RefreshIndicator(
@@ -50,10 +56,10 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> {
           physics: const AlwaysScrollableScrollPhysics(),
           child: SizedBox(
             height: MediaQuery.of(context).size.height * 0.7,
-            child: const EmptyState(
+            child: EmptyState(
               icon: Icons.child_care_rounded,
-              title: 'NO CHILDREN LINKED',
-              subtitle: 'Contact admin to link your child\'s admission',
+              title: t('no_students'),
+              subtitle: t('link_child'),
             ),
           ),
         ),

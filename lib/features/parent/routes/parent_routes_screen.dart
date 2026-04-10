@@ -5,6 +5,7 @@ import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/student_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../shared/widgets/stat_card.dart';
+import '../../shared/widgets/stylish_loader.dart';
 
 class ParentRoutesScreen extends StatefulWidget {
   const ParentRoutesScreen({super.key});
@@ -22,9 +23,21 @@ class _ParentRoutesScreenState extends State<ParentRoutesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final students = context.watch<StudentProvider>().students;
-    if (students.isEmpty) return const EmptyState(icon: Icons.route_outlined, title: 'NO CHILDREN FOUND',
-        subtitle: 'Contact admin to link your child\'s profile');
+    final studentProv = context.watch<StudentProvider>();
+    final students = studentProv.students;
+
+    // Show loader while initial data loads
+    if (studentProv.isLoading) {
+      return const Center(child: StylishLoader(label: 'Loading routes...', size: 64));
+    }
+
+    if (students.isEmpty) {
+      return const EmptyState(
+        icon: Icons.route_outlined,
+        title: 'No children found',
+        subtitle: 'Contact admin to link your child\'s profile',
+      );
+    }
 
     return ListView.builder(
       padding: const EdgeInsets.all(16),
