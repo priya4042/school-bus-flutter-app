@@ -54,8 +54,8 @@ class _ReportsScreenState extends State<ReportsScreen> with SingleTickerProvider
           indicator: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10),
               boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)]),
           indicatorSize: TabBarIndicatorSize.tab, dividerColor: Colors.transparent,
-          labelStyle: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
-          unselectedLabelStyle: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
+          labelStyle: TextStyle(fontFamily: 'Inter', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
+          unselectedLabelStyle: TextStyle(fontFamily: 'Inter', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
           labelColor: AppColors.primary, unselectedLabelColor: AppColors.slate400,
           tabs: const [Tab(text: 'REVENUE'), Tab(text: 'ROUTES'), Tab(text: 'DEFAULTERS'), Tab(text: 'HISTORY')],
         ),
@@ -151,9 +151,9 @@ class _ReportsScreenState extends State<ReportsScreen> with SingleTickerProvider
           const Icon(Icons.archive_rounded, color: Colors.white, size: 22),
           const SizedBox(width: 14),
           Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('EXPORT ARCHIVES', style: TextStyle(fontFamily: 'PlusJakartaSans', 
+            Text('EXPORT ARCHIVES', style: TextStyle(fontFamily: 'Inter', 
               fontSize: 14, fontWeight: FontWeight.w900, color: Colors.white, letterSpacing: -0.3)),
-            Text('DOWNLOAD COMPLETE FINANCIAL DATA', style: TextStyle(fontFamily: 'PlusJakartaSans', 
+            Text('DOWNLOAD COMPLETE FINANCIAL DATA', style: TextStyle(fontFamily: 'Inter', 
               fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 2, color: Colors.white.withOpacity(0.4))),
           ])),
           const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white, size: 14),
@@ -210,23 +210,23 @@ class _ReportsScreenState extends State<ReportsScreen> with SingleTickerProvider
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text('TOP PERFORMING ROUTE', style: AppTheme.labelXs),
               const SizedBox(height: 4),
-              Text('NORTH ZONE', style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 16, fontWeight: FontWeight.w900, color: AppColors.slate800)),
+              Text('NORTH ZONE', style: TextStyle(fontFamily: 'Inter', fontSize: 16, fontWeight: FontWeight.w900, color: AppColors.slate800)),
             ]),
             Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(color: AppColors.success.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
-              child: Text('+18.4%', style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 12, fontWeight: FontWeight.w900, color: AppColors.success))),
+              child: Text('+18.4%', style: TextStyle(fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w900, color: AppColors.success))),
           ]),
           const Divider(height: 24),
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text('AVERAGE FEE RECOVERY', style: AppTheme.labelXs),
               const SizedBox(height: 4),
-              Text('${collectionRate.toStringAsFixed(1)}%', style: TextStyle(fontFamily: 'PlusJakartaSans', 
+              Text('${collectionRate.toStringAsFixed(1)}%', style: TextStyle(fontFamily: 'Inter', 
                 fontSize: 16, fontWeight: FontWeight.w900, color: AppColors.slate800)),
             ]),
             Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(color: AppColors.success.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
-              child: Text('HEALTHY', style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2, color: AppColors.success))),
+              child: Text('HEALTHY', style: TextStyle(fontFamily: 'Inter', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2, color: AppColors.success))),
           ]),
         ]),
       ),
@@ -256,12 +256,12 @@ class _ReportsScreenState extends State<ReportsScreen> with SingleTickerProvider
                   style: const TextStyle(color: AppColors.danger, fontWeight: FontWeight.w900, fontSize: 14)))),
             const SizedBox(width: 12),
             Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text((d.studentName ?? 'UNKNOWN').toUpperCase(), style: TextStyle(fontFamily: 'PlusJakartaSans', 
+              Text((d.studentName ?? 'UNKNOWN').toUpperCase(), style: TextStyle(fontFamily: 'Inter', 
                 fontSize: 12, fontWeight: FontWeight.w900, color: AppColors.slate800)),
               Text(d.monthLabel.toUpperCase(), style: AppTheme.labelXs.copyWith(color: AppColors.slate400)),
             ])),
             Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-              Text(Formatters.currencyFull(d.totalDue), style: TextStyle(fontFamily: 'PlusJakartaSans', 
+              Text(Formatters.currencyFull(d.totalDue), style: TextStyle(fontFamily: 'Inter', 
                 fontSize: 14, fontWeight: FontWeight.w900, color: AppColors.danger)),
               GestureDetector(
                 onTap: () {}, // Send notice
@@ -296,7 +296,7 @@ class _ReportsScreenState extends State<ReportsScreen> with SingleTickerProvider
                     style: const TextStyle(color: AppColors.slate500, fontWeight: FontWeight.w900)))),
               const SizedBox(width: 12),
               Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(((s['full_name'] ?? 'UNKNOWN') as String).toUpperCase(), style: TextStyle(fontFamily: 'PlusJakartaSans', 
+                Text(((s['full_name'] ?? 'UNKNOWN') as String).toUpperCase(), style: TextStyle(fontFamily: 'Inter', 
                   fontSize: 13, fontWeight: FontWeight.w900, color: AppColors.slate800)),
                 Text('${s['admission_number'] ?? ""}'.toUpperCase(), style: AppTheme.labelXs.copyWith(color: AppColors.slate400)),
               ])),
@@ -312,7 +312,7 @@ class _ReportsScreenState extends State<ReportsScreen> with SingleTickerProvider
             if ((s['outstanding_amount'] ?? 0) > 0) ...[
               const SizedBox(height: 8),
               Text('OUTSTANDING: ${Formatters.currencyFull((s['outstanding_amount'] as num).toDouble())}',
-                  style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 11, fontWeight: FontWeight.w900, color: AppColors.danger)),
+                  style: TextStyle(fontFamily: 'Inter', fontSize: 11, fontWeight: FontWeight.w900, color: AppColors.danger)),
             ],
           ]),
         );
@@ -323,7 +323,7 @@ class _ReportsScreenState extends State<ReportsScreen> with SingleTickerProvider
   Widget _archiveInfo(String label, String value) {
     return Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Text(label, style: AppTheme.labelXs),
-      Text(value, style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 10, fontWeight: FontWeight.w900, color: AppColors.slate700)),
+      Text(value, style: TextStyle(fontFamily: 'Inter', fontSize: 10, fontWeight: FontWeight.w900, color: AppColors.slate700)),
     ]));
   }
 
@@ -333,9 +333,9 @@ class _ReportsScreenState extends State<ReportsScreen> with SingleTickerProvider
       decoration: BoxDecoration(color: color.withOpacity(0.08), borderRadius: BorderRadius.circular(16),
           border: Border.all(color: color.withOpacity(0.15))),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(value, style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 20, fontWeight: FontWeight.w900, color: color)),
+        Text(value, style: TextStyle(fontFamily: 'Inter', fontSize: 20, fontWeight: FontWeight.w900, color: color)),
         const SizedBox(height: 2),
-        Text(label, style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2, color: color.withOpacity(0.7))),
+        Text(label, style: TextStyle(fontFamily: 'Inter', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2, color: color.withOpacity(0.7))),
       ]),
     );
   }
@@ -344,7 +344,7 @@ class _ReportsScreenState extends State<ReportsScreen> with SingleTickerProvider
     return Row(children: [
       Container(width: 10, height: 10, decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(3))),
       const SizedBox(width: 6),
-      Text(label, style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 1, color: AppColors.slate600)),
+      Text(label, style: TextStyle(fontFamily: 'Inter', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 1, color: AppColors.slate600)),
     ]);
   }
 

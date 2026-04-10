@@ -51,16 +51,16 @@ class StatCard extends StatelessWidget {
           ]),
           const SizedBox(height: 14),
           // Value: text-3xl font-bold
-          Text(value, style: TextStyle(fontFamily: 'PlusJakartaSans', 
+          Text(value, style: TextStyle(fontFamily: 'Inter', 
             fontSize: 26, fontWeight: FontWeight.w900, color: AppColors.slate800, letterSpacing: -1)),
           const SizedBox(height: 4),
           // Title: text-sm font-medium text-slate-500 uppercase tracking-wider
-          Text(title.toUpperCase(), style: TextStyle(fontFamily: 'PlusJakartaSans', 
+          Text(title.toUpperCase(), style: TextStyle(fontFamily: 'Inter', 
             fontSize: 9, fontWeight: FontWeight.w900, color: AppColors.slate500,
             letterSpacing: 2)),
           if (subtitle != null) ...[
             const SizedBox(height: 4),
-            Text(subtitle!, style: TextStyle(fontFamily: 'PlusJakartaSans', 
+            Text(subtitle!, style: TextStyle(fontFamily: 'Inter', 
               fontSize: 10, fontWeight: FontWeight.w700, color: c)),
           ],
         ]),
@@ -113,7 +113,7 @@ class StatusBadge extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: borderColor ?? color.withOpacity(0.1)),
       ),
-      child: Text(label, style: TextStyle(fontFamily: 'PlusJakartaSans', 
+      child: Text(label, style: TextStyle(fontFamily: 'Inter', 
         fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2, color: color)),
     );
   }
@@ -134,12 +134,12 @@ class EmptyState extends StatelessWidget {
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           Icon(icon, size: 56, color: AppColors.slate300),
           const SizedBox(height: 16),
-          Text(title.toUpperCase(), style: TextStyle(fontFamily: 'PlusJakartaSans', 
+          Text(title.toUpperCase(), style: TextStyle(fontFamily: 'Inter', 
             fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2, color: AppColors.slate400)),
           if (subtitle != null) ...[
             const SizedBox(height: 8),
             Text(subtitle!, textAlign: TextAlign.center,
-                style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 12, color: AppColors.slate400)),
+                style: TextStyle(fontFamily: 'Inter', fontSize: 12, color: AppColors.slate400)),
           ],
         ]),
       ),
@@ -171,11 +171,11 @@ class MiniLoader extends StatelessWidget {
             shaderCallback: (bounds) => const LinearGradient(
               colors: [AppColors.primary, AppColors.cyan500],
             ).createShader(bounds),
-            child: Text('SBW', style: TextStyle(fontFamily: 'PlusJakartaSans', 
+            child: Text('SBW', style: TextStyle(fontFamily: 'Inter', 
               fontSize: 14, fontWeight: FontWeight.w900, color: Colors.white)),
           ),
           const SizedBox(height: 8),
-          Text('CLOUD SYNC IN PROGRESS', style: TextStyle(fontFamily: 'PlusJakartaSans', 
+          Text('CLOUD SYNC IN PROGRESS', style: TextStyle(fontFamily: 'Inter', 
             fontSize: 9, fontWeight: FontWeight.w700, letterSpacing: 2, color: AppColors.slate400)),
         ]),
       ),

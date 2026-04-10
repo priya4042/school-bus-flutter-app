@@ -43,7 +43,7 @@ class _ParentRoutesScreenState extends State<ParentRoutesScreen> {
                     style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18)))),
               const SizedBox(width: 14),
               Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(s.fullName.toUpperCase(), style: TextStyle(fontFamily: 'PlusJakartaSans', 
+                Text(s.fullName.toUpperCase(), style: TextStyle(fontFamily: 'Inter', 
                   fontSize: 14, fontWeight: FontWeight.w900, letterSpacing: -0.3, color: AppColors.slate800)),
                 Text(s.admissionNumber.toUpperCase(), style: AppTheme.labelXs.copyWith(color: AppColors.slate400)),
               ])),
@@ -70,7 +70,7 @@ class _ParentRoutesScreenState extends State<ParentRoutesScreen> {
               child: Row(children: [
                 const Icon(Icons.pin_drop_rounded, size: 16, color: AppColors.primary),
                 const SizedBox(width: 8),
-                Text('BOARDING: ${(s.boardingPoint ?? "NOT SET").toUpperCase()}', style: TextStyle(fontFamily: 'PlusJakartaSans', 
+                Text('BOARDING: ${(s.boardingPoint ?? "NOT SET").toUpperCase()}', style: TextStyle(fontFamily: 'Inter', 
                   fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: -0.3, color: AppColors.primary)),
               ]),
             ),
@@ -86,7 +86,7 @@ class _ParentRoutesScreenState extends State<ParentRoutesScreen> {
       const SizedBox(width: 6),
       Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(label, style: AppTheme.labelXs),
-        Text(value.toUpperCase(), style: TextStyle(fontFamily: 'PlusJakartaSans', 
+        Text(value.toUpperCase(), style: TextStyle(fontFamily: 'Inter', 
           fontSize: 12, fontWeight: FontWeight.w900, color: AppColors.slate800)),
       ]),
     ]);

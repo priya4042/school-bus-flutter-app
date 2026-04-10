@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/providers/auth_provider.dart';
+import '../../../core/providers/locale_provider.dart';
 import '../../../core/models/user_model.dart';
 import '../../../core/services/avatar_service.dart';
 import '../../../core/theme/app_theme.dart';
@@ -65,19 +66,19 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> with Single
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Text('REMOVE AVATAR?', style: TextStyle(
-          fontFamily: 'PlusJakartaSans', fontSize: 16, fontWeight: FontWeight.w900)),
+          fontFamily: 'Inter', fontSize: 16, fontWeight: FontWeight.w900)),
         content: const Text('Your profile will show your initial instead.',
-          style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 13)),
+          style: TextStyle(fontFamily: 'Inter', fontSize: 13)),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx, false),
             child: const Text('CANCEL', style: TextStyle(
-              fontFamily: 'PlusJakartaSans', fontSize: 11, fontWeight: FontWeight.w900,
+              fontFamily: 'Inter', fontSize: 11, fontWeight: FontWeight.w900,
               letterSpacing: 2, color: AppColors.slate500))),
           ElevatedButton(
             onPressed: () => Navigator.pop(ctx, true),
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.danger),
             child: const Text('REMOVE', style: TextStyle(
-              fontFamily: 'PlusJakartaSans', fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
+              fontFamily: 'Inter', fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
           ),
         ],
       ),
@@ -156,8 +157,8 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> with Single
               boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)]),
           indicatorSize: TabBarIndicatorSize.tab,
           dividerColor: Colors.transparent,
-          labelStyle: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
-          unselectedLabelStyle: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
+          labelStyle: TextStyle(fontFamily: 'Inter', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
+          unselectedLabelStyle: TextStyle(fontFamily: 'Inter', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
           labelColor: AppColors.primary,
           unselectedLabelColor: AppColors.slate400,
           tabs: const [Tab(text: 'PROFILE'), Tab(text: 'SECURITY'), Tab(text: 'LANGUAGE')],
@@ -171,7 +172,7 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> with Single
             widget.initialTab == 0 ? 'EDIT PROFILE' :
             widget.initialTab == 1 ? 'PASSWORD RESET' : 'LANGUAGE',
             style: const TextStyle(
-              fontFamily: 'PlusJakartaSans',
+              fontFamily: 'Inter',
               fontSize: 22,
               fontWeight: FontWeight.w900,
               letterSpacing: -0.5,
@@ -183,7 +184,7 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> with Single
             widget.initialTab == 0 ? 'UPDATE YOUR PERSONAL INFORMATION' :
             widget.initialTab == 1 ? 'CHANGE YOUR ACCOUNT PASSWORD' : 'SELECT YOUR PREFERRED LANGUAGE',
             style: const TextStyle(
-              fontFamily: 'PlusJakartaSans',
+              fontFamily: 'Inter',
               fontSize: 9,
               fontWeight: FontWeight.w900,
               letterSpacing: 2,
@@ -224,7 +225,7 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> with Single
                                 child: Text(
                                   (auth.user!.fullName.isNotEmpty ? auth.user!.fullName[0] : 'U').toUpperCase(),
                                   style: TextStyle(
-                                    fontFamily: 'PlusJakartaSans',
+                                    fontFamily: 'Inter',
                                     fontSize: 32,
                                     fontWeight: FontWeight.w900,
                                     color: AppColors.slate300,
@@ -236,7 +237,7 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> with Single
                               child: Text(
                                 (auth.user?.fullName.isNotEmpty ?? false) ? auth.user!.fullName[0].toUpperCase() : 'U',
                                 style: TextStyle(
-                                  fontFamily: 'PlusJakartaSans',
+                                  fontFamily: 'Inter',
                                   fontSize: 32,
                                   fontWeight: FontWeight.w900,
                                   color: AppColors.slate300,
@@ -285,14 +286,14 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> with Single
               ),
               const SizedBox(width: 18),
               Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(auth.user?.fullName ?? '', style: TextStyle(fontFamily: 'PlusJakartaSans',
+                Text(auth.user?.fullName ?? '', style: TextStyle(fontFamily: 'Inter',
                   fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: -0.5, color: AppColors.slate900)),
                 const SizedBox(height: 4),
                 Text('${auth.user?.isParent ?? true ? "PARENT" : "USER"} • SINCE ${auth.user?.createdAt != null ? Formatters.date(auth.user!.createdAt!).toUpperCase() : "N/A"}',
                     style: AppTheme.labelXs.copyWith(color: AppColors.slate500)),
                 const SizedBox(height: 6),
                 Text('Tap camera to update photo',
-                    style: TextStyle(fontFamily: 'PlusJakartaSans',
+                    style: TextStyle(fontFamily: 'Inter',
                       fontSize: 10, fontWeight: FontWeight.w600, color: AppColors.slate400)),
               ])),
             ]),
@@ -308,7 +309,7 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> with Single
               decoration: AppTheme.inputDecoration('ADMISSION NUMBER').copyWith(
                 prefixIcon: const Icon(Icons.badge_rounded, color: AppColors.slate400, size: 20)),
               controller: TextEditingController(text: auth.user?.admissionNumber ?? ''),
-              style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate400),
+              style: TextStyle(fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate400),
             ),
             const SizedBox(height: 24),
             SizedBox(width: double.infinity, height: 52, child: Container(
@@ -316,7 +317,7 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> with Single
               child: ElevatedButton.icon(
                 onPressed: _saveProfile, style: AppTheme.primaryButton,
                 icon: const Icon(Icons.check_rounded, size: 18),
-                label: Text('SAVE CHANGES', style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
+                label: Text('SAVE CHANGES', style: TextStyle(fontFamily: 'Inter', fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
               ),
             )),
           ]),
@@ -332,7 +333,7 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> with Single
             TextField(
               controller: _newPassCtrl,
               obscureText: _obscure,
-              style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate800),
+              style: TextStyle(fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate800),
               decoration: AppTheme.inputDecoration('NEW PASSWORD', icon: Icons.lock_rounded).copyWith(
                 suffixIcon: IconButton(
                   icon: Icon(_obscure ? Icons.visibility_off_rounded : Icons.visibility_rounded, color: AppColors.slate400, size: 20),
@@ -344,7 +345,7 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> with Single
             TextField(
               controller: _confirmPassCtrl,
               obscureText: _obscureConfirm,
-              style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate800),
+              style: TextStyle(fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate800),
               decoration: AppTheme.inputDecoration('CONFIRM PASSWORD', icon: Icons.lock_rounded).copyWith(
                 suffixIcon: IconButton(
                   icon: Icon(_obscureConfirm ? Icons.visibility_off_rounded : Icons.visibility_rounded, color: AppColors.slate400, size: 20),
@@ -360,38 +361,83 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> with Single
             SizedBox(width: double.infinity, height: 52, child: Container(
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), boxShadow: AppTheme.primaryButtonShadow()),
               child: ElevatedButton(onPressed: _changePassword, style: AppTheme.primaryButton,
-                child: Text('UPDATE PASSWORD', style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2))),
+                child: Text('UPDATE PASSWORD', style: TextStyle(fontFamily: 'Inter', fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2))),
             )),
           ]),
         )),
 
         // ===== LANGUAGE TAB =====
-        SingleChildScrollView(padding: const EdgeInsets.all(16), child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: _languages.map((l) => Container(
-            margin: const EdgeInsets.only(bottom: 8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: _selectedLang == l['code'] ? AppColors.primary : AppColors.slate100,
-                width: _selectedLang == l['code'] ? 2 : 1),
-              color: _selectedLang == l['code'] ? AppColors.primary.withOpacity(0.05) : Colors.white,
-              boxShadow: _selectedLang == l['code'] ? [BoxShadow(color: AppColors.primary.withOpacity(0.1), blurRadius: 8)] : null,
+        Consumer<LocaleProvider>(
+          builder: (context, locale, _) => SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: _languages.map((l) {
+                final isSelected = locale.lang == l['code'];
+                final isAvailable = l['available'] == 'true';
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 8),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: isSelected ? AppColors.primary : AppColors.slate100,
+                      width: isSelected ? 2 : 1,
+                    ),
+                    color: isSelected ? AppColors.primary.withOpacity(0.05) : Colors.white,
+                    boxShadow: isSelected
+                        ? [BoxShadow(color: AppColors.primary.withOpacity(0.1), blurRadius: 8)]
+                        : null,
+                  ),
+                  child: ListTile(
+                    leading: Text(l['flag']!, style: const TextStyle(fontSize: 28)),
+                    title: Text(
+                      l['name']!,
+                      style: const TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.slate800,
+                      ),
+                    ),
+                    subtitle: !isAvailable
+                        ? Text('Coming soon', style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 11,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.slate400,
+                          ))
+                        : Text(l['sub']!, style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 11,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.slate400,
+                          )),
+                    trailing: isSelected
+                        ? const Icon(Icons.check_circle_rounded, color: AppColors.primary, size: 22)
+                        : null,
+                    onTap: isAvailable
+                        ? () async {
+                            await locale.setLang(l['code']!);
+                            if (mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(l['code'] == 'hi'
+                                      ? 'भाषा हिन्दी में बदल दी गई'
+                                      : 'Language changed to English'),
+                                  backgroundColor: AppColors.success,
+                                ),
+                              );
+                            }
+                          }
+                        : null,
+                    enabled: isAvailable,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  ),
+                );
+              }).toList(),
             ),
-            child: ListTile(
-              leading: Text(l['flag']!, style: const TextStyle(fontSize: 24)),
-              title: Text(l['name']!, style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 14, fontWeight: FontWeight.w900, color: AppColors.slate800)),
-              subtitle: l['available'] != 'true'
-                  ? Text('COMING SOON', style: AppTheme.labelXs.copyWith(color: AppColors.slate400))
-                  : null,
-              trailing: _selectedLang == l['code']
-                  ? const Icon(Icons.check_circle_rounded, color: AppColors.primary) : null,
-              onTap: l['available'] == 'true' ? () => setState(() => _selectedLang = l['code']!) : null,
-              enabled: l['available'] == 'true',
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            ),
-          )).toList(),
-        )),
+          ),
+        ),
       ])),
     ]);
   }
@@ -399,20 +445,20 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> with Single
   Widget _field(String label, TextEditingController ctrl, IconData icon, {TextInputType inputType = TextInputType.text}) {
     return Padding(padding: const EdgeInsets.only(bottom: 16), child: TextField(
       controller: ctrl, keyboardType: inputType,
-      style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate800),
+      style: TextStyle(fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate800),
       decoration: AppTheme.inputDecoration(label, icon: icon),
     ));
   }
 
   static const _languages = [
-    {'code': 'en', 'name': 'English', 'flag': '🇺🇸', 'available': 'true'},
-    {'code': 'hi', 'name': 'हिन्दी', 'flag': '🇮🇳', 'available': 'true'},
-    {'code': 'es', 'name': 'Español', 'flag': '🇪🇸', 'available': 'false'},
-    {'code': 'fr', 'name': 'Français', 'flag': '🇫🇷', 'available': 'false'},
-    {'code': 'ar', 'name': 'العربية', 'flag': '🇸🇦', 'available': 'false'},
-    {'code': 'pt', 'name': 'Português', 'flag': '🇧🇷', 'available': 'false'},
-    {'code': 'zh', 'name': '中文', 'flag': '🇨🇳', 'available': 'false'},
-    {'code': 'ja', 'name': '日本語', 'flag': '🇯🇵', 'available': 'false'},
+    {'code': 'en', 'name': 'English', 'sub': 'Default', 'flag': '🇬🇧', 'available': 'true'},
+    {'code': 'hi', 'name': 'हिन्दी', 'sub': 'Hindi', 'flag': '🇮🇳', 'available': 'true'},
+    {'code': 'es', 'name': 'Español', 'sub': 'Spanish', 'flag': '🇪🇸', 'available': 'false'},
+    {'code': 'fr', 'name': 'Français', 'sub': 'French', 'flag': '🇫🇷', 'available': 'false'},
+    {'code': 'ar', 'name': 'العربية', 'sub': 'Arabic', 'flag': '🇸🇦', 'available': 'false'},
+    {'code': 'pt', 'name': 'Português', 'sub': 'Portuguese', 'flag': '🇧🇷', 'available': 'false'},
+    {'code': 'zh', 'name': '中文', 'sub': 'Chinese', 'flag': '🇨🇳', 'available': 'false'},
+    {'code': 'ja', 'name': '日本語', 'sub': 'Japanese', 'flag': '🇯🇵', 'available': 'false'},
   ];
 
   @override

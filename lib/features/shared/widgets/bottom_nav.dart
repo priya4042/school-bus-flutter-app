@@ -56,7 +56,7 @@ class AppBottomNav extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       item.label,
-                      style: TextStyle(fontFamily: 'PlusJakartaSans', 
+                      style: TextStyle(fontFamily: 'Inter', 
                         fontSize: 8,
                         fontWeight: FontWeight.w900,
                         color: isActive ? AppColors.primary : AppColors.slate400,

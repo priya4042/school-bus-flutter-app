@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/navigation_provider.dart';
 import '../../../core/providers/notification_provider.dart';
+import '../../../core/providers/locale_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import 'app_drawer.dart';
 import 'bottom_nav.dart';
@@ -58,6 +59,8 @@ class _AppShellState extends State<AppShell> {
     final auth = context.watch<AppAuthProvider>();
     final nav = context.watch<NavigationProvider>();
     final notifications = context.watch<NotificationProvider>();
+    final locale = context.watch<LocaleProvider>();
+    final t = locale.t;
 
     if (auth.user == null) return const SizedBox.shrink();
     final isAdmin = auth.user!.isAdmin;
@@ -76,22 +79,33 @@ class _AppShellState extends State<AppShell> {
           ),
         ),
         title: Row(children: [
-          // Status dot: w-2 h-2 bg-success rounded-full animate-pulse
+          // Status dot
           Container(
             width: 8, height: 8,
             decoration: const BoxDecoration(color: AppColors.success, shape: BoxShape.circle),
           ),
           const SizedBox(width: 8),
           Text(
-            isAdmin ? 'GLOBAL FLEET' : 'MAIN PORTAL',
-            style: TextStyle(fontFamily: 'PlusJakartaSans', 
-              fontSize: 10, fontWeight: FontWeight.w900,
-              letterSpacing: 2, color: AppColors.slate400,
+            isAdmin ? t('global_fleet') : t('main_portal'),
+            style: const TextStyle(
+              fontFamily: 'Inter',
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.3,
+              color: AppColors.slate600,
             ),
           ),
           const SizedBox(width: 6),
-          Text('ONLINE', style: TextStyle(fontFamily: 'PlusJakartaSans', 
-            fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 2, color: AppColors.success)),
+          Text(
+            '· ${t('online')}',
+            style: const TextStyle(
+              fontFamily: 'Inter',
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.3,
+              color: AppColors.success,
+            ),
+          ),
         ]),
         actions: [
           // Notification bell
@@ -112,7 +126,7 @@ class _AppShellState extends State<AppShell> {
                   ),
                   child: Center(child: Text(
                     notifications.unreadCount > 9 ? '9+' : '${notifications.unreadCount}',
-                    style: TextStyle(fontFamily: 'PlusJakartaSans', 
+                    style: TextStyle(fontFamily: 'Inter', 
                       fontSize: 8, fontWeight: FontWeight.w900, color: Colors.white),
                   )),
                 ),
@@ -139,23 +153,24 @@ class _AppShellState extends State<AppShell> {
                     Text(
                       auth.user!.fullName.split(' ').first,
                       style: const TextStyle(
-                        fontFamily: 'PlusJakartaSans',
-                        fontSize: 11,
-                        fontWeight: FontWeight.w900,
-                        color: AppColors.slate800,
-                        height: 1.0,
+                        fontFamily: 'Inter',
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: -0.2,
+                        color: AppColors.slate900,
+                        height: 1.1,
                       ),
                     ),
-                    const SizedBox(height: 3),
+                    const SizedBox(height: 2),
                     Text(
-                      isAdmin ? 'ADMIN' : 'PARENT',
+                      isAdmin ? 'Admin' : 'Parent',
                       style: const TextStyle(
-                        fontFamily: 'PlusJakartaSans',
-                        fontSize: 8,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 2,
+                        fontFamily: 'Inter',
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.3,
                         color: AppColors.primary,
-                        height: 1.0,
+                        height: 1.1,
                       ),
                     ),
                   ],
@@ -194,20 +209,21 @@ class _AppShellState extends State<AppShell> {
                         Text(
                           auth.user!.fullName,
                           style: const TextStyle(
-                            fontFamily: 'PlusJakartaSans',
-                            fontSize: 13,
-                            fontWeight: FontWeight.w900,
-                            color: AppColors.slate800,
+                            fontFamily: 'Inter',
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: -0.2,
+                            color: AppColors.slate900,
                           ),
                         ),
-                        const SizedBox(height: 2),
+                        const SizedBox(height: 3),
                         Text(
                           auth.user!.email,
                           style: const TextStyle(
-                            fontFamily: 'PlusJakartaSans',
-                            fontSize: 10,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.slate400,
+                            fontFamily: 'Inter',
+                            fontSize: 11,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.slate500,
                           ),
                         ),
                       ],
@@ -215,12 +231,34 @@ class _AppShellState extends State<AppShell> {
                   ),
                 ),
                 if (!isAdmin)
-                  _menuItem('edit_profile', Icons.edit_rounded, 'EDIT PROFILE'),
-                _menuItem(isAdmin ? 'settings' : 'parent_settings', Icons.settings_rounded, 'SETTINGS'),
-                if (!isAdmin)
-                  _menuItem('parent_settings_lang', Icons.language_rounded, 'LANGUAGE'),
+                  _menuItem('edit_profile', Icons.edit_rounded, t('edit_profile')),
+                _menuItem(isAdmin ? 'settings' : 'parent_settings', Icons.settings_rounded, t('settings')),
+                // Language quick-toggle (EN/HI buttons)
+                PopupMenuItem<String>(
+                  enabled: false,
+                  height: 60,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(t('language'),
+                          style: const TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0.5,
+                            color: AppColors.slate400,
+                          )),
+                      const SizedBox(height: 6),
+                      Row(children: [
+                        _langButton('en', '🇬🇧', 'EN', locale, t),
+                        const SizedBox(width: 6),
+                        _langButton('hi', '🇮🇳', 'हिं', locale, t),
+                      ]),
+                    ],
+                  ),
+                ),
                 const PopupMenuDivider(),
-                _menuItem('logout', Icons.logout_rounded, 'LOGOUT', isLogout: true),
+                _menuItem('logout', Icons.logout_rounded, t('sign_out'), isLogout: true),
               ],
               onSelected: (value) async {
                 if (value == 'logout') {
@@ -251,6 +289,37 @@ class _AppShellState extends State<AppShell> {
     );
   }
 
+  Widget _langButton(String code, String flag, String label, LocaleProvider locale, String Function(String) t) {
+    final isActive = locale.lang == code;
+    return Expanded(
+      child: GestureDetector(
+        onTap: () async {
+          await locale.setLang(code);
+          if (mounted) Navigator.of(context).pop();
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+          decoration: BoxDecoration(
+            color: isActive ? AppColors.primary : AppColors.slate50,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: isActive ? [BoxShadow(color: AppColors.primary.withOpacity(0.25), blurRadius: 8)] : null,
+          ),
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Text(flag, style: const TextStyle(fontSize: 14)),
+            const SizedBox(width: 6),
+            Text(label, style: TextStyle(
+              fontFamily: 'Inter',
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.5,
+              color: isActive ? Colors.white : AppColors.slate500,
+            )),
+          ]),
+        ),
+      ),
+    );
+  }
+
   Widget _initialAvatar(String fullName) {
     return Container(
       color: AppColors.slate900,
@@ -258,7 +327,7 @@ class _AppShellState extends State<AppShell> {
       child: Text(
         fullName.isNotEmpty ? fullName[0].toUpperCase() : 'U',
         style: const TextStyle(
-          fontFamily: 'PlusJakartaSans',
+          fontFamily: 'Inter',
           color: Colors.white,
           fontWeight: FontWeight.w900,
           fontSize: 14,
@@ -270,17 +339,17 @@ class _AppShellState extends State<AppShell> {
   PopupMenuItem<String> _menuItem(String value, IconData icon, String label, {bool isLogout = false}) {
     return PopupMenuItem<String>(
       value: value,
-      height: 44,
+      height: 46,
       child: Row(children: [
-        Icon(icon, size: 16, color: isLogout ? AppColors.danger : AppColors.slate500),
+        Icon(icon, size: 18, color: isLogout ? AppColors.danger : AppColors.slate500),
         const SizedBox(width: 12),
         Text(
           label,
           style: TextStyle(
-            fontFamily: 'PlusJakartaSans',
-            fontSize: 11,
-            fontWeight: FontWeight.w900,
-            letterSpacing: 1.5,
+            fontFamily: 'Inter',
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.1,
             color: isLogout ? AppColors.danger : AppColors.slate700,
           ),
         ),

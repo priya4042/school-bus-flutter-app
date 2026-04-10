@@ -100,7 +100,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> {
                 ),
                 const SizedBox(width: 16),
                 Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text('FAMILY HUB', style: TextStyle(fontFamily: 'PlusJakartaSans', 
+                  Text('FAMILY HUB', style: TextStyle(fontFamily: 'Inter', 
                     fontSize: 22, fontWeight: FontWeight.w900, letterSpacing: -1, color: AppColors.slate800)),
                   Text('SCHOOL BUS MANAGEMENT', style: AppTheme.labelSmall.copyWith(color: AppColors.slate500)),
                 ])),
@@ -113,7 +113,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> {
                   const SizedBox(height: 4),
                   Text(
                     totalDue > 0 ? Formatters.currencyFull(totalDue) : 'ALL CLEAR',
-                    style: TextStyle(fontFamily: 'PlusJakartaSans', 
+                    style: TextStyle(fontFamily: 'Inter', 
                       fontSize: 32, fontWeight: FontWeight.w900, letterSpacing: -2,
                       color: totalDue > 0 ? AppColors.danger : AppColors.success,
                     ),
@@ -128,7 +128,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> {
                     child: ElevatedButton(
                       onPressed: () => nav.setTab('fees'),
                       style: AppTheme.primaryButton,
-                      child: Text('PAY NOW', style: TextStyle(fontFamily: 'PlusJakartaSans', 
+                      child: Text('PAY NOW', style: TextStyle(fontFamily: 'Inter', 
                         fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
                     ),
                   ),
@@ -163,7 +163,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> {
                     ),
                     child: Center(child: Text(
                       s.fullName.split(' ').first.toUpperCase(),
-                      style: TextStyle(fontFamily: 'PlusJakartaSans', 
+                      style: TextStyle(fontFamily: 'Inter', 
                         fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2,
                         color: selected ? Colors.white : AppColors.slate400,
                       ),
@@ -197,7 +197,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> {
                   Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     Text('FEE MANIFEST', style: AppTheme.labelSmall),
                     const SizedBox(height: 2),
-                    Text(child.fullName.toUpperCase(), style: TextStyle(fontFamily: 'PlusJakartaSans', 
+                    Text(child.fullName.toUpperCase(), style: TextStyle(fontFamily: 'Inter', 
                       fontSize: 12, fontWeight: FontWeight.w900, color: AppColors.slate800)),
                   ]),
                   Container(
@@ -231,7 +231,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> {
                       ),
                       child: Row(children: [
                         Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Text(d.fullMonthLabel.toUpperCase(), style: TextStyle(fontFamily: 'PlusJakartaSans', 
+                          Text(d.fullMonthLabel.toUpperCase(), style: TextStyle(fontFamily: 'Inter', 
                             fontSize: 12, fontWeight: FontWeight.w900, letterSpacing: -0.3, color: AppColors.slate800)),
                           const SizedBox(height: 4),
                           StatusBadge.fromStatus(
@@ -241,19 +241,19 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> {
                             Padding(
                               padding: const EdgeInsets.only(top: 4),
                               child: Text('LATE FEE: ${Formatters.currencyFull(d.lateFee)}',
-                                style: TextStyle(fontFamily: 'PlusJakartaSans', 
+                                style: TextStyle(fontFamily: 'Inter', 
                                   fontSize: 7, fontWeight: FontWeight.w900, letterSpacing: 2, color: AppColors.danger)),
                             ),
                         ])),
                         Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-                          Text(Formatters.currencyFull(d.totalDue), style: TextStyle(fontFamily: 'PlusJakartaSans', 
+                          Text(Formatters.currencyFull(d.totalDue), style: TextStyle(fontFamily: 'Inter', 
                             fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: -1, color: AppColors.slate800)),
                           const SizedBox(height: 6),
                           if (d.isPaid)
                             Row(mainAxisSize: MainAxisSize.min, children: [
                               const Icon(Icons.check_circle_rounded, size: 14, color: AppColors.success),
                               const SizedBox(width: 4),
-                              Text('PAID', style: TextStyle(fontFamily: 'PlusJakartaSans', 
+                              Text('PAID', style: TextStyle(fontFamily: 'Inter', 
                                 fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 2, color: AppColors.success)),
                             ])
                           else if (isPayable)
@@ -266,7 +266,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> {
                                   borderRadius: BorderRadius.circular(12),
                                   boxShadow: AppTheme.primaryButtonShadow(),
                                 ),
-                                child: Text('PAY NOW', style: TextStyle(fontFamily: 'PlusJakartaSans', 
+                                child: Text('PAY NOW', style: TextStyle(fontFamily: 'Inter', 
                                   fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 2, color: Colors.white)),
                               ),
                             )
@@ -280,7 +280,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> {
                               child: Row(mainAxisSize: MainAxisSize.min, children: [
                                 const Icon(Icons.lock_rounded, size: 10, color: AppColors.slate400),
                                 const SizedBox(width: 4),
-                                Text('LOCKED', style: TextStyle(fontFamily: 'PlusJakartaSans', 
+                                Text('LOCKED', style: TextStyle(fontFamily: 'Inter', 
                                   fontSize: 7, fontWeight: FontWeight.w900, letterSpacing: 2, color: AppColors.slate400)),
                               ]),
                             ),
@@ -298,7 +298,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> {
                   decoration: const BoxDecoration(
                     borderRadius: BorderRadius.vertical(bottom: Radius.circular(28)),
                   ),
-                  child: Center(child: Text('VIEW FULL LEDGER →', style: TextStyle(fontFamily: 'PlusJakartaSans', 
+                  child: Center(child: Text('VIEW FULL LEDGER →', style: TextStyle(fontFamily: 'Inter', 
                     fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2, color: AppColors.primary))),
                 ),
               ),
@@ -349,7 +349,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> {
             child: Icon(icon, color: AppColors.primary, size: 22),
           ),
           const SizedBox(height: 8),
-          Text(label, style: TextStyle(fontFamily: 'PlusJakartaSans', 
+          Text(label, style: TextStyle(fontFamily: 'Inter', 
             fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 1.5, color: AppColors.slate500)),
         ]),
       ),

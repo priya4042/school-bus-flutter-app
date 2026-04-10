@@ -16,6 +16,7 @@ import 'core/providers/bus_provider.dart';
 import 'core/providers/route_provider.dart';
 import 'core/providers/attendance_provider.dart';
 import 'core/providers/admin_provider.dart';
+import 'core/providers/locale_provider.dart';
 import 'features/auth/screens/login_screen.dart';
 import 'features/shared/widgets/app_shell.dart';
 
@@ -55,6 +56,7 @@ class SchoolBusApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => RouteProvider()),
         ChangeNotifierProvider(create: (_) => AttendanceProvider()),
         ChangeNotifierProvider(create: (_) => AdminProvider()),
+        ChangeNotifierProvider(create: (_) => LocaleProvider()),
       ],
       child: MaterialApp(
         title: 'BusWay Pro',
@@ -91,10 +93,10 @@ class AuthGate extends StatelessWidget {
                     child: const Icon(Icons.directions_bus_rounded, color: Colors.white, size: 32),
                   ),
                   const SizedBox(height: 20),
-                  Text('BUSWAY PRO', style: TextStyle(fontFamily: 'PlusJakartaSans', 
+                  Text('BUSWAY PRO', style: TextStyle(fontFamily: 'Inter', 
                     fontSize: 13, fontWeight: FontWeight.w900, letterSpacing: 3, color: Colors.white)),
                   const SizedBox(height: 4),
-                  Text('ENTERPRISE FLEET', style: TextStyle(fontFamily: 'PlusJakartaSans', 
+                  Text('ENTERPRISE FLEET', style: TextStyle(fontFamily: 'Inter', 
                     fontSize: 7, fontWeight: FontWeight.w900, letterSpacing: 4, color: AppColors.primary)),
                   const SizedBox(height: 24),
                   SizedBox(
