@@ -20,16 +20,19 @@ class Attendance {
   });
 
   factory Attendance.fromMap(Map<String, dynamic> map) {
-    final students = map['students'];
+    Map<String, dynamic>? students;
+    if (map['students'] is Map) {
+      students = Map<String, dynamic>.from(map['students'] as Map);
+    }
     return Attendance(
-      id: map['id'] ?? '',
-      studentId: map['student_id'] ?? '',
-      studentName: students != null ? students['full_name'] : map['student_name'],
-      admissionNumber: students != null ? students['admission_number'] : map['admission_number'],
-      busId: map['bus_id'],
+      id: (map['id'] ?? '').toString(),
+      studentId: (map['student_id'] ?? '').toString(),
+      studentName: students?['full_name']?.toString() ?? map['student_name']?.toString(),
+      admissionNumber: students?['admission_number']?.toString() ?? map['admission_number']?.toString(),
+      busId: map['bus_id']?.toString(),
       status: (map['status'] ?? 'PRESENT').toString().toUpperCase(),
       type: (map['type'] ?? 'PICKUP').toString().toUpperCase(),
-      createdAt: DateTime.tryParse(map['created_at'] ?? '') ?? DateTime.now(),
+      createdAt: DateTime.tryParse((map['created_at'] ?? '').toString()) ?? DateTime.now(),
     );
   }
 
