@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/models/user_model.dart';
+import '../../../core/services/avatar_service.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../utils/formatters.dart';
 
@@ -22,7 +23,74 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> with Single
   final _confirmPassCtrl = TextEditingController();
   bool _obscure = true;
   bool _obscureConfirm = true;
+  bool _uploadingAvatar = false;
   String _selectedLang = 'en';
+
+  Future<void> _pickAndUploadAvatar() async {
+    final auth = context.read<AppAuthProvider>();
+    if (auth.user == null) return;
+
+    final file = await AvatarService.pickImage();
+    if (file == null) return;
+
+    setState(() => _uploadingAvatar = true);
+    try {
+      final url = await AvatarService.uploadAvatar(auth.user!.id, file);
+      if (url != null) {
+        // Reload profile so avatar appears in topbar
+        await auth.updateProfile({'avatar_url': url});
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Avatar updated'), backgroundColor: AppColors.success),
+          );
+        }
+      } else if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to upload avatar'), backgroundColor: AppColors.danger),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _uploadingAvatar = false);
+    }
+  }
+
+  Future<void> _removeAvatar() async {
+    final auth = context.read<AppAuthProvider>();
+    if (auth.user == null) return;
+
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Text('REMOVE AVATAR?', style: TextStyle(
+          fontFamily: 'PlusJakartaSans', fontSize: 16, fontWeight: FontWeight.w900)),
+        content: const Text('Your profile will show your initial instead.',
+          style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 13)),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('CANCEL', style: TextStyle(
+              fontFamily: 'PlusJakartaSans', fontSize: 11, fontWeight: FontWeight.w900,
+              letterSpacing: 2, color: AppColors.slate500))),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.danger),
+            child: const Text('REMOVE', style: TextStyle(
+              fontFamily: 'PlusJakartaSans', fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
+          ),
+        ],
+      ),
+    );
+
+    if (ok == true) {
+      await AvatarService.removeAvatar(auth.user!.id);
+      await auth.updateProfile({'avatar_url': null});
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Avatar removed'), backgroundColor: AppColors.success),
+        );
+      }
+    }
+  }
 
   @override
   void initState() {
@@ -99,26 +167,99 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> with Single
           padding: const EdgeInsets.all(24),
           decoration: AppTheme.cardXlDecoration,
           child: Column(children: [
-            // Avatar section
+            // Avatar section with upload + remove
             Row(children: [
-              Container(
-                width: 80, height: 80,
-                decoration: BoxDecoration(
-                  color: AppColors.slate50, borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: Colors.white, width: 4),
-                  boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 16)],
-                ),
-                child: Center(child: Text(
-                  (auth.user?.fullName.isNotEmpty ?? false) ? auth.user!.fullName[0].toUpperCase() : 'U',
-                  style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 28, fontWeight: FontWeight.w900, color: AppColors.slate300),
-                )),
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Container(
+                    width: 88, height: 88,
+                    decoration: BoxDecoration(
+                      color: AppColors.slate50,
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(color: Colors.white, width: 4),
+                      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 16)],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: auth.user?.avatarUrl != null && auth.user!.avatarUrl!.isNotEmpty
+                          ? Image.network(
+                              auth.user!.avatarUrl!,
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, __, ___) => Center(
+                                child: Text(
+                                  (auth.user!.fullName.isNotEmpty ? auth.user!.fullName[0] : 'U').toUpperCase(),
+                                  style: TextStyle(
+                                    fontFamily: 'PlusJakartaSans',
+                                    fontSize: 32,
+                                    fontWeight: FontWeight.w900,
+                                    color: AppColors.slate300,
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Center(
+                              child: Text(
+                                (auth.user?.fullName.isNotEmpty ?? false) ? auth.user!.fullName[0].toUpperCase() : 'U',
+                                style: TextStyle(
+                                  fontFamily: 'PlusJakartaSans',
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.w900,
+                                  color: AppColors.slate300,
+                                ),
+                              ),
+                            ),
+                    ),
+                  ),
+                  // Camera button (bottom-right)
+                  Positioned(
+                    bottom: -4, right: -4,
+                    child: GestureDetector(
+                      onTap: _uploadingAvatar ? null : _pickAndUploadAvatar,
+                      child: Container(
+                        width: 32, height: 32,
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [BoxShadow(color: AppColors.primary.withOpacity(0.3), blurRadius: 8)],
+                        ),
+                        child: _uploadingAvatar
+                            ? const Padding(padding: EdgeInsets.all(8),
+                                child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                            : const Icon(Icons.camera_alt_rounded, color: Colors.white, size: 16),
+                      ),
+                    ),
+                  ),
+                  // Remove button (top-right) - only show if avatar exists
+                  if (auth.user?.avatarUrl != null && auth.user!.avatarUrl!.isNotEmpty)
+                    Positioned(
+                      top: -4, right: -4,
+                      child: GestureDetector(
+                        onTap: _removeAvatar,
+                        child: Container(
+                          width: 28, height: 28,
+                          decoration: BoxDecoration(
+                            color: AppColors.danger,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [BoxShadow(color: AppColors.danger.withOpacity(0.3), blurRadius: 8)],
+                          ),
+                          child: const Icon(Icons.close_rounded, color: Colors.white, size: 14),
+                        ),
+                      ),
+                    ),
+                ],
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: 18),
               Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(auth.user?.fullName ?? '', style: TextStyle(fontFamily: 'PlusJakartaSans', 
+                Text(auth.user?.fullName ?? '', style: TextStyle(fontFamily: 'PlusJakartaSans',
                   fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: -0.5, color: AppColors.slate900)),
+                const SizedBox(height: 4),
                 Text('${auth.user?.isParent ?? true ? "PARENT" : "USER"} • SINCE ${auth.user?.createdAt != null ? Formatters.date(auth.user!.createdAt!).toUpperCase() : "N/A"}',
                     style: AppTheme.labelXs.copyWith(color: AppColors.slate500)),
+                const SizedBox(height: 6),
+                Text('Tap camera to update photo',
+                    style: TextStyle(fontFamily: 'PlusJakartaSans',
+                      fontSize: 10, fontWeight: FontWeight.w600, color: AppColors.slate400)),
               ])),
             ]),
             const SizedBox(height: 24),

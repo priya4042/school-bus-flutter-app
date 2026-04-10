@@ -32,6 +32,15 @@ class AppUser {
   }) : preferences = preferences ?? UserPreferences();
 
   factory AppUser.fromMap(Map<String, dynamic> map) {
+    // Try direct avatar_url column first, then fallback to preferences.avatar_url
+    String? avatar = map['avatar_url']?.toString();
+    if (avatar == null || avatar.isEmpty) {
+      final prefs = map['preferences'];
+      if (prefs is Map) {
+        avatar = prefs['avatar_url']?.toString();
+      }
+    }
+
     return AppUser(
       id: map['id'] ?? '',
       email: map['email'] ?? '',
@@ -39,7 +48,7 @@ class AppUser {
       role: _parseRole(map['role']),
       phoneNumber: map['phone_number'] ?? map['phoneNumber'],
       admissionNumber: map['admission_number'] ?? map['admissionNumber'],
-      avatarUrl: map['avatar_url'],
+      avatarUrl: avatar,
       preferences: UserPreferences.fromMap(map['preferences'] ?? {}),
       createdAt: map['created_at'] != null ? DateTime.tryParse(map['created_at']) : null,
     );
