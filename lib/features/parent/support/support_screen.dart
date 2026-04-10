@@ -8,7 +8,8 @@ import '../../../core/theme/app_theme.dart';
 import '../../shared/widgets/stat_card.dart';
 
 class SupportScreen extends StatefulWidget {
-  const SupportScreen({super.key});
+  final int initialTab;
+  const SupportScreen({super.key, this.initialTab = 0});
   @override
   State<SupportScreen> createState() => _SupportScreenState();
 }
@@ -32,7 +33,7 @@ class _SupportScreenState extends State<SupportScreen> with SingleTickerProvider
   ];
 
   @override
-  void initState() { super.initState(); _tabCtrl = TabController(length: 2, vsync: this); }
+  void initState() { super.initState(); _tabCtrl = TabController(length: 2, vsync: this, initialIndex: widget.initialTab); }
 
   Future<void> _submitTicket() async {
     if (_subjectCtrl.text.isEmpty || _descCtrl.text.isEmpty) return;

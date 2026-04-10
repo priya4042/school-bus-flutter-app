@@ -218,7 +218,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> {
                   child: Text('NO FEES GENERATED', style: AppTheme.labelSmall),
                 )
               else
-                ...sortedDues.take(8).map((d) {
+                ...sortedDues.map((d) {
                   final isPayable = !d.isPaid && FeeCalculator.isMonthPayable(d, childDues);
                   final isLocked = !d.isPaid && !isPayable;
 

@@ -89,10 +89,14 @@ class _FeeHistoryScreenState extends State<FeeHistoryScreen> {
     final outstanding = unpaid.fold<double>(0, (s, d) => s + d.totalDue);
     final overdueCount = unpaid.where((d) => d.isOverdue).length;
 
-    // Separate future scheduled
-    final now = DateTime.now();
-    final futureDues = unpaid.where((d) => d.dueDate.isAfter(now)).toList();
-    final actionableDues = dues.where((d) => d.isPaid || (d.dueDate.isBefore(now) || d.dueDate.isAtSameMomentAs(now))).toList();
+    // Show ALL dues (paid + unpaid + future) - parent should see and pay any month
+    // Sort chronologically: most recent first
+    final actionableDues = List<MonthlyDue>.from(dues)
+      ..sort((a, b) {
+        final yearCmp = b.year.compareTo(a.year);
+        return yearCmp != 0 ? yearCmp : b.month.compareTo(a.month);
+      });
+    final futureDues = <MonthlyDue>[]; // No longer separate
 
     return RefreshIndicator(
       onRefresh: _load,
