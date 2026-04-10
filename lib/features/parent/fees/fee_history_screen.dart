@@ -729,17 +729,10 @@ class _PaymentPortalState extends State<_PaymentPortal> {
 
   // ===== PROCESSING STEP =====
   Widget _buildProcessingStep() {
-    return Padding(padding: const EdgeInsets.all(40), child: Column(children: [
-      Container(width: 80, height: 80,
-        decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: AppColors.slate100, width: 4)),
-        child: const Padding(padding: EdgeInsets.all(8),
-          child: CircularProgressIndicator(strokeWidth: 4, color: AppColors.primary))),
-      const SizedBox(height: 24),
-      Text('SYNCING WITH GATEWAY', style: TextStyle(fontFamily: 'Inter', 
-        fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: -0.5, color: AppColors.slate800)),
-      const SizedBox(height: 8),
-      Text('CLOUD SYNC IN PROGRESS', style: AppTheme.labelSmall),
-    ]));
+    return const Padding(
+      padding: EdgeInsets.all(40),
+      child: StylishLoader(label: 'Syncing with payment gateway...', size: 72),
+    );
   }
 
   // ===== UPI CONFIRM STEP =====

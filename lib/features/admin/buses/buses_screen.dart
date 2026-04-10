@@ -151,7 +151,7 @@ class _BusesScreenState extends State<BusesScreen> {
         ),
         Expanded(
           child: prov.isLoading
-              ? const Center(child: CircularProgressIndicator())
+              ? const MiniLoader()
               : filtered.isEmpty
                   ? const EmptyState(icon: Icons.directions_bus_outlined, title: 'No buses found')
                   : ListView.builder(

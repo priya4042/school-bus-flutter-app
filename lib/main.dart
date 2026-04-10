@@ -69,14 +69,31 @@ class SchoolBusApp extends StatelessWidget {
   }
 }
 
-class AuthGate extends StatelessWidget {
+class AuthGate extends StatefulWidget {
   const AuthGate({super.key});
+
+  @override
+  State<AuthGate> createState() => _AuthGateState();
+}
+
+class _AuthGateState extends State<AuthGate> {
+  bool _splashDone = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Show splash for at least 2 seconds so user sees the new loader
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) setState(() => _splashDone = true);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<AppAuthProvider>(
       builder: (context, auth, _) {
-        if (auth.isLoading) {
+        // Show stylish loader during auth init OR until splash min duration reached
+        if (auth.isLoading || !_splashDone) {
           return const AppLoadingScreen(message: 'Connecting to BusWay Pro...');
         }
         if (auth.isAuthenticated) {

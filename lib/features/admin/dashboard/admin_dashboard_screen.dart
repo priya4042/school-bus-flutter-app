@@ -46,6 +46,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     final routes = context.watch<RouteProvider>();
     final nav = context.read<NavigationProvider>();
 
+    // Show loader while initial data is loading
+    if (students.isLoading && students.students.isEmpty) {
+      return const MiniLoader();
+    }
+
     final totalStudents = students.activeStudents.length;
     final totalBuses = buses.buses.length;
     final activeBuses = buses.activeBuses.length;

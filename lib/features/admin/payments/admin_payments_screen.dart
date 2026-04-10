@@ -94,10 +94,7 @@ class _AdminPaymentsScreenState extends State<AdminPaymentsScreen> {
 
             // Payment List
             if (feeProv.isLoading)
-              const Center(child: Padding(
-                padding: EdgeInsets.all(40),
-                child: CircularProgressIndicator(),
-              ))
+              const MiniLoader()
             else if (filtered.isEmpty)
               const EmptyState(icon: Icons.payment_outlined, title: 'No payments found')
             else
