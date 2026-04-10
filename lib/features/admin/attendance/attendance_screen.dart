@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../core/providers/attendance_provider.dart';
@@ -88,7 +88,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 const Icon(Icons.calendar_today_rounded, size: 14, color: AppColors.primary),
                 const SizedBox(width: 8),
                 Text(DateFormat('dd MMM yyyy').format(_selectedDate).toUpperCase(),
-                    style: GoogleFonts.plusJakartaSans(fontSize: 11, fontWeight: FontWeight.w900, color: AppColors.slate800)),
+                    style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 11, fontWeight: FontWeight.w900, color: AppColors.slate800)),
               ]),
             ),
           ),
@@ -113,7 +113,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                       decoration: BoxDecoration(
                         color: sel ? AppColors.primary : AppColors.slate100,
                         borderRadius: BorderRadius.circular(10)),
-                      child: Center(child: Text('ALL', style: GoogleFonts.plusJakartaSans(
+                      child: Center(child: Text('ALL', style: TextStyle(fontFamily: 'PlusJakartaSans', 
                         fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2,
                         color: sel ? Colors.white : AppColors.slate500))),
                     ),
@@ -130,7 +130,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                     decoration: BoxDecoration(
                       color: sel ? AppColors.primary : AppColors.slate100,
                       borderRadius: BorderRadius.circular(10)),
-                    child: Center(child: Text(r.routeName.toUpperCase(), style: GoogleFonts.plusJakartaSans(
+                    child: Center(child: Text(r.routeName.toUpperCase(), style: TextStyle(fontFamily: 'PlusJakartaSans', 
                       fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 1,
                       color: sel ? Colors.white : AppColors.slate500), maxLines: 1)),
                   ),
@@ -167,7 +167,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                           size: 18, color: mark == 'PRESENT' ? AppColors.success : mark == 'ABSENT' ? AppColors.danger : AppColors.slate300)),
                       const SizedBox(width: 10),
                       Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Text(s.fullName.toUpperCase(), style: GoogleFonts.plusJakartaSans(
+                        Text(s.fullName.toUpperCase(), style: TextStyle(fontFamily: 'PlusJakartaSans', 
                           fontSize: 12, fontWeight: FontWeight.w900, letterSpacing: -0.3, color: AppColors.slate800)),
                         Text('${s.admissionNumber} • ${s.displayGrade}'.toUpperCase(),
                             style: AppTheme.labelXs.copyWith(color: AppColors.slate400)),
@@ -224,7 +224,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         child: Row(children: [
           Icon(icon, size: 14, color: sel ? Colors.white : AppColors.slate400),
           const SizedBox(width: 6),
-          Text(label, style: GoogleFonts.plusJakartaSans(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2,
+          Text(label, style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2,
               color: sel ? Colors.white : AppColors.slate500)),
         ]),
       ),

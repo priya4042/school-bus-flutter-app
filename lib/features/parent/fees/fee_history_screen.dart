@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/fee_provider.dart';
 import '../../../core/providers/student_provider.dart';
@@ -132,12 +132,12 @@ class _FeeHistoryScreenState extends State<FeeHistoryScreen> {
                             value: _selectedStudentId,
                             isExpanded: true,
                             hint: Text('ALL STUDENTS', style: AppTheme.labelSmall.copyWith(color: AppColors.slate500)),
-                            style: GoogleFonts.plusJakartaSans(fontSize: 11, fontWeight: FontWeight.w900, color: AppColors.slate800),
+                            style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 11, fontWeight: FontWeight.w900, color: AppColors.slate800),
                             items: [
-                              DropdownMenuItem(value: null, child: Text('ALL STUDENTS', style: GoogleFonts.plusJakartaSans(
+                              DropdownMenuItem(value: null, child: Text('ALL STUDENTS', style: TextStyle(fontFamily: 'PlusJakartaSans', 
                                 fontSize: 11, fontWeight: FontWeight.w900, color: AppColors.slate800))),
                               ...students.map((s) => DropdownMenuItem(value: s.id,
-                                  child: Text(s.fullName.toUpperCase(), style: GoogleFonts.plusJakartaSans(
+                                  child: Text(s.fullName.toUpperCase(), style: TextStyle(fontFamily: 'PlusJakartaSans', 
                                     fontSize: 11, fontWeight: FontWeight.w900, color: AppColors.slate800)))),
                             ],
                             onChanged: (v) => setState(() => _selectedStudentId = v),
@@ -151,10 +151,10 @@ class _FeeHistoryScreenState extends State<FeeHistoryScreen> {
                   Expanded(
                     child: TextField(
                       onChanged: (v) => setState(() => _search = v),
-                      style: GoogleFonts.plusJakartaSans(fontSize: 13, fontWeight: FontWeight.w700),
+                      style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 13, fontWeight: FontWeight.w700),
                       decoration: InputDecoration(
                         hintText: 'Search...',
-                        hintStyle: GoogleFonts.plusJakartaSans(fontSize: 12, color: AppColors.slate400),
+                        hintStyle: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 12, color: AppColors.slate400),
                         prefixIcon: const Icon(Icons.search_rounded, color: AppColors.slate400, size: 20),
                         filled: true,
                         fillColor: AppColors.primary.withOpacity(0.05),
@@ -216,11 +216,11 @@ class _FeeHistoryScreenState extends State<FeeHistoryScreen> {
                         ),
                         child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                            Text(d.fullMonthLabel.toUpperCase(), style: GoogleFonts.plusJakartaSans(
+                            Text(d.fullMonthLabel.toUpperCase(), style: TextStyle(fontFamily: 'PlusJakartaSans', 
                               fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: -0.3, color: AppColors.slate800)),
                             Text('DUE: ${Formatters.date(d.dueDate)}', style: AppTheme.labelXs.copyWith(color: AppColors.slate400)),
                           ]),
-                          Text(Formatters.currencyFull(d.amount), style: GoogleFonts.plusJakartaSans(
+                          Text(Formatters.currencyFull(d.amount), style: TextStyle(fontFamily: 'PlusJakartaSans', 
                             fontSize: 13, fontWeight: FontWeight.w900, letterSpacing: -0.5, color: AppColors.slate600)),
                         ]),
                       )),
@@ -246,7 +246,7 @@ class _FeeHistoryScreenState extends State<FeeHistoryScreen> {
       child: Column(children: [
         Text(label, style: AppTheme.labelXs),
         const SizedBox(height: 4),
-        Text(value, style: GoogleFonts.plusJakartaSans(
+        Text(value, style: TextStyle(fontFamily: 'PlusJakartaSans', 
           fontSize: 20, fontWeight: FontWeight.w900, letterSpacing: -1, color: color)),
       ]),
     );
@@ -265,7 +265,7 @@ class _FeeHistoryScreenState extends State<FeeHistoryScreen> {
         ),
         child: Row(children: [
           Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(d.fullMonthLabel.toUpperCase(), style: GoogleFonts.plusJakartaSans(
+            Text(d.fullMonthLabel.toUpperCase(), style: TextStyle(fontFamily: 'PlusJakartaSans', 
               fontSize: 13, fontWeight: FontWeight.w900, letterSpacing: -0.3, color: AppColors.slate800)),
             if (d.studentName != null)
               Text(d.studentName!.toUpperCase(), style: AppTheme.labelXs.copyWith(color: AppColors.slate400)),
@@ -275,11 +275,11 @@ class _FeeHistoryScreenState extends State<FeeHistoryScreen> {
               Padding(
                 padding: const EdgeInsets.only(top: 3),
                 child: Text('LATE: ${Formatters.currencyFull(d.lateFee)}',
-                  style: GoogleFonts.plusJakartaSans(fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 1, color: AppColors.danger)),
+                  style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 1, color: AppColors.danger)),
               ),
           ])),
           Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-            Text(Formatters.currencyFull(d.totalDue), style: GoogleFonts.plusJakartaSans(
+            Text(Formatters.currencyFull(d.totalDue), style: TextStyle(fontFamily: 'PlusJakartaSans', 
               fontSize: 14, fontWeight: FontWeight.w900, color: AppColors.slate800)),
             const SizedBox(height: 6),
             if (d.isPaid)
@@ -295,7 +295,7 @@ class _FeeHistoryScreenState extends State<FeeHistoryScreen> {
                     child: Row(mainAxisSize: MainAxisSize.min, children: [
                       const Icon(Icons.download_rounded, size: 12, color: AppColors.success),
                       const SizedBox(width: 4),
-                      Text('RECEIPT', style: GoogleFonts.plusJakartaSans(
+                      Text('RECEIPT', style: TextStyle(fontFamily: 'PlusJakartaSans', 
                         fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 1, color: AppColors.success)),
                     ]),
                   ),
@@ -311,7 +311,7 @@ class _FeeHistoryScreenState extends State<FeeHistoryScreen> {
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: AppTheme.primaryButtonShadow(),
                   ),
-                  child: Text('PAY NOW', style: GoogleFonts.plusJakartaSans(
+                  child: Text('PAY NOW', style: TextStyle(fontFamily: 'PlusJakartaSans', 
                     fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2, color: Colors.white)),
                 ),
               )
@@ -319,7 +319,7 @@ class _FeeHistoryScreenState extends State<FeeHistoryScreen> {
               Row(mainAxisSize: MainAxisSize.min, children: [
                 const Icon(Icons.lock_rounded, size: 10, color: AppColors.slate400),
                 const SizedBox(width: 4),
-                Text('PAY PREVIOUS', style: GoogleFonts.plusJakartaSans(
+                Text('PAY PREVIOUS', style: TextStyle(fontFamily: 'PlusJakartaSans', 
                   fontSize: 7, fontWeight: FontWeight.w900, letterSpacing: 1, color: AppColors.slate400)),
               ]),
           ]),
@@ -362,7 +362,7 @@ class _FeeHistoryScreenState extends State<FeeHistoryScreen> {
         decoration: BoxDecoration(color: AppColors.primary.withOpacity(0.05), borderRadius: BorderRadius.circular(10)),
         child: Icon(icon, color: AppColors.primary, size: 18),
       ),
-      title: Text(label, style: GoogleFonts.plusJakartaSans(fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1, color: AppColors.slate700)),
+      title: Text(label, style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1, color: AppColors.slate700)),
       trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: AppColors.slate300),
       onTap: onTap,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -564,7 +564,7 @@ class _PaymentPortalState extends State<_PaymentPortal> {
         child: Column(children: [
           Text('TOTAL PAYABLE', style: AppTheme.labelSmall),
           const SizedBox(height: 8),
-          Text(Formatters.currencyFull(widget.bundle.amount), style: GoogleFonts.plusJakartaSans(
+          Text(Formatters.currencyFull(widget.bundle.amount), style: TextStyle(fontFamily: 'PlusJakartaSans', 
             fontSize: 36, fontWeight: FontWeight.w900, letterSpacing: -2, color: AppColors.slate800)),
         ]),
       ),
@@ -576,7 +576,7 @@ class _PaymentPortalState extends State<_PaymentPortal> {
           decoration: BoxDecoration(color: AppColors.blue50.withOpacity(0.7), borderRadius: BorderRadius.circular(12),
               border: Border.all(color: AppColors.blue100)),
           child: Text(widget.bundle.explanation.toUpperCase(), textAlign: TextAlign.center,
-            style: GoogleFonts.plusJakartaSans(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2, color: AppColors.primary)),
+            style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2, color: AppColors.primary)),
         ),
       const SizedBox(height: 12),
 
@@ -608,8 +608,8 @@ class _PaymentPortalState extends State<_PaymentPortal> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: AppColors.slate50))),
             child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text(item.due.monthLabel.toUpperCase(), style: GoogleFonts.plusJakartaSans(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.slate700)),
-              Text(Formatters.currencyFull(item.total), style: GoogleFonts.plusJakartaSans(fontSize: 12, fontWeight: FontWeight.w900, color: AppColors.slate800)),
+              Text(item.due.monthLabel.toUpperCase(), style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.slate700)),
+              Text(Formatters.currencyFull(item.total), style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 12, fontWeight: FontWeight.w900, color: AppColors.slate800)),
             ]),
           )),
         ]),
@@ -654,7 +654,7 @@ class _PaymentPortalState extends State<_PaymentPortal> {
                 decoration: BoxDecoration(color: AppColors.purple50, borderRadius: BorderRadius.circular(10)),
                 child: const Icon(Icons.qr_code_rounded, color: AppColors.purple600, size: 18)),
               const SizedBox(width: 12),
-              Expanded(child: Text('SCAN QR CODE / MANUAL UPI', style: GoogleFonts.plusJakartaSans(
+              Expanded(child: Text('SCAN QR CODE / MANUAL UPI', style: TextStyle(fontFamily: 'PlusJakartaSans', 
                 fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 1, color: AppColors.slate700))),
               Icon(_showQr ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: AppColors.slate400),
             ]),
@@ -673,15 +673,15 @@ class _PaymentPortalState extends State<_PaymentPortal> {
                     child: Image.network(_adminQrUrl, fit: BoxFit.cover,
                         errorBuilder: (_, __, ___) => const Center(child: Icon(Icons.qr_code_rounded, size: 60, color: AppColors.slate300)))),
               ),
-            if (_adminUpiId.isNotEmpty) Text('UPI: $_adminUpiId', style: GoogleFonts.plusJakartaSans(
+            if (_adminUpiId.isNotEmpty) Text('UPI: $_adminUpiId', style: TextStyle(fontFamily: 'PlusJakartaSans', 
               fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.slate600)),
             const SizedBox(height: 8),
-            Text(Formatters.currencyFull(widget.bundle.amount), style: GoogleFonts.plusJakartaSans(
+            Text(Formatters.currencyFull(widget.bundle.amount), style: TextStyle(fontFamily: 'PlusJakartaSans', 
               fontSize: 22, fontWeight: FontWeight.w900, letterSpacing: -1, color: AppColors.slate800)),
             const SizedBox(height: 12),
             TextField(
               controller: _upiRefCtrl,
-              style: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate800),
+              style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate800),
               decoration: AppTheme.inputDecoration('UPI REFERENCE / TXN ID', icon: Icons.receipt_rounded),
             ),
             const SizedBox(height: 12),
@@ -694,7 +694,7 @@ class _PaymentPortalState extends State<_PaymentPortal> {
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent, shadowColor: Colors.transparent),
                 child: _loading
                     ? const SizedBox(height: 18, width: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                    : Text('CONFIRM PAYMENT', style: GoogleFonts.plusJakartaSans(
+                    : Text('CONFIRM PAYMENT', style: TextStyle(fontFamily: 'PlusJakartaSans', 
                         fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2, color: Colors.white)),
               ),
             )),
@@ -707,7 +707,7 @@ class _PaymentPortalState extends State<_PaymentPortal> {
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         const Icon(Icons.lock_rounded, size: 10, color: AppColors.slate400),
         const SizedBox(width: 4),
-        Text('256-BIT SSL ENCRYPTED', style: GoogleFonts.plusJakartaSans(
+        Text('256-BIT SSL ENCRYPTED', style: TextStyle(fontFamily: 'PlusJakartaSans', 
           fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 2, color: AppColors.slate400)),
       ]),
       const SizedBox(height: 8),
@@ -724,7 +724,7 @@ class _PaymentPortalState extends State<_PaymentPortal> {
         child: const Padding(padding: EdgeInsets.all(8),
           child: CircularProgressIndicator(strokeWidth: 4, color: AppColors.primary))),
       const SizedBox(height: 24),
-      Text('SYNCING WITH GATEWAY', style: GoogleFonts.plusJakartaSans(
+      Text('SYNCING WITH GATEWAY', style: TextStyle(fontFamily: 'PlusJakartaSans', 
         fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: -0.5, color: AppColors.slate800)),
       const SizedBox(height: 8),
       Text('CLOUD SYNC IN PROGRESS', style: AppTheme.labelSmall),
@@ -738,7 +738,7 @@ class _PaymentPortalState extends State<_PaymentPortal> {
         decoration: BoxDecoration(color: AppColors.green100, borderRadius: BorderRadius.circular(20)),
         child: const Icon(Icons.phone_android_rounded, size: 32, color: AppColors.green600)),
       const SizedBox(height: 16),
-      Text('DID YOU COMPLETE THE PAYMENT?', style: GoogleFonts.plusJakartaSans(
+      Text('DID YOU COMPLETE THE PAYMENT?', style: TextStyle(fontFamily: 'PlusJakartaSans', 
         fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: -0.5, color: AppColors.slate800)),
       const SizedBox(height: 16),
 
@@ -748,7 +748,7 @@ class _PaymentPortalState extends State<_PaymentPortal> {
         child: Column(children: [
           Text(widget.studentName.toUpperCase(), style: AppTheme.labelSmall.copyWith(color: AppColors.slate600)),
           const SizedBox(height: 4),
-          Text(Formatters.currencyFull(widget.bundle.amount), style: GoogleFonts.plusJakartaSans(
+          Text(Formatters.currencyFull(widget.bundle.amount), style: TextStyle(fontFamily: 'PlusJakartaSans', 
             fontSize: 28, fontWeight: FontWeight.w900, letterSpacing: -1.5, color: AppColors.slate800)),
         ]),
       ),
@@ -756,7 +756,7 @@ class _PaymentPortalState extends State<_PaymentPortal> {
 
       TextField(
         controller: _upiRefCtrl,
-        style: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate800),
+        style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate800),
         decoration: AppTheme.inputDecoration('UPI REFERENCE / TXN ID', icon: Icons.receipt_rounded),
       ),
       const SizedBox(height: 8),
@@ -775,7 +775,7 @@ class _PaymentPortalState extends State<_PaymentPortal> {
           style: ElevatedButton.styleFrom(backgroundColor: Colors.transparent, shadowColor: Colors.transparent),
           child: _loading
               ? const SizedBox(height: 18, width: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-              : Text('CONFIRM PAYMENT', style: GoogleFonts.plusJakartaSans(
+              : Text('CONFIRM PAYMENT', style: TextStyle(fontFamily: 'PlusJakartaSans', 
                   fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2, color: Colors.white)),
         ),
       )),
@@ -792,7 +792,7 @@ class _PaymentPortalState extends State<_PaymentPortal> {
         decoration: BoxDecoration(color: AppColors.success, borderRadius: BorderRadius.circular(28)),
         child: const Icon(Icons.check_rounded, size: 40, color: Colors.white)),
       const SizedBox(height: 20),
-      Text('TRANSACTION AUTHORIZED', style: GoogleFonts.plusJakartaSans(
+      Text('TRANSACTION AUTHORIZED', style: TextStyle(fontFamily: 'PlusJakartaSans', 
         fontSize: 20, fontWeight: FontWeight.w900, letterSpacing: -1, color: AppColors.slate800)),
       const SizedBox(height: 8),
       if (_transactionId != null)
@@ -809,7 +809,7 @@ class _PaymentPortalState extends State<_PaymentPortal> {
           },
           style: AppTheme.primaryButton,
           icon: const Icon(Icons.download_rounded, size: 18),
-          label: Text('DOWNLOAD RECEIPT', style: GoogleFonts.plusJakartaSans(
+          label: Text('DOWNLOAD RECEIPT', style: TextStyle(fontFamily: 'PlusJakartaSans', 
             fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
         ),
       )),
@@ -844,7 +844,7 @@ class _PaymentPortalState extends State<_PaymentPortal> {
                 border: Border.all(color: Colors.white.withOpacity(iconBgOpacity))),
             child: Icon(icon, size: 16, color: Colors.white)),
           const SizedBox(width: 12),
-          Text(label, style: GoogleFonts.plusJakartaSans(fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2, color: Colors.white)),
+          Text(label, style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2, color: Colors.white)),
         ]),
       ),
     ));
@@ -856,7 +856,7 @@ class _PaymentPortalState extends State<_PaymentPortal> {
       child: Column(children: [
         Text(label, style: AppTheme.labelXs),
         const SizedBox(height: 4),
-        Text(value, style: GoogleFonts.plusJakartaSans(fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: -0.5, color: color ?? AppColors.slate800)),
+        Text(value, style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: -0.5, color: color ?? AppColors.slate800)),
       ]),
     ));
   }

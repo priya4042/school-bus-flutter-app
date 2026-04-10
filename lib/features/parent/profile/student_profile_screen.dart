@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/student_provider.dart';
@@ -113,7 +113,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                         boxShadow: sel ? [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)] : null,
                       ),
                       child: Center(child: Text(students[i].fullName.split(' ').first.toUpperCase(),
-                        style: GoogleFonts.plusJakartaSans(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2,
+                        style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2,
                             color: sel ? AppColors.primary : AppColors.slate400), maxLines: 1, overflow: TextOverflow.ellipsis)),
                     ),
                   ));
@@ -126,7 +126,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(16),
                     boxShadow: AppTheme.primaryButtonShadow()),
-                child: Text('+ ADD CHILD', style: GoogleFonts.plusJakartaSans(
+                child: Text('+ ADD CHILD', style: TextStyle(fontFamily: 'PlusJakartaSans', 
                   fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2, color: Colors.white)),
               ),
             ),
@@ -194,7 +194,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  Text(child.fullName, style: GoogleFonts.plusJakartaSans(
+                  Text(child.fullName, style: TextStyle(fontFamily: 'PlusJakartaSans', 
                     fontSize: 20, fontWeight: FontWeight.w900, letterSpacing: -0.5, color: AppColors.slate900)),
                   Text('${child.grade ?? ''} - ${child.section ?? ''}'.toUpperCase(),
                     style: AppTheme.labelSmall.copyWith(color: AppColors.primary)),
@@ -225,7 +225,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
               boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 20)],
             ),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('TRANSIT DETAILS', style: GoogleFonts.plusJakartaSans(
+              Text('TRANSIT DETAILS', style: TextStyle(fontFamily: 'PlusJakartaSans', 
                 fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: -0.5, color: Colors.white)),
               const SizedBox(height: 20),
               _transitRow(Icons.location_on_rounded, 'BOARDING POINT', child.boardingPoint ?? 'Not set'),
@@ -255,7 +255,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                         size: 14, color: unpaidDues.isEmpty ? AppColors.emerald600 : AppColors.red500),
                     const SizedBox(width: 4),
                     Text(unpaidDues.isEmpty ? 'ALL CLEAR' : 'DUES PENDING',
-                        style: GoogleFonts.plusJakartaSans(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2,
+                        style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2,
                             color: unpaidDues.isEmpty ? AppColors.emerald600 : AppColors.red500)),
                   ]),
                 ),
@@ -297,7 +297,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                     ),
                     const SizedBox(width: 12),
                     Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      Text(Formatters.date(r.createdAt), style: GoogleFonts.plusJakartaSans(
+                      Text(Formatters.date(r.createdAt), style: TextStyle(fontFamily: 'PlusJakartaSans', 
                         fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.slate700)),
                       Text(r.type, style: AppTheme.labelXs.copyWith(color: AppColors.slate400)),
                     ])),
@@ -323,7 +323,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
         const SizedBox(width: 12),
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(label, style: AppTheme.labelXs),
-          Text(value.toUpperCase(), style: GoogleFonts.plusJakartaSans(
+          Text(value.toUpperCase(), style: TextStyle(fontFamily: 'PlusJakartaSans', 
             fontSize: 12, fontWeight: FontWeight.w900, color: AppColors.slate800)),
         ]),
       ]),
@@ -337,10 +337,10 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
         child: Icon(icon, size: 16, color: AppColors.primary)),
       const SizedBox(width: 12),
       Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(label, style: GoogleFonts.plusJakartaSans(fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 2,
+        Text(label, style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 2,
             color: Colors.white.withOpacity(0.4))),
         const SizedBox(height: 2),
-        Text(value.toUpperCase(), style: GoogleFonts.plusJakartaSans(
+        Text(value.toUpperCase(), style: TextStyle(fontFamily: 'PlusJakartaSans', 
           fontSize: 12, fontWeight: FontWeight.w900, color: Colors.white)),
       ])),
     ]);
@@ -359,7 +359,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
         const SizedBox(height: 12),
         Text(label, style: AppTheme.labelXs),
         const SizedBox(height: 4),
-        Text(value, style: GoogleFonts.plusJakartaSans(fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: -0.5, color: AppColors.slate900)),
+        Text(value, style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: -0.5, color: AppColors.slate900)),
       ]),
     );
   }

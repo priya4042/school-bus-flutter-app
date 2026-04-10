@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import '../../../core/models/user_model.dart';
 import '../../../core/theme/app_theme.dart';
 
@@ -41,9 +41,9 @@ class AppDrawer extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text('BUSWAY PRO', style: GoogleFonts.plusJakartaSans(
+                Text('BUSWAY PRO', style: TextStyle(fontFamily: 'PlusJakartaSans', 
                   fontSize: 12, fontWeight: FontWeight.w900, letterSpacing: -0.5, color: Colors.white)),
-                Text('ENTERPRISE', style: GoogleFonts.plusJakartaSans(
+                Text('ENTERPRISE', style: TextStyle(fontFamily: 'PlusJakartaSans', 
                   fontSize: 7, fontWeight: FontWeight.w900, letterSpacing: 3, color: AppColors.primary)),
               ]),
             ]),
@@ -69,10 +69,10 @@ class AppDrawer extends StatelessWidget {
               const SizedBox(width: 10),
               Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(user.fullName,
-                    style: GoogleFonts.plusJakartaSans(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w700),
+                    style: TextStyle(fontFamily: 'PlusJakartaSans', color: Colors.white, fontSize: 12, fontWeight: FontWeight.w700),
                     maxLines: 1, overflow: TextOverflow.ellipsis),
                 Text(user.isSuperAdmin ? 'SUPER ADMIN' : user.isAdmin ? 'ADMIN' : 'PARENT',
-                    style: GoogleFonts.plusJakartaSans(
+                    style: TextStyle(fontFamily: 'PlusJakartaSans', 
                       fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 2, color: AppColors.primary)),
               ])),
             ]),
@@ -108,7 +108,7 @@ class AppDrawer extends StatelessWidget {
                         ElevatedButton(
                           onPressed: () { Navigator.pop(ctx); onLogout(); },
                           style: ElevatedButton.styleFrom(backgroundColor: AppColors.danger),
-                          child: Text('SIGN OUT', style: GoogleFonts.plusJakartaSans(
+                          child: Text('SIGN OUT', style: TextStyle(fontFamily: 'PlusJakartaSans', 
                             fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
                         ),
                       ],
@@ -131,7 +131,7 @@ class AppDrawer extends StatelessWidget {
                       child: const Icon(Icons.logout_rounded, color: AppColors.red400, size: 16),
                     ),
                     const SizedBox(width: 12),
-                    Text('SIGN OUT', style: GoogleFonts.plusJakartaSans(
+                    Text('SIGN OUT', style: TextStyle(fontFamily: 'PlusJakartaSans', 
                       fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2, color: AppColors.slate500)),
                   ]),
                 ),
@@ -194,7 +194,7 @@ class AppDrawer extends StatelessWidget {
             child: Row(children: [
               Icon(icon, size: 18, color: isActive ? Colors.white : AppColors.slate500),
               const SizedBox(width: 12),
-              Text(label, style: GoogleFonts.plusJakartaSans(
+              Text(label, style: TextStyle(fontFamily: 'PlusJakartaSans', 
                 fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1.5,
                 color: isActive ? Colors.white : AppColors.slate500,
               )),

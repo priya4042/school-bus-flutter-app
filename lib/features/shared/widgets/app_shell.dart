@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/navigation_provider.dart';
 import '../../../core/providers/notification_provider.dart';
@@ -84,13 +84,13 @@ class _AppShellState extends State<AppShell> {
           const SizedBox(width: 8),
           Text(
             isAdmin ? 'GLOBAL FLEET' : 'MAIN PORTAL',
-            style: GoogleFonts.plusJakartaSans(
+            style: TextStyle(fontFamily: 'PlusJakartaSans', 
               fontSize: 10, fontWeight: FontWeight.w900,
               letterSpacing: 2, color: AppColors.slate400,
             ),
           ),
           const SizedBox(width: 6),
-          Text('ONLINE', style: GoogleFonts.plusJakartaSans(
+          Text('ONLINE', style: TextStyle(fontFamily: 'PlusJakartaSans', 
             fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 2, color: AppColors.success)),
         ]),
         actions: [
@@ -112,7 +112,7 @@ class _AppShellState extends State<AppShell> {
                   ),
                   child: Center(child: Text(
                     notifications.unreadCount > 9 ? '9+' : '${notifications.unreadCount}',
-                    style: GoogleFonts.plusJakartaSans(
+                    style: TextStyle(fontFamily: 'PlusJakartaSans', 
                       fontSize: 8, fontWeight: FontWeight.w900, color: Colors.white),
                   )),
                 ),

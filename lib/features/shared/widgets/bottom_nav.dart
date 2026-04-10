@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import '../../../core/theme/app_theme.dart';
 
 class AppBottomNav extends StatelessWidget {
@@ -56,7 +56,7 @@ class AppBottomNav extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       item.label,
-                      style: GoogleFonts.plusJakartaSans(
+                      style: TextStyle(fontFamily: 'PlusJakartaSans', 
                         fontSize: 8,
                         fontWeight: FontWeight.w900,
                         color: isActive ? AppColors.primary : AppColors.slate400,
