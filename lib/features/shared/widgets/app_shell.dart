@@ -49,6 +49,9 @@ class _AppShellState extends State<AppShell> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final auth = context.read<AppAuthProvider>();
       if (auth.user != null) {
+        // Fetch initial notifications
+        context.read<NotificationProvider>().fetchNotifications(auth.user!.id);
+        // Subscribe to real-time updates
         context.read<NotificationProvider>().subscribe(auth.user!.id);
       }
     });

@@ -5,11 +5,13 @@ import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/student_provider.dart';
 import '../../../core/providers/fee_provider.dart';
 import '../../../core/providers/navigation_provider.dart';
+import '../../../core/providers/locale_provider.dart';
 import '../../../core/models/monthly_due_model.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../utils/formatters.dart';
 import '../../../utils/fee_calculator.dart';
 import '../../shared/widgets/stat_card.dart';
+import '../../shared/widgets/stylish_loader.dart';
 
 class ParentDashboardScreen extends StatefulWidget {
   const ParentDashboardScreen({super.key});
@@ -39,6 +41,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> {
     final nav = context.read<NavigationProvider>();
     final students = context.watch<StudentProvider>().students;
     final fees = context.watch<FeeProvider>();
+    final t = context.watch<LocaleProvider>().t;
 
     if (students.isEmpty) {
       return RefreshIndicator(
@@ -100,21 +103,27 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> {
                 ),
                 const SizedBox(width: 16),
                 Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text('FAMILY HUB', style: TextStyle(fontFamily: 'Inter', 
-                    fontSize: 22, fontWeight: FontWeight.w900, letterSpacing: -1, color: AppColors.slate800)),
-                  Text('SCHOOL BUS MANAGEMENT', style: AppTheme.labelSmall.copyWith(color: AppColors.slate500)),
+                  Text(t('family_hub'), style: const TextStyle(fontFamily: 'Inter',
+                    fontSize: 22, fontWeight: FontWeight.w700, letterSpacing: -0.5, color: AppColors.slate900)),
+                  Text(t('school_bus_mgmt'), style: const TextStyle(
+                    fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w500, color: AppColors.slate500)),
                 ])),
               ]),
               const SizedBox(height: 20),
               // Total due display
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text('NEXT PAYMENT DUE', style: AppTheme.labelSmall),
+                  Text(t('total_due'), style: const TextStyle(
+                    fontFamily: 'Inter', fontSize: 11, fontWeight: FontWeight.w600,
+                    letterSpacing: 0.3, color: AppColors.slate500)),
                   const SizedBox(height: 4),
                   Text(
-                    totalDue > 0 ? Formatters.currencyFull(totalDue) : 'ALL CLEAR',
-                    style: TextStyle(fontFamily: 'Inter', 
-                      fontSize: 32, fontWeight: FontWeight.w900, letterSpacing: -2,
+                    totalDue > 0 ? Formatters.currencyFull(totalDue) : t('paid'),
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 30,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: -1.2,
                       color: totalDue > 0 ? AppColors.danger : AppColors.success,
                     ),
                   ),
@@ -128,8 +137,8 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> {
                     child: ElevatedButton(
                       onPressed: () => nav.setTab('fees'),
                       style: AppTheme.primaryButton,
-                      child: Text('PAY NOW', style: TextStyle(fontFamily: 'Inter', 
-                        fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
+                      child: Text(t('pay_now'), style: const TextStyle(fontFamily: 'Inter',
+                        fontSize: 13, fontWeight: FontWeight.w600, letterSpacing: 0.3)),
                     ),
                   ),
               ]),
@@ -195,10 +204,13 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> {
                 ),
                 child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                   Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Text('FEE MANIFEST', style: AppTheme.labelSmall),
-                    const SizedBox(height: 2),
-                    Text(child.fullName.toUpperCase(), style: TextStyle(fontFamily: 'Inter', 
-                      fontSize: 12, fontWeight: FontWeight.w900, color: AppColors.slate800)),
+                    Text(t('fee_history'), style: const TextStyle(
+                      fontFamily: 'Inter', fontSize: 11, fontWeight: FontWeight.w600,
+                      letterSpacing: 0.3, color: AppColors.slate500)),
+                    const SizedBox(height: 4),
+                    Text(child.fullName, style: const TextStyle(
+                      fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w700,
+                      letterSpacing: -0.2, color: AppColors.slate900)),
                   ]),
                   Container(
                     width: 40, height: 40,
@@ -215,7 +227,8 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> {
               if (sortedDues.isEmpty)
                 Padding(
                   padding: const EdgeInsets.all(32),
-                  child: Text('NO FEES GENERATED', style: AppTheme.labelSmall),
+                  child: Text(t('no_data'), style: const TextStyle(
+                    fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w500, color: AppColors.slate400)),
                 )
               else
                 ...sortedDues.map((d) {
@@ -223,7 +236,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> {
                   final isLocked = !d.isPaid && !isPayable;
 
                   return Opacity(
-                    opacity: isLocked ? 0.3 : 1.0,
+                    opacity: isLocked ? 0.4 : 1.0,
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                       decoration: const BoxDecoration(
@@ -231,8 +244,9 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> {
                       ),
                       child: Row(children: [
                         Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Text(d.fullMonthLabel.toUpperCase(), style: TextStyle(fontFamily: 'Inter', 
-                            fontSize: 12, fontWeight: FontWeight.w900, letterSpacing: -0.3, color: AppColors.slate800)),
+                          Text(d.fullMonthLabel, style: const TextStyle(
+                            fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w600,
+                            letterSpacing: -0.2, color: AppColors.slate900)),
                           const SizedBox(height: 4),
                           StatusBadge.fromStatus(
                             d.isPaid ? 'PAID' : isLocked ? 'FUTURE' : d.isOverdue ? 'OVERDUE' : 'PENDING',
@@ -240,34 +254,37 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> {
                           if (!d.isPaid && d.lateFee > 0)
                             Padding(
                               padding: const EdgeInsets.only(top: 4),
-                              child: Text('LATE FEE: ${Formatters.currencyFull(d.lateFee)}',
-                                style: TextStyle(fontFamily: 'Inter', 
-                                  fontSize: 7, fontWeight: FontWeight.w900, letterSpacing: 2, color: AppColors.danger)),
+                              child: Text('${t('late_fee')}: ${Formatters.currencyFull(d.lateFee)}',
+                                style: const TextStyle(fontFamily: 'Inter',
+                                  fontSize: 10, fontWeight: FontWeight.w600, color: AppColors.danger)),
                             ),
                         ])),
                         Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-                          Text(Formatters.currencyFull(d.totalDue), style: TextStyle(fontFamily: 'Inter', 
-                            fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: -1, color: AppColors.slate800)),
+                          Text(Formatters.currencyFull(d.totalDue), style: const TextStyle(
+                            fontFamily: 'Inter', fontSize: 17, fontWeight: FontWeight.w700,
+                            letterSpacing: -0.5, color: AppColors.slate900)),
                           const SizedBox(height: 6),
                           if (d.isPaid)
                             Row(mainAxisSize: MainAxisSize.min, children: [
                               const Icon(Icons.check_circle_rounded, size: 14, color: AppColors.success),
                               const SizedBox(width: 4),
-                              Text('PAID', style: TextStyle(fontFamily: 'Inter', 
-                                fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 2, color: AppColors.success)),
+                              Text(t('paid'), style: const TextStyle(
+                                fontFamily: 'Inter', fontSize: 11, fontWeight: FontWeight.w600,
+                                color: AppColors.success)),
                             ])
                           else if (isPayable)
                             GestureDetector(
                               onTap: () => nav.setTab('fees'),
                               child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
                                 decoration: BoxDecoration(
                                   color: AppColors.primary,
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius: BorderRadius.circular(10),
                                   boxShadow: AppTheme.primaryButtonShadow(),
                                 ),
-                                child: Text('PAY NOW', style: TextStyle(fontFamily: 'Inter', 
-                                  fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 2, color: Colors.white)),
+                                child: Text(t('pay_now'), style: const TextStyle(
+                                  fontFamily: 'Inter', fontSize: 11, fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.2, color: Colors.white)),
                               ),
                             )
                           else
@@ -278,10 +295,11 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Row(mainAxisSize: MainAxisSize.min, children: [
-                                const Icon(Icons.lock_rounded, size: 10, color: AppColors.slate400),
+                                const Icon(Icons.lock_rounded, size: 11, color: AppColors.slate400),
                                 const SizedBox(width: 4),
-                                Text('LOCKED', style: TextStyle(fontFamily: 'Inter', 
-                                  fontSize: 7, fontWeight: FontWeight.w900, letterSpacing: 2, color: AppColors.slate400)),
+                                Text(t('pay_previous'), style: const TextStyle(
+                                  fontFamily: 'Inter', fontSize: 10, fontWeight: FontWeight.w600,
+                                  color: AppColors.slate400)),
                               ]),
                             ),
                         ]),

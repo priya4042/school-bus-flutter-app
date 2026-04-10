@@ -64,7 +64,7 @@ class _ParentReceiptsScreenState extends State<ParentReceiptsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_loading) return const Center(child: CircularProgressIndicator());
+    if (_loading) return const MiniLoader();
 
     if (_receipts.isEmpty) {
       return const EmptyState(
