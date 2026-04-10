@@ -118,7 +118,7 @@ class _AppShellState extends State<AppShell> {
                 ),
               ),
           ]),
-          // Avatar with user menu popup
+          // Avatar + Name + Role with user menu popup
           Padding(
             padding: const EdgeInsets.only(right: 12),
             child: PopupMenuButton<String>(
@@ -129,26 +129,56 @@ class _AppShellState extends State<AppShell> {
               ),
               elevation: 12,
               color: Colors.white,
-              child: Container(
-                width: 36, height: 36,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: AppColors.slate200, width: 2),
-                ),
-                child: CircleAvatar(
-                  radius: 16,
-                  backgroundColor: AppColors.slate900,
-                  child: Text(
-                    (auth.user!.fullName.isNotEmpty ? auth.user!.fullName[0] : 'U').toUpperCase(),
-                    style: const TextStyle(
-                      fontFamily: 'PlusJakartaSans',
-                      color: Colors.white,
-                      fontWeight: FontWeight.w900,
-                      fontSize: 13,
+              padding: EdgeInsets.zero,
+              child: Row(mainAxisSize: MainAxisSize.min, children: [
+                // Name + Role text (right-aligned)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      auth.user!.fullName.split(' ').first,
+                      style: const TextStyle(
+                        fontFamily: 'PlusJakartaSans',
+                        fontSize: 11,
+                        fontWeight: FontWeight.w900,
+                        color: AppColors.slate800,
+                        height: 1.0,
+                      ),
                     ),
+                    const SizedBox(height: 3),
+                    Text(
+                      isAdmin ? 'ADMIN' : 'PARENT',
+                      style: const TextStyle(
+                        fontFamily: 'PlusJakartaSans',
+                        fontSize: 8,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 2,
+                        color: AppColors.primary,
+                        height: 1.0,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 8),
+                // Avatar circle with image or initial
+                Container(
+                  width: 38, height: 38,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: AppColors.slate200, width: 2),
+                  ),
+                  child: ClipOval(
+                    child: auth.user!.avatarUrl != null && auth.user!.avatarUrl!.isNotEmpty
+                        ? Image.network(
+                            auth.user!.avatarUrl!,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => _initialAvatar(auth.user!.fullName),
+                          )
+                        : _initialAvatar(auth.user!.fullName),
                   ),
                 ),
-              ),
+              ]),
               itemBuilder: (ctx) => [
                 // Header with name + role
                 PopupMenuItem<String>(
@@ -217,6 +247,22 @@ class _AppShellState extends State<AppShell> {
         isAdmin: isAdmin,
         currentTab: nav.currentTab,
         onTabSelected: nav.setTab,
+      ),
+    );
+  }
+
+  Widget _initialAvatar(String fullName) {
+    return Container(
+      color: AppColors.slate900,
+      alignment: Alignment.center,
+      child: Text(
+        fullName.isNotEmpty ? fullName[0].toUpperCase() : 'U',
+        style: const TextStyle(
+          fontFamily: 'PlusJakartaSans',
+          color: Colors.white,
+          fontWeight: FontWeight.w900,
+          fontSize: 14,
+        ),
       ),
     );
   }
