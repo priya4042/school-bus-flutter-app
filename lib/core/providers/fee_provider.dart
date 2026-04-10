@@ -73,10 +73,13 @@ class FeeProvider extends ChangeNotifier {
       // Get parent's student IDs
       final students = await _supabase
           .from('students')
-          .select('id')
+          .select('id, full_name, admission_number')
           .eq('parent_id', parentId);
 
-      final studentIds = (students as List).map((s) => s['id'] as String).toList();
+      final studentList = students as List;
+      final studentIds = studentList.map((s) => s['id'] as String).toList();
+      debugPrint('[FeeProvider] Found ${studentIds.length} students for parent $parentId');
+
       if (studentIds.isEmpty) {
         _dues = [];
         _isLoading = false;
@@ -84,15 +87,30 @@ class FeeProvider extends ChangeNotifier {
         return;
       }
 
+      // Build student name lookup map for enriching dues
+      final studentMap = <String, Map<String, dynamic>>{};
+      for (final s in studentList) {
+        studentMap[s['id'] as String] = Map<String, dynamic>.from(s as Map);
+      }
+
+      // Fetch dues without join (to avoid join failures)
       final res = await _supabase
           .from('monthly_dues')
-          .select('*, students(full_name, admission_number)')
+          .select()
           .inFilter('student_id', studentIds)
           .order('year', ascending: false)
           .order('month', ascending: false);
 
-      _dues = (res as List).map((e) {
-        final due = MonthlyDue.fromMap(e);
+      debugPrint('[FeeProvider] Fetched ${(res as List).length} dues');
+
+      _dues = (res).map((e) {
+        // Manually attach student info for display
+        final dueMap = Map<String, dynamic>.from(e as Map);
+        final studentId = dueMap['student_id'];
+        if (studentId != null && studentMap.containsKey(studentId)) {
+          dueMap['students'] = studentMap[studentId];
+        }
+        final due = MonthlyDue.fromMap(dueMap);
         if (!due.isPaid) {
           final ledger = FeeCalculator.calculateCurrentLedger(due);
           return MonthlyDue(
@@ -119,6 +137,7 @@ class FeeProvider extends ChangeNotifier {
       }).toList();
     } catch (e) {
       _error = e.toString();
+      debugPrint('[FeeProvider] Error in fetchParentDues: $e');
     }
 
     _isLoading = false;

@@ -38,25 +38,42 @@ class MonthlyDue {
   });
 
   factory MonthlyDue.fromMap(Map<String, dynamic> map) {
-    final students = map['students'];
+    Map<String, dynamic>? students;
+    if (map['students'] is Map) {
+      students = Map<String, dynamic>.from(map['students'] as Map);
+    }
+
+    double parseDouble(dynamic v) {
+      if (v == null) return 0;
+      if (v is num) return v.toDouble();
+      return double.tryParse(v.toString()) ?? 0;
+    }
+
+    int parseInt(dynamic v, [int fallback = 0]) {
+      if (v == null) return fallback;
+      if (v is int) return v;
+      if (v is num) return v.toInt();
+      return int.tryParse(v.toString()) ?? fallback;
+    }
+
     return MonthlyDue(
-      id: map['id'] ?? '',
-      studentId: map['student_id'] ?? '',
-      studentName: students != null ? students['full_name'] : map['student_name'],
-      admissionNumber: students != null ? students['admission_number'] : map['admission_number'],
-      month: map['month'] ?? 1,
-      year: map['year'] ?? DateTime.now().year,
-      amount: (map['amount'] ?? 0).toDouble(),
-      lateFee: (map['late_fee'] ?? 0).toDouble(),
-      discount: map['discount']?.toDouble(),
-      finePerDay: (map['fine_per_day'] ?? 50).toDouble(),
-      fineAfterDays: map['fine_after_days'] ?? 5,
-      dueDate: DateTime.tryParse(map['due_date'] ?? '') ?? DateTime.now(),
-      lastDate: map['last_date'] != null ? DateTime.tryParse(map['last_date']) : null,
+      id: (map['id'] ?? '').toString(),
+      studentId: (map['student_id'] ?? '').toString(),
+      studentName: students?['full_name']?.toString() ?? map['student_name']?.toString(),
+      admissionNumber: students?['admission_number']?.toString() ?? map['admission_number']?.toString(),
+      month: parseInt(map['month'], 1),
+      year: parseInt(map['year'], DateTime.now().year),
+      amount: parseDouble(map['amount']),
+      lateFee: parseDouble(map['late_fee']),
+      discount: map['discount'] != null ? parseDouble(map['discount']) : null,
+      finePerDay: parseDouble(map['fine_per_day'] ?? 50),
+      fineAfterDays: parseInt(map['fine_after_days'], 5),
+      dueDate: DateTime.tryParse((map['due_date'] ?? '').toString()) ?? DateTime.now(),
+      lastDate: map['last_date'] != null ? DateTime.tryParse(map['last_date'].toString()) : null,
       status: (map['status'] ?? 'UNPAID').toString().toUpperCase(),
-      paidAt: map['paid_at'] != null ? DateTime.tryParse(map['paid_at']) : null,
-      transactionId: map['transaction_id'],
-      createdAt: map['created_at'] != null ? DateTime.tryParse(map['created_at']) : null,
+      paidAt: map['paid_at'] != null ? DateTime.tryParse(map['paid_at'].toString()) : null,
+      transactionId: map['transaction_id']?.toString(),
+      createdAt: map['created_at'] != null ? DateTime.tryParse(map['created_at'].toString()) : null,
     );
   }
 

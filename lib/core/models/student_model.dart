@@ -38,28 +38,39 @@ class Student {
   });
 
   factory Student.fromMap(Map<String, dynamic> map) {
-    final routes = map['routes'];
-    final buses = map['buses'];
-    final profiles = map['profiles'];
+    // Safely cast joined relations - they can be null, Map, or List
+    Map<String, dynamic>? safeMap(dynamic v) {
+      if (v == null) return null;
+      if (v is Map<String, dynamic>) return v;
+      if (v is Map) return Map<String, dynamic>.from(v);
+      if (v is List && v.isNotEmpty && v.first is Map) {
+        return Map<String, dynamic>.from(v.first as Map);
+      }
+      return null;
+    }
+
+    final routes = safeMap(map['routes']);
+    final buses = safeMap(map['buses']);
+    final profiles = safeMap(map['profiles']);
 
     return Student(
-      id: map['id'] ?? '',
-      admissionNumber: map['admission_number'] ?? '',
-      fullName: map['full_name'] ?? '',
-      grade: map['grade'],
-      section: map['section'],
-      parentId: map['parent_id'],
-      parentName: profiles != null ? profiles['full_name'] : map['parent_name'],
-      parentPhone: profiles != null ? profiles['phone_number'] : map['parent_phone'],
-      busId: map['bus_id'],
-      routeId: map['route_id'],
-      routeName: routes != null ? routes['route_name'] : map['route_name'],
-      busNumber: buses != null ? buses['bus_number'] : map['bus_number'],
-      busPlate: buses != null ? (buses['vehicle_number'] ?? buses['plate']) : map['bus_plate'],
-      boardingPoint: map['boarding_point'],
-      monthlyFee: (map['monthly_fee'] ?? 0).toDouble(),
+      id: (map['id'] ?? '').toString(),
+      admissionNumber: (map['admission_number'] ?? '').toString(),
+      fullName: (map['full_name'] ?? '').toString(),
+      grade: map['grade']?.toString(),
+      section: map['section']?.toString(),
+      parentId: map['parent_id']?.toString(),
+      parentName: profiles?['full_name']?.toString() ?? map['parent_name']?.toString(),
+      parentPhone: profiles?['phone_number']?.toString() ?? map['parent_phone']?.toString(),
+      busId: map['bus_id']?.toString(),
+      routeId: map['route_id']?.toString(),
+      routeName: routes?['route_name']?.toString() ?? map['route_name']?.toString(),
+      busNumber: buses?['bus_number']?.toString() ?? map['bus_number']?.toString(),
+      busPlate: buses?['vehicle_number']?.toString() ?? buses?['plate']?.toString() ?? map['bus_plate']?.toString(),
+      boardingPoint: map['boarding_point']?.toString(),
+      monthlyFee: (map['monthly_fee'] is num) ? (map['monthly_fee'] as num).toDouble() : 0.0,
       status: (map['status'] ?? 'ACTIVE').toString().toLowerCase(),
-      createdAt: map['created_at'] != null ? DateTime.tryParse(map['created_at']) : null,
+      createdAt: map['created_at'] != null ? DateTime.tryParse(map['created_at'].toString()) : null,
     );
   }
 

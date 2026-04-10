@@ -50,14 +50,16 @@ class AttendanceProvider extends ChangeNotifier {
     try {
       final res = await _supabase
           .from('attendance')
-          .select('*')
+          .select()
           .eq('student_id', studentId)
           .order('created_at', ascending: false)
           .limit(limit);
 
       _records = (res as List).map((e) => Attendance.fromMap(e)).toList();
+      debugPrint('[AttendanceProvider] Fetched ${_records.length} records for student $studentId');
     } catch (e) {
       _error = e.toString();
+      debugPrint('[AttendanceProvider] Error fetching attendance: $e');
     }
 
     _isLoading = false;
