@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/notification_provider.dart';
+import '../../../core/providers/locale_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../utils/formatters.dart';
 import '../../shared/widgets/stat_card.dart';
@@ -19,29 +20,64 @@ class _ParentNotificationsScreenState extends State<ParentNotificationsScreen> {
   @override
   void initState() {
     super.initState();
-    final auth = context.read<AppAuthProvider>();
-    if (auth.user != null) context.read<NotificationProvider>().fetchNotifications(auth.user!.id);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final auth = context.read<AppAuthProvider>();
+      if (auth.user != null) {
+        // Fetch + subscribe to real-time updates
+        final prov = context.read<NotificationProvider>();
+        prov.fetchNotifications(auth.user!.id);
+        prov.subscribe(auth.user!.id);
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final auth = context.read<AppAuthProvider>();
     final prov = context.watch<NotificationProvider>();
+    final t = context.watch<LocaleProvider>().t;
     final notifications = _showUnreadOnly ? prov.unread : prov.notifications;
 
     return Column(children: [
+      // Page header
+      Padding(
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 4),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(
+            t('alert_center'),
+            style: const TextStyle(
+              fontFamily: 'Inter',
+              fontSize: 22,
+              fontWeight: FontWeight.w700,
+              letterSpacing: -0.5,
+              color: AppColors.slate900,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            t('notifications'),
+            style: const TextStyle(
+              fontFamily: 'Inter',
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: AppColors.slate500,
+            ),
+          ),
+        ]),
+      ),
       // Filter bar
       Container(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
         child: Row(children: [
-          _filterChip('ALL (${prov.notifications.length})', !_showUnreadOnly, () => setState(() => _showUnreadOnly = false)),
+          _filterChip('${t('view_all')} (${prov.notifications.length})', !_showUnreadOnly, () => setState(() => _showUnreadOnly = false)),
           const SizedBox(width: 8),
-          _filterChip('UNREAD (${prov.unreadCount})', _showUnreadOnly, () => setState(() => _showUnreadOnly = true)),
+          _filterChip('${t('warning').toLowerCase() == 'warning' ? "Unread" : "अपठित"} (${prov.unreadCount})', _showUnreadOnly, () => setState(() => _showUnreadOnly = true)),
           const Spacer(),
           if (prov.unreadCount > 0)
             GestureDetector(
               onTap: () { if (auth.user != null) prov.markAllAsRead(auth.user!.id); },
-              child: Text('MARK ALL READ', style: AppTheme.labelXs.copyWith(color: AppColors.primary)),
+              child: Text(t('mark_all_read'), style: const TextStyle(
+                fontFamily: 'Inter', fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.primary)),
             ),
         ]),
       ),
@@ -49,9 +85,9 @@ class _ParentNotificationsScreenState extends State<ParentNotificationsScreen> {
       // List
       Expanded(
         child: prov.isLoading
-            ? const MiniLoader()
+            ? MiniLoader(label: t('loading'))
             : notifications.isEmpty
-                ? const EmptyState(icon: Icons.notifications_none_rounded, title: 'ALL CAUGHT UP!', subtitle: 'No notifications')
+                ? EmptyState(icon: Icons.notifications_none_rounded, title: t('all_caught_up'), subtitle: t('no_alerts'))
                 : ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     itemCount: notifications.length,
