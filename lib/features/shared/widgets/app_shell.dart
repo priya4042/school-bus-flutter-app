@@ -118,23 +118,90 @@ class _AppShellState extends State<AppShell> {
                 ),
               ),
           ]),
-          // Avatar
+          // Avatar with user menu popup
           Padding(
             padding: const EdgeInsets.only(right: 12),
-            child: Container(
-              width: 36, height: 36,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: AppColors.slate200, width: 2),
+            child: PopupMenuButton<String>(
+              offset: const Offset(0, 50),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+                side: const BorderSide(color: AppColors.slate100),
               ),
-              child: CircleAvatar(
-                radius: 16,
-                backgroundColor: AppColors.slate900,
-                child: Text(
-                  (auth.user!.fullName.isNotEmpty ? auth.user!.fullName[0] : 'U').toUpperCase(),
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 13),
+              elevation: 12,
+              color: Colors.white,
+              child: Container(
+                width: 36, height: 36,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: AppColors.slate200, width: 2),
+                ),
+                child: CircleAvatar(
+                  radius: 16,
+                  backgroundColor: AppColors.slate900,
+                  child: Text(
+                    (auth.user!.fullName.isNotEmpty ? auth.user!.fullName[0] : 'U').toUpperCase(),
+                    style: const TextStyle(
+                      fontFamily: 'PlusJakartaSans',
+                      color: Colors.white,
+                      fontWeight: FontWeight.w900,
+                      fontSize: 13,
+                    ),
+                  ),
                 ),
               ),
+              itemBuilder: (ctx) => [
+                // Header with name + role
+                PopupMenuItem<String>(
+                  enabled: false,
+                  child: Container(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    decoration: const BoxDecoration(
+                      border: Border(bottom: BorderSide(color: AppColors.slate100)),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          auth.user!.fullName,
+                          style: const TextStyle(
+                            fontFamily: 'PlusJakartaSans',
+                            fontSize: 13,
+                            fontWeight: FontWeight.w900,
+                            color: AppColors.slate800,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          auth.user!.email,
+                          style: const TextStyle(
+                            fontFamily: 'PlusJakartaSans',
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.slate400,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                if (!isAdmin)
+                  _menuItem('edit_profile', Icons.edit_rounded, 'EDIT PROFILE'),
+                _menuItem(isAdmin ? 'settings' : 'parent_settings', Icons.settings_rounded, 'SETTINGS'),
+                if (!isAdmin)
+                  _menuItem('parent_settings_lang', Icons.language_rounded, 'LANGUAGE'),
+                const PopupMenuDivider(),
+                _menuItem('logout', Icons.logout_rounded, 'LOGOUT', isLogout: true),
+              ],
+              onSelected: (value) async {
+                if (value == 'logout') {
+                  await auth.logout();
+                  nav.reset();
+                } else if (value == 'edit_profile') {
+                  nav.setTab('parent_settings');
+                } else {
+                  nav.setTab(value);
+                }
+              },
             ),
           ),
         ],
@@ -151,6 +218,27 @@ class _AppShellState extends State<AppShell> {
         currentTab: nav.currentTab,
         onTabSelected: nav.setTab,
       ),
+    );
+  }
+
+  PopupMenuItem<String> _menuItem(String value, IconData icon, String label, {bool isLogout = false}) {
+    return PopupMenuItem<String>(
+      value: value,
+      height: 44,
+      child: Row(children: [
+        Icon(icon, size: 16, color: isLogout ? AppColors.danger : AppColors.slate500),
+        const SizedBox(width: 12),
+        Text(
+          label,
+          style: TextStyle(
+            fontFamily: 'PlusJakartaSans',
+            fontSize: 11,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 1.5,
+            color: isLogout ? AppColors.danger : AppColors.slate700,
+          ),
+        ),
+      ]),
     );
   }
 
@@ -181,8 +269,16 @@ class _AppShellState extends State<AppShell> {
         case 'parent_tracking': return const ParentTrackingScreen();
         case 'bus_camera': return const BusCameraScreen();
         case 'parent_notifications': return const ParentNotificationsScreen();
-        case 'support': return const SupportScreen();
-        case 'parent_settings': return const ParentSettingsScreen();
+        case 'support':
+          return const SupportScreen(initialTab: 0);
+        case 'support_faq':
+          return const SupportScreen(initialTab: 1);
+        case 'parent_settings':
+          return const ParentSettingsScreen(initialTab: 0);
+        case 'parent_settings_password':
+          return const ParentSettingsScreen(initialTab: 1);
+        case 'parent_settings_lang':
+          return const ParentSettingsScreen(initialTab: 2);
         default: return const ParentDashboardScreen();
       }
     }

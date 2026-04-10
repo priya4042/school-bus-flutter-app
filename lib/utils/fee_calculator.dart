@@ -91,46 +91,25 @@ class FeeCalculator {
   }) {
     final now = referenceDate ?? DateTime.now();
 
-    // Filter unpaid dues for same student, sorted chronologically
-    final unpaid = allDues
-        .where((d) =>
-            d.studentId == targetDue.studentId &&
-            !d.isPaid &&
-            (d.year < targetDue.year ||
-                (d.year == targetDue.year && d.month <= targetDue.month)))
-        .toList()
-      ..sort((a, b) {
-        final yearCmp = a.year.compareTo(b.year);
-        return yearCmp != 0 ? yearCmp : a.month.compareTo(b.month);
-      });
-
-    final items = <PaymentBundleItem>[];
-    double totalBase = 0;
-    double totalLate = 0;
-
-    for (final due in unpaid) {
-      final ledger = calculateCurrentLedger(due, referenceDate: now);
-      items.add(PaymentBundleItem(
-        due: due,
-        baseFee: due.amount,
+    // Pay only the selected month (not bundled). Each month is independently payable.
+    final ledger = calculateCurrentLedger(targetDue, referenceDate: now);
+    final items = <PaymentBundleItem>[
+      PaymentBundleItem(
+        due: targetDue,
+        baseFee: targetDue.amount,
         lateFee: ledger.lateFee,
         total: ledger.total,
-        reason: due.id == targetDue.id ? 'Current month' : 'Arrears',
-      ));
-      totalBase += due.amount;
-      totalLate += ledger.lateFee;
-    }
-
+        reason: 'Selected month',
+      ),
+    ];
+    final totalBase = targetDue.amount;
+    final totalLate = ledger.lateFee;
     final totalAmount = totalBase + totalLate;
-    final hasArrears = items.length > 1;
+    const hasArrears = false;
 
     String explanation = '';
-    if (hasArrears) {
-      explanation = '${items.length} months bundled (includes ${items.length - 1} month(s) of arrears)';
-    }
     if (totalLate > 0) {
-      explanation += explanation.isEmpty ? '' : '. ';
-      explanation += 'Late fees: ₹${totalLate.toStringAsFixed(0)}';
+      explanation = 'Late fees: ₹${totalLate.toStringAsFixed(0)}';
     }
 
     return PaymentBundle(
@@ -145,12 +124,10 @@ class FeeCalculator {
     );
   }
 
+  /// Check if a month can be paid.
+  /// Returns true if the month is unpaid (allows paying any unpaid month — admin
+  /// may create yearly fees and parents should be able to pay any month).
   static bool isMonthPayable(MonthlyDue targetDue, List<MonthlyDue> allDues) {
-    final earlier = allDues.where((d) =>
-        d.studentId == targetDue.studentId &&
-        !d.isPaid &&
-        (d.year < targetDue.year ||
-            (d.year == targetDue.year && d.month < targetDue.month)));
-    return earlier.isEmpty;
+    return !targetDue.isPaid;
   }
 }

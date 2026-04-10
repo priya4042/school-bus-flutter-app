@@ -42,13 +42,24 @@ class StudentProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
+      // Match React query exactly: parent_id filter, all status variants
       final res = await _supabase
           .from('students')
-          .select('*, routes(route_name, code, start_point, end_point), buses(bus_number, vehicle_number)')
+          .select('*, routes(route_name, code, start_point, end_point), buses(bus_number, vehicle_number, plate)')
           .eq('parent_id', parentId)
-          .order('full_name');
+          .order('full_name', ascending: true);
 
-      _students = (res as List).map((e) => Student.fromMap(e)).toList();
+      final all = (res as List).map((e) => Student.fromMap(e)).toList();
+      // Filter active students (case-insensitive)
+      _students = all.where((s) {
+        final status = s.status.toLowerCase();
+        return status == 'active' || status.isEmpty;
+      }).toList();
+
+      // If no active students, show all (so parent isn't stuck)
+      if (_students.isEmpty && all.isNotEmpty) {
+        _students = all;
+      }
     } catch (e) {
       _error = e.toString();
     }

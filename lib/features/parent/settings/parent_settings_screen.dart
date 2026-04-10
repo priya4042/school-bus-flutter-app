@@ -7,7 +7,8 @@ import '../../../core/theme/app_theme.dart';
 import '../../../utils/formatters.dart';
 
 class ParentSettingsScreen extends StatefulWidget {
-  const ParentSettingsScreen({super.key});
+  final int initialTab;
+  const ParentSettingsScreen({super.key, this.initialTab = 0});
   @override
   State<ParentSettingsScreen> createState() => _ParentSettingsScreenState();
 }
@@ -26,7 +27,7 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> with Single
   @override
   void initState() {
     super.initState();
-    _tabCtrl = TabController(length: 3, vsync: this);
+    _tabCtrl = TabController(length: 3, vsync: this, initialIndex: widget.initialTab);
     final auth = context.read<AppAuthProvider>();
     if (auth.user != null) {
       _nameCtrl.text = auth.user!.fullName;
