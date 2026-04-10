@@ -76,34 +76,12 @@ class _AppDrawerState extends State<AppDrawer> {
             ]),
           ),
 
-          // ===== USER CARD =====
+          const SizedBox(height: 8),
+          // Subtle divider under header
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: 12),
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.05),
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: Colors.white.withOpacity(0.05)),
-            ),
-            child: Row(children: [
-              CircleAvatar(
-                radius: 18, backgroundColor: AppColors.primary,
-                child: Text(widget.user.fullName.isNotEmpty ? widget.user.fullName[0].toUpperCase() : 'U',
-                  style: const TextStyle(fontFamily: 'PlusJakartaSans', color: Colors.white,
-                    fontWeight: FontWeight.w900, fontSize: 14)),
-              ),
-              const SizedBox(width: 10),
-              Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(widget.user.fullName,
-                    style: const TextStyle(fontFamily: 'PlusJakartaSans', color: Colors.white,
-                      fontSize: 12, fontWeight: FontWeight.w700),
-                    maxLines: 1, overflow: TextOverflow.ellipsis),
-                const SizedBox(height: 2),
-                Text(widget.user.isSuperAdmin ? 'SUPER ADMIN' : widget.user.isAdmin ? 'ADMIN' : 'PARENT',
-                    style: const TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 7,
-                      fontWeight: FontWeight.w900, letterSpacing: 2, color: AppColors.primary)),
-              ])),
-            ]),
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            height: 1,
+            color: Colors.white.withOpacity(0.06),
           ),
           const SizedBox(height: 12),
 

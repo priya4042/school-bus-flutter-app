@@ -316,15 +316,15 @@ class _AppShellState extends State<AppShell> {
         case 'bus_camera': return const BusCameraScreen();
         case 'parent_notifications': return const ParentNotificationsScreen();
         case 'support':
-          return const SupportScreen(initialTab: 0);
+          return const SupportScreen(initialTab: 0, singleTab: true);
         case 'support_faq':
-          return const SupportScreen(initialTab: 1);
+          return const SupportScreen(initialTab: 1, singleTab: true);
         case 'parent_settings':
-          return const ParentSettingsScreen(initialTab: 0);
+          return const ParentSettingsScreen(initialTab: 0, singleTab: true);
         case 'parent_settings_password':
-          return const ParentSettingsScreen(initialTab: 1);
+          return const ParentSettingsScreen(initialTab: 1, singleTab: true);
         case 'parent_settings_lang':
-          return const ParentSettingsScreen(initialTab: 2);
+          return const ParentSettingsScreen(initialTab: 2, singleTab: true);
         default: return const ParentDashboardScreen();
       }
     }

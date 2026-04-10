@@ -9,7 +9,9 @@ import '../../../utils/formatters.dart';
 
 class ParentSettingsScreen extends StatefulWidget {
   final int initialTab;
-  const ParentSettingsScreen({super.key, this.initialTab = 0});
+  /// When true, only the selected tab's content is shown (no tab bar)
+  final bool singleTab;
+  const ParentSettingsScreen({super.key, this.initialTab = 0, this.singleTab = false});
   @override
   State<ParentSettingsScreen> createState() => _ParentSettingsScreenState();
 }
@@ -142,8 +144,8 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> with Single
     final auth = context.watch<AppAuthProvider>();
 
     return Column(children: [
-      // Tab bar
-      Container(
+      // Tab bar — hidden in singleTab mode (when accessed from sidebar submenu)
+      if (!widget.singleTab) Container(
         margin: const EdgeInsets.fromLTRB(16, 8, 16, 0),
         padding: const EdgeInsets.all(4),
         decoration: BoxDecoration(color: AppColors.slate100, borderRadius: BorderRadius.circular(14),
@@ -161,7 +163,39 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> with Single
           tabs: const [Tab(text: 'PROFILE'), Tab(text: 'SECURITY'), Tab(text: 'LANGUAGE')],
         ),
       ),
-      Expanded(child: TabBarView(controller: _tabCtrl, children: [
+      // Page title (only shown in singleTab mode)
+      if (widget.singleTab) Padding(
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 4),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(
+            widget.initialTab == 0 ? 'EDIT PROFILE' :
+            widget.initialTab == 1 ? 'PASSWORD RESET' : 'LANGUAGE',
+            style: const TextStyle(
+              fontFamily: 'PlusJakartaSans',
+              fontSize: 22,
+              fontWeight: FontWeight.w900,
+              letterSpacing: -0.5,
+              color: AppColors.slate800,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            widget.initialTab == 0 ? 'UPDATE YOUR PERSONAL INFORMATION' :
+            widget.initialTab == 1 ? 'CHANGE YOUR ACCOUNT PASSWORD' : 'SELECT YOUR PREFERRED LANGUAGE',
+            style: const TextStyle(
+              fontFamily: 'PlusJakartaSans',
+              fontSize: 9,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 2,
+              color: AppColors.slate400,
+            ),
+          ),
+        ]),
+      ),
+      Expanded(child: TabBarView(
+        controller: _tabCtrl,
+        physics: widget.singleTab ? const NeverScrollableScrollPhysics() : null,
+        children: [
         // ===== PROFILE TAB =====
         SingleChildScrollView(padding: const EdgeInsets.all(16), child: Container(
           padding: const EdgeInsets.all(24),
