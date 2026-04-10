@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 // Exact colors from tailwind.config.js
 class AppColors {
@@ -97,15 +96,11 @@ class AppColors {
 }
 
 class AppTheme {
-  // Use the font preloaded in index.html — GoogleFonts.plusJakartaSans() as primary,
-  // with CSS fallback 'Plus Jakarta Sans' if runtime download fails
-  static TextStyle get _baseTextStyle {
-    try {
-      return GoogleFonts.plusJakartaSans();
-    } catch (_) {
-      return const TextStyle(fontFamily: 'Plus Jakarta Sans');
-    }
-  }
+  // Use bundled PlusJakartaSans font (loaded from assets/fonts/)
+  // This works offline and never fails - same font as React app
+  static const String fontFamily = 'PlusJakartaSans';
+
+  static const TextStyle _baseTextStyle = TextStyle(fontFamily: fontFamily);
 
   // Exact label style: text-[10px] font-black uppercase tracking-widest
   static TextStyle get labelStyle => _baseTextStyle.copyWith(
@@ -286,17 +281,10 @@ class AppTheme {
   );
 
   static ThemeData get lightTheme {
-    // Build text theme with Plus Jakarta Sans — works both on web (preloaded via HTML)
-    // and on mobile (downloaded by GoogleFonts package)
-    final baseTheme = ThemeData(brightness: Brightness.light);
-    final textTheme = GoogleFonts.plusJakartaSansTextTheme(baseTheme.textTheme).apply(
-      bodyColor: AppColors.slate800,
-      displayColor: AppColors.slate800,
-    );
-
+    // Use bundled PlusJakartaSans font from assets/fonts/
     return ThemeData(
       useMaterial3: true,
-      fontFamily: GoogleFonts.plusJakartaSans().fontFamily,
+      fontFamily: fontFamily,
       colorScheme: ColorScheme.fromSeed(
         seedColor: AppColors.primary,
         brightness: Brightness.light,
@@ -305,15 +293,15 @@ class AppTheme {
         surface: AppColors.surface,
         error: AppColors.danger,
       ),
-      textTheme: textTheme,
       scaffoldBackgroundColor: AppColors.slate50,
-      appBarTheme: AppBarTheme(
+      appBarTheme: const AppBarTheme(
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: false,
-        backgroundColor: Colors.white.withOpacity(0.8),
+        backgroundColor: Colors.white,
         foregroundColor: AppColors.slate800,
-        titleTextStyle: GoogleFonts.plusJakartaSans(
+        titleTextStyle: TextStyle(
+          fontFamily: fontFamily,
           fontSize: 14,
           fontWeight: FontWeight.w900,
           color: AppColors.slate800,
@@ -362,7 +350,7 @@ class AppTheme {
       chipTheme: ChipThemeData(
         backgroundColor: AppColors.slate100,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        labelStyle: GoogleFonts.plusJakartaSans(
+        labelStyle: TextStyle(fontFamily: 'PlusJakartaSans', 
           fontSize: 10,
           fontWeight: FontWeight.w900,
           letterSpacing: 2.0,

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../core/providers/notification_provider.dart';
 import '../../../core/providers/route_provider.dart';
@@ -117,8 +117,8 @@ class _AdminNotificationsScreenState extends State<AdminNotificationsScreen> wit
           indicator: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10),
               boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)]),
           indicatorSize: TabBarIndicatorSize.tab, dividerColor: Colors.transparent,
-          labelStyle: GoogleFonts.plusJakartaSans(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
-          unselectedLabelStyle: GoogleFonts.plusJakartaSans(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
+          labelStyle: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
+          unselectedLabelStyle: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
           labelColor: AppColors.primary, unselectedLabelColor: AppColors.slate400,
           tabs: const [Tab(text: 'BROADCAST'), Tab(text: 'CHAT'), Tab(text: 'AUDIT LOGS')],
         ),
@@ -156,7 +156,7 @@ class _AdminNotificationsScreenState extends State<AdminNotificationsScreen> wit
                 decoration: BoxDecoration(
                   color: sel ? (t == 'Emergency Alert' ? AppColors.danger.withOpacity(0.15) : AppColors.primary.withOpacity(0.15)) : AppColors.slate100,
                   borderRadius: BorderRadius.circular(10)),
-                child: Text(t.toUpperCase(), style: GoogleFonts.plusJakartaSans(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 1,
+                child: Text(t.toUpperCase(), style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 1,
                     color: sel ? (t == 'Emergency Alert' ? AppColors.danger : AppColors.primary) : AppColors.slate500)),
               ),
             );
@@ -169,7 +169,7 @@ class _AdminNotificationsScreenState extends State<AdminNotificationsScreen> wit
             decoration: BoxDecoration(color: AppColors.slate50, borderRadius: BorderRadius.circular(12), border: Border.all(color: AppColors.slate200)),
             child: DropdownButtonHideUnderline(child: DropdownButton<String>(
               value: _target, isExpanded: true,
-              style: GoogleFonts.plusJakartaSans(fontSize: 11, fontWeight: FontWeight.w900, color: AppColors.slate800),
+              style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 11, fontWeight: FontWeight.w900, color: AppColors.slate800),
               items: [
                 const DropdownMenuItem(value: 'All Parents', child: Text('ALL PARENTS')),
                 ...routes.map((r) => DropdownMenuItem(value: r.id, child: Text('${r.routeName} PARENTS'.toUpperCase()))),
@@ -183,10 +183,10 @@ class _AdminNotificationsScreenState extends State<AdminNotificationsScreen> wit
             decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(20)),
             child: TextField(
               controller: _msgCtrl, maxLines: 5,
-              style: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white),
+              style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white),
               decoration: InputDecoration(
                 hintText: 'Type your message...',
-                hintStyle: GoogleFonts.plusJakartaSans(color: Colors.white.withOpacity(0.5)),
+                hintStyle: TextStyle(fontFamily: 'PlusJakartaSans', color: Colors.white.withOpacity(0.5)),
                 border: InputBorder.none, contentPadding: const EdgeInsets.all(20)),
             ),
           ),
@@ -205,7 +205,7 @@ class _AdminNotificationsScreenState extends State<AdminNotificationsScreen> wit
               onPressed: _sending ? null : _sendBroadcast, style: AppTheme.primaryButton,
               icon: _sending ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
                   : const Icon(Icons.send_rounded, size: 16),
-              label: Text('SEND BROADCAST', style: GoogleFonts.plusJakartaSans(fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2))),
+              label: Text('SEND BROADCAST', style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2))),
           )),
         ]),
       ),
@@ -225,9 +225,9 @@ class _AdminNotificationsScreenState extends State<AdminNotificationsScreen> wit
               child: const Icon(Icons.check_circle_rounded, size: 16, color: AppColors.success)),
             const SizedBox(width: 10),
             Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(n.title, style: GoogleFonts.plusJakartaSans(fontSize: 11, fontWeight: FontWeight.w900, color: AppColors.slate800)),
+              Text(n.title, style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 11, fontWeight: FontWeight.w900, color: AppColors.slate800)),
               Text(n.message, maxLines: 2, overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.plusJakartaSans(fontSize: 10, fontWeight: FontWeight.w600, color: AppColors.slate500)),
+                  style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 10, fontWeight: FontWeight.w600, color: AppColors.slate500)),
               Text(Formatters.relativeTime(n.createdAt).toUpperCase(), style: AppTheme.labelXs.copyWith(color: AppColors.slate300)),
             ])),
           ]),
@@ -255,7 +255,7 @@ class _AdminNotificationsScreenState extends State<AdminNotificationsScreen> wit
                   color: n.type == 'WARNING' ? AppColors.danger : n.type == 'FEE_DUE' ? AppColors.warning : AppColors.blue500)),
             ),
             const SizedBox(width: 10),
-            Expanded(child: Text(n.title, style: GoogleFonts.plusJakartaSans(fontSize: 11, fontWeight: FontWeight.w900, color: AppColors.slate800))),
+            Expanded(child: Text(n.title, style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 11, fontWeight: FontWeight.w900, color: AppColors.slate800))),
             Text(Formatters.relativeTime(n.createdAt).toUpperCase(), style: AppTheme.labelXs.copyWith(color: AppColors.slate300)),
           ]),
         )),
@@ -283,7 +283,7 @@ class _AdminNotificationsScreenState extends State<AdminNotificationsScreen> wit
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(parentName.toUpperCase(), style: AppTheme.labelSmall.copyWith(color: AppColors.primary)),
             const SizedBox(height: 4),
-            Text(m['message'] ?? '', style: GoogleFonts.plusJakartaSans(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.slate700)),
+            Text(m['message'] ?? '', style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.slate700)),
             const SizedBox(height: 4),
             Text(Formatters.relativeTime(DateTime.tryParse(m['created_at'] ?? '') ?? DateTime.now()).toUpperCase(),
                 style: AppTheme.labelXs.copyWith(color: AppColors.slate300)),
@@ -291,9 +291,9 @@ class _AdminNotificationsScreenState extends State<AdminNotificationsScreen> wit
             Row(children: [
               Expanded(child: TextField(
                 controller: _replyCtrls[userId],
-                style: GoogleFonts.plusJakartaSans(fontSize: 13, fontWeight: FontWeight.w700),
+                style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 13, fontWeight: FontWeight.w700),
                 decoration: InputDecoration(
-                  hintText: 'Reply...', hintStyle: GoogleFonts.plusJakartaSans(color: AppColors.slate400),
+                  hintText: 'Reply...', hintStyle: TextStyle(fontFamily: 'PlusJakartaSans', color: AppColors.slate400),
                   filled: true, fillColor: Colors.white,
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.slate200)),
                   enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.slate200)),
@@ -325,7 +325,7 @@ class _AdminNotificationsScreenState extends State<AdminNotificationsScreen> wit
     return Column(children: [
       Padding(padding: const EdgeInsets.all(16), child: TextField(
         onChanged: (v) => setState(() => _auditSearch = v),
-        style: GoogleFonts.plusJakartaSans(fontSize: 13, fontWeight: FontWeight.w700),
+        style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 13, fontWeight: FontWeight.w700),
         decoration: AppTheme.inputDecoration('SEARCH AUDIT LOGS', icon: Icons.search_rounded),
       )),
       Expanded(
@@ -363,12 +363,12 @@ class _AdminNotificationsScreenState extends State<AdminNotificationsScreen> wit
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(color: catColor.withOpacity(0.1), borderRadius: BorderRadius.circular(6)),
-                        child: Text(category, style: GoogleFonts.plusJakartaSans(
+                        child: Text(category, style: TextStyle(fontFamily: 'PlusJakartaSans', 
                           fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 1.5, color: catColor)),
                       ),
                       const SizedBox(width: 10),
                       Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Text(action, style: GoogleFonts.plusJakartaSans(fontSize: 11, fontWeight: FontWeight.w900, color: AppColors.slate800)),
+                        Text(action, style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 11, fontWeight: FontWeight.w900, color: AppColors.slate800)),
                         Text('$entityType — ${entityId.length > 8 ? entityId.substring(0, 8) : entityId}'.toUpperCase(),
                             style: AppTheme.labelXs.copyWith(color: AppColors.slate400)),
                       ])),

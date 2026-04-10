@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/models/user_model.dart';
 import '../../../core/theme/app_theme.dart';
@@ -85,8 +85,8 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> with Single
               boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)]),
           indicatorSize: TabBarIndicatorSize.tab,
           dividerColor: Colors.transparent,
-          labelStyle: GoogleFonts.plusJakartaSans(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
-          unselectedLabelStyle: GoogleFonts.plusJakartaSans(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
+          labelStyle: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
+          unselectedLabelStyle: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
           labelColor: AppColors.primary,
           unselectedLabelColor: AppColors.slate400,
           tabs: const [Tab(text: 'PROFILE'), Tab(text: 'SECURITY'), Tab(text: 'LANGUAGE')],
@@ -109,12 +109,12 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> with Single
                 ),
                 child: Center(child: Text(
                   (auth.user?.fullName.isNotEmpty ?? false) ? auth.user!.fullName[0].toUpperCase() : 'U',
-                  style: GoogleFonts.plusJakartaSans(fontSize: 28, fontWeight: FontWeight.w900, color: AppColors.slate300),
+                  style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 28, fontWeight: FontWeight.w900, color: AppColors.slate300),
                 )),
               ),
               const SizedBox(width: 16),
               Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(auth.user?.fullName ?? '', style: GoogleFonts.plusJakartaSans(
+                Text(auth.user?.fullName ?? '', style: TextStyle(fontFamily: 'PlusJakartaSans', 
                   fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: -0.5, color: AppColors.slate900)),
                 Text('${auth.user?.isParent ?? true ? "PARENT" : "USER"} • SINCE ${auth.user?.createdAt != null ? Formatters.date(auth.user!.createdAt!).toUpperCase() : "N/A"}',
                     style: AppTheme.labelXs.copyWith(color: AppColors.slate500)),
@@ -132,7 +132,7 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> with Single
               decoration: AppTheme.inputDecoration('ADMISSION NUMBER').copyWith(
                 prefixIcon: const Icon(Icons.badge_rounded, color: AppColors.slate400, size: 20)),
               controller: TextEditingController(text: auth.user?.admissionNumber ?? ''),
-              style: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate400),
+              style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate400),
             ),
             const SizedBox(height: 24),
             SizedBox(width: double.infinity, height: 52, child: Container(
@@ -140,7 +140,7 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> with Single
               child: ElevatedButton.icon(
                 onPressed: _saveProfile, style: AppTheme.primaryButton,
                 icon: const Icon(Icons.check_rounded, size: 18),
-                label: Text('SAVE CHANGES', style: GoogleFonts.plusJakartaSans(fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
+                label: Text('SAVE CHANGES', style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
               ),
             )),
           ]),
@@ -156,7 +156,7 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> with Single
             TextField(
               controller: _newPassCtrl,
               obscureText: _obscure,
-              style: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate800),
+              style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate800),
               decoration: AppTheme.inputDecoration('NEW PASSWORD', icon: Icons.lock_rounded).copyWith(
                 suffixIcon: IconButton(
                   icon: Icon(_obscure ? Icons.visibility_off_rounded : Icons.visibility_rounded, color: AppColors.slate400, size: 20),
@@ -168,7 +168,7 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> with Single
             TextField(
               controller: _confirmPassCtrl,
               obscureText: _obscureConfirm,
-              style: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate800),
+              style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate800),
               decoration: AppTheme.inputDecoration('CONFIRM PASSWORD', icon: Icons.lock_rounded).copyWith(
                 suffixIcon: IconButton(
                   icon: Icon(_obscureConfirm ? Icons.visibility_off_rounded : Icons.visibility_rounded, color: AppColors.slate400, size: 20),
@@ -184,7 +184,7 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> with Single
             SizedBox(width: double.infinity, height: 52, child: Container(
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), boxShadow: AppTheme.primaryButtonShadow()),
               child: ElevatedButton(onPressed: _changePassword, style: AppTheme.primaryButton,
-                child: Text('UPDATE PASSWORD', style: GoogleFonts.plusJakartaSans(fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2))),
+                child: Text('UPDATE PASSWORD', style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2))),
             )),
           ]),
         )),
@@ -204,7 +204,7 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> with Single
             ),
             child: ListTile(
               leading: Text(l['flag']!, style: const TextStyle(fontSize: 24)),
-              title: Text(l['name']!, style: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.w900, color: AppColors.slate800)),
+              title: Text(l['name']!, style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 14, fontWeight: FontWeight.w900, color: AppColors.slate800)),
               subtitle: l['available'] != 'true'
                   ? Text('COMING SOON', style: AppTheme.labelXs.copyWith(color: AppColors.slate400))
                   : null,
@@ -223,7 +223,7 @@ class _ParentSettingsScreenState extends State<ParentSettingsScreen> with Single
   Widget _field(String label, TextEditingController ctrl, IconData icon, {TextInputType inputType = TextInputType.text}) {
     return Padding(padding: const EdgeInsets.only(bottom: 16), child: TextField(
       controller: ctrl, keyboardType: inputType,
-      style: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate800),
+      style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate800),
       decoration: AppTheme.inputDecoration(label, icon: icon),
     ));
   }

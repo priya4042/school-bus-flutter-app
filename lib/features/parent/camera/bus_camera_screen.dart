@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/student_provider.dart';
 import '../../../core/theme/app_theme.dart';
@@ -36,7 +36,7 @@ class _BusCameraScreenState extends State<BusCameraScreen> {
           Text('CAMERA ACCESS DISABLED', style: AppTheme.labelStyle.copyWith(color: AppColors.slate800)),
           const SizedBox(height: 8),
           Text('Bus camera access has not been enabled for your account.\nContact your admin.',
-              textAlign: TextAlign.center, style: GoogleFonts.plusJakartaSans(fontSize: 12, color: AppColors.slate400)),
+              textAlign: TextAlign.center, style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 12, color: AppColors.slate400)),
         ],
       )));
     }
@@ -54,9 +54,9 @@ class _BusCameraScreenState extends State<BusCameraScreen> {
           const Icon(Icons.directions_bus_rounded, color: Colors.white, size: 22),
           const SizedBox(width: 12),
           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(child.busNumber?.toUpperCase() ?? 'NO BUS', style: GoogleFonts.plusJakartaSans(
+            Text(child.busNumber?.toUpperCase() ?? 'NO BUS', style: TextStyle(fontFamily: 'PlusJakartaSans', 
               fontSize: 14, fontWeight: FontWeight.w900, color: Colors.white)),
-            Text(child.busPlate?.toUpperCase() ?? '', style: GoogleFonts.plusJakartaSans(
+            Text(child.busPlate?.toUpperCase() ?? '', style: TextStyle(fontFamily: 'PlusJakartaSans', 
               fontSize: 10, fontWeight: FontWeight.w700, color: Colors.white.withOpacity(0.5))),
           ]),
           const Spacer(),
@@ -66,7 +66,7 @@ class _BusCameraScreenState extends State<BusCameraScreen> {
             child: Row(children: [
               Container(width: 6, height: 6, decoration: const BoxDecoration(color: AppColors.success, shape: BoxShape.circle)),
               const SizedBox(width: 4),
-              Text('LIVE', style: GoogleFonts.plusJakartaSans(fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2, color: Colors.white)),
+              Text('LIVE', style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2, color: Colors.white)),
             ]),
           ),
         ]),
@@ -83,11 +83,11 @@ class _BusCameraScreenState extends State<BusCameraScreen> {
             child: Icon(Icons.videocam_rounded, size: 36, color: Colors.white.withOpacity(0.15)),
           ),
           const SizedBox(height: 16),
-          Text('LIVE CAMERA FEED', style: GoogleFonts.plusJakartaSans(
+          Text('LIVE CAMERA FEED', style: TextStyle(fontFamily: 'PlusJakartaSans', 
             fontSize: 14, fontWeight: FontWeight.w700, color: Colors.white.withOpacity(0.3))),
           const SizedBox(height: 8),
           Text('CAMERA STREAM WILL APPEAR HERE\nWHEN THE BUS IS ACTIVE', textAlign: TextAlign.center,
-              style: GoogleFonts.plusJakartaSans(fontSize: 10, fontWeight: FontWeight.w700,
+              style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 10, fontWeight: FontWeight.w700,
                   letterSpacing: 2, color: Colors.white.withOpacity(0.15))),
         ])),
       )),
@@ -100,7 +100,7 @@ class _BusCameraScreenState extends State<BusCameraScreen> {
           const Icon(Icons.shield_rounded, size: 14, color: AppColors.slate400),
           const SizedBox(width: 8),
           Expanded(child: Text('CAMERA FEED IS ENCRYPTED AND ONLY VISIBLE TO AUTHORIZED PARENTS.',
-              style: GoogleFonts.plusJakartaSans(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 1, color: AppColors.slate400))),
+              style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 1, color: AppColors.slate400))),
         ]),
       ),
     ]);

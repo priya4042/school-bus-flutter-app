@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import '../../../core/theme/app_theme.dart';
 
 /// Exact DashboardCard: bg-white p-6 border border-slate-200 rounded-xl shadow-sm
@@ -51,16 +51,16 @@ class StatCard extends StatelessWidget {
           ]),
           const SizedBox(height: 14),
           // Value: text-3xl font-bold
-          Text(value, style: GoogleFonts.plusJakartaSans(
+          Text(value, style: TextStyle(fontFamily: 'PlusJakartaSans', 
             fontSize: 26, fontWeight: FontWeight.w900, color: AppColors.slate800, letterSpacing: -1)),
           const SizedBox(height: 4),
           // Title: text-sm font-medium text-slate-500 uppercase tracking-wider
-          Text(title.toUpperCase(), style: GoogleFonts.plusJakartaSans(
+          Text(title.toUpperCase(), style: TextStyle(fontFamily: 'PlusJakartaSans', 
             fontSize: 9, fontWeight: FontWeight.w900, color: AppColors.slate500,
             letterSpacing: 2)),
           if (subtitle != null) ...[
             const SizedBox(height: 4),
-            Text(subtitle!, style: GoogleFonts.plusJakartaSans(
+            Text(subtitle!, style: TextStyle(fontFamily: 'PlusJakartaSans', 
               fontSize: 10, fontWeight: FontWeight.w700, color: c)),
           ],
         ]),
@@ -113,7 +113,7 @@ class StatusBadge extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: borderColor ?? color.withOpacity(0.1)),
       ),
-      child: Text(label, style: GoogleFonts.plusJakartaSans(
+      child: Text(label, style: TextStyle(fontFamily: 'PlusJakartaSans', 
         fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2, color: color)),
     );
   }
@@ -134,12 +134,12 @@ class EmptyState extends StatelessWidget {
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           Icon(icon, size: 56, color: AppColors.slate300),
           const SizedBox(height: 16),
-          Text(title.toUpperCase(), style: GoogleFonts.plusJakartaSans(
+          Text(title.toUpperCase(), style: TextStyle(fontFamily: 'PlusJakartaSans', 
             fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2, color: AppColors.slate400)),
           if (subtitle != null) ...[
             const SizedBox(height: 8),
             Text(subtitle!, textAlign: TextAlign.center,
-                style: GoogleFonts.plusJakartaSans(fontSize: 12, color: AppColors.slate400)),
+                style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 12, color: AppColors.slate400)),
           ],
         ]),
       ),
@@ -171,11 +171,11 @@ class MiniLoader extends StatelessWidget {
             shaderCallback: (bounds) => const LinearGradient(
               colors: [AppColors.primary, AppColors.cyan500],
             ).createShader(bounds),
-            child: Text('SBW', style: GoogleFonts.plusJakartaSans(
+            child: Text('SBW', style: TextStyle(fontFamily: 'PlusJakartaSans', 
               fontSize: 14, fontWeight: FontWeight.w900, color: Colors.white)),
           ),
           const SizedBox(height: 8),
-          Text('CLOUD SYNC IN PROGRESS', style: GoogleFonts.plusJakartaSans(
+          Text('CLOUD SYNC IN PROGRESS', style: TextStyle(fontFamily: 'PlusJakartaSans', 
             fontSize: 9, fontWeight: FontWeight.w700, letterSpacing: 2, color: AppColors.slate400)),
         ]),
       ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/notification_provider.dart';
@@ -61,8 +61,8 @@ class _SupportScreenState extends State<SupportScreen> with SingleTickerProvider
           indicator: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10),
               boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)]),
           indicatorSize: TabBarIndicatorSize.tab, dividerColor: Colors.transparent,
-          labelStyle: GoogleFonts.plusJakartaSans(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
-          unselectedLabelStyle: GoogleFonts.plusJakartaSans(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
+          labelStyle: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
+          unselectedLabelStyle: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
           labelColor: AppColors.primary, unselectedLabelColor: AppColors.slate400,
           tabs: const [Tab(text: 'CONTACT'), Tab(text: 'FAQ')],
         ),
@@ -81,7 +81,7 @@ class _SupportScreenState extends State<SupportScreen> with SingleTickerProvider
                 child: const Icon(Icons.check_rounded, color: Colors.white, size: 20)),
               const SizedBox(width: 12),
               Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text('TICKET SUBMITTED', style: GoogleFonts.plusJakartaSans(
+                Text('TICKET SUBMITTED', style: TextStyle(fontFamily: 'PlusJakartaSans', 
                   fontSize: 12, fontWeight: FontWeight.w900, letterSpacing: -0.3, color: AppColors.emerald600)),
                 Text('WE\'LL RESPOND WITHIN 24H', style: AppTheme.labelXs.copyWith(color: AppColors.emerald600)),
               ])),
@@ -100,10 +100,10 @@ class _SupportScreenState extends State<SupportScreen> with SingleTickerProvider
                 boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 20)],
               ),
               child: Column(children: [
-                Text('HOW CAN WE HELP?', style: GoogleFonts.plusJakartaSans(
+                Text('HOW CAN WE HELP?', style: TextStyle(fontFamily: 'PlusJakartaSans', 
                   fontSize: 20, fontWeight: FontWeight.w900, letterSpacing: -0.5, color: Colors.white)),
                 const SizedBox(height: 8),
-                Text('SEARCH OUR HELP CENTER', style: GoogleFonts.plusJakartaSans(
+                Text('SEARCH OUR HELP CENTER', style: TextStyle(fontFamily: 'PlusJakartaSans', 
                   fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 3, color: Colors.white.withOpacity(0.4))),
               ]),
             ),
@@ -123,7 +123,7 @@ class _SupportScreenState extends State<SupportScreen> with SingleTickerProvider
         SingleChildScrollView(padding: const EdgeInsets.all(16), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           TextField(
             onChanged: (v) => setState(() => _faqSearch = v),
-            style: GoogleFonts.plusJakartaSans(fontSize: 13, fontWeight: FontWeight.w700),
+            style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 13, fontWeight: FontWeight.w700),
             decoration: AppTheme.inputDecoration('SEARCH FAQS', icon: Icons.search_rounded),
           ),
           const SizedBox(height: 16),
@@ -142,10 +142,10 @@ class _SupportScreenState extends State<SupportScreen> with SingleTickerProvider
                   decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10),
                       boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 4)]),
                   child: const Icon(Icons.help_outline_rounded, color: AppColors.primary, size: 18)),
-                title: Text(f['q']!.toUpperCase(), style: GoogleFonts.plusJakartaSans(
+                title: Text(f['q']!.toUpperCase(), style: TextStyle(fontFamily: 'PlusJakartaSans', 
                   fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: -0.3, color: AppColors.slate800)),
                 childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                children: [Text(f['a']!, style: GoogleFonts.plusJakartaSans(
+                children: [Text(f['a']!, style: TextStyle(fontFamily: 'PlusJakartaSans', 
                   fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 2, color: AppColors.slate400, height: 1.8))],
               ),
             ),
@@ -183,7 +183,7 @@ class _SupportScreenState extends State<SupportScreen> with SingleTickerProvider
         ]),
         const SizedBox(height: 20),
         TextField(controller: _subjectCtrl, decoration: AppTheme.inputDecoration('SUBJECT'),
-            style: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate800)),
+            style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate800)),
         const SizedBox(height: 12),
         Text('PRIORITY', style: AppTheme.labelSmall),
         const SizedBox(height: 8),
@@ -198,7 +198,7 @@ class _SupportScreenState extends State<SupportScreen> with SingleTickerProvider
               decoration: BoxDecoration(
                 color: sel ? c : AppColors.slate100,
                 borderRadius: BorderRadius.circular(12)),
-              child: Text(p, style: GoogleFonts.plusJakartaSans(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2,
+              child: Text(p, style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2,
                   color: sel ? Colors.white : AppColors.slate500)),
             ),
           ));
@@ -206,7 +206,7 @@ class _SupportScreenState extends State<SupportScreen> with SingleTickerProvider
         const SizedBox(height: 16),
         TextField(controller: _descCtrl, maxLines: 5,
             decoration: AppTheme.inputDecoration('DESCRIBE YOUR ISSUE'),
-            style: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate800)),
+            style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate800)),
         const SizedBox(height: 20),
         Row(children: [
           Expanded(child: SizedBox(height: 52, child: ElevatedButton(onPressed: () => setState(() => _showTicketForm = false),
@@ -216,7 +216,7 @@ class _SupportScreenState extends State<SupportScreen> with SingleTickerProvider
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), boxShadow: AppTheme.primaryButtonShadow()),
             child: ElevatedButton.icon(onPressed: _submitTicket, style: AppTheme.primaryButton,
               icon: const Icon(Icons.send_rounded, size: 16),
-              label: Text('SUBMIT', style: GoogleFonts.plusJakartaSans(fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2))),
+              label: Text('SUBMIT', style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2))),
           ))),
         ]),
       ]),
@@ -237,7 +237,7 @@ class _SupportScreenState extends State<SupportScreen> with SingleTickerProvider
             child: Icon(icon, color: color, size: 22)),
           const SizedBox(width: 16),
           Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(title, style: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.w900, letterSpacing: -0.3, color: AppColors.slate900)),
+            Text(title, style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 14, fontWeight: FontWeight.w900, letterSpacing: -0.3, color: AppColors.slate900)),
             Text(sub, style: AppTheme.labelXs.copyWith(color: AppColors.slate400)),
           ])),
           const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: AppColors.slate300),
@@ -256,7 +256,7 @@ class _SupportScreenState extends State<SupportScreen> with SingleTickerProvider
           decoration: BoxDecoration(color: AppColors.slate50, borderRadius: BorderRadius.circular(10)),
           child: Icon(icon, color: color, size: 18)),
         const SizedBox(height: 6),
-        Text(label, style: GoogleFonts.plusJakartaSans(fontSize: 7, fontWeight: FontWeight.w900, letterSpacing: 1.5, color: AppColors.slate600)),
+        Text(label, style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 7, fontWeight: FontWeight.w900, letterSpacing: 1.5, color: AppColors.slate600)),
       ]),
     ));
   }

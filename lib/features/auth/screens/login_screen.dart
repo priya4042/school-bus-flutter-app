@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import 'register_screen.dart';
@@ -114,10 +114,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: const Icon(Icons.directions_bus_rounded, color: Colors.white, size: 36),
                         ),
                         const SizedBox(height: 16),
-                        Text('BUSWAY PRO', style: GoogleFonts.plusJakartaSans(
+                        Text('BUSWAY PRO', style: TextStyle(fontFamily: 'PlusJakartaSans', 
                           fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: -0.5, color: AppColors.slate800)),
                         const SizedBox(height: 2),
-                        Text('ENTERPRISE FLEET', style: GoogleFonts.plusJakartaSans(
+                        Text('ENTERPRISE FLEET', style: TextStyle(fontFamily: 'PlusJakartaSans', 
                           fontSize: 7, fontWeight: FontWeight.w900, letterSpacing: 3, color: AppColors.primary)),
                         const SizedBox(height: 24),
 
@@ -143,7 +143,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Column(children: [
                             TextFormField(
                               controller: _identifierCtrl,
-                              style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w700, fontSize: 14, color: AppColors.slate800),
+                              style: TextStyle(fontFamily: 'PlusJakartaSans', fontWeight: FontWeight.w700, fontSize: 14, color: AppColors.slate800),
                               decoration: _isParentMode
                                   ? AppTheme.inputDecoration('Admission No / Email', icon: Icons.badge_outlined)
                                   : AppTheme.adminInputDecoration('Email / Phone', icon: Icons.email_outlined),
@@ -153,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             TextFormField(
                               controller: _passwordCtrl,
                               obscureText: _obscurePassword,
-                              style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w700, fontSize: 14, color: AppColors.slate800),
+                              style: TextStyle(fontFamily: 'PlusJakartaSans', fontWeight: FontWeight.w700, fontSize: 14, color: AppColors.slate800),
                               decoration: (_isParentMode
                                   ? AppTheme.inputDecoration('Password', icon: Icons.lock_outlined)
                                   : AppTheme.adminInputDecoration('Password', icon: Icons.lock_outlined))
@@ -188,7 +188,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ? const SizedBox(height: 18, width: 18,
                                           child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
                                       : Text(_isParentMode ? 'ACCESS PORTAL' : 'ACCESS ADMIN',
-                                          style: GoogleFonts.plusJakartaSans(
+                                          style: TextStyle(fontFamily: 'PlusJakartaSans', 
                                             fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 3)),
                                 ),
                               ),
@@ -231,7 +231,7 @@ class _LoginScreenState extends State<LoginScreen> {
             blurRadius: 12, offset: const Offset(0, 4),
           )] : null,
         ),
-        child: Center(child: Text(label, style: GoogleFonts.plusJakartaSans(
+        child: Center(child: Text(label, style: TextStyle(fontFamily: 'PlusJakartaSans', 
           fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 2,
           color: selected ? Colors.white : AppColors.slate400,
         ))),

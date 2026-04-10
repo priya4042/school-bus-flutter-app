@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:intl/intl.dart';
 import '../../../core/providers/student_provider.dart';
 import '../../../core/providers/route_provider.dart';
@@ -141,12 +141,12 @@ class _StudentsScreenState extends State<StudentsScreen> with SingleTickerProvid
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       title: Text('DELETE ${s.fullName.toUpperCase()}?', style: AppTheme.headingSmall),
       content: Text('A snapshot will be saved in Reports for deleted students.',
-          style: GoogleFonts.plusJakartaSans(fontSize: 12, color: AppColors.slate500)),
+          style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 12, color: AppColors.slate500)),
       actions: [
         TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text('CANCEL', style: AppTheme.labelSmall.copyWith(color: AppColors.slate500))),
         ElevatedButton(onPressed: () => Navigator.pop(ctx, true),
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.danger),
-            child: Text('DELETE', style: GoogleFonts.plusJakartaSans(fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2))),
+            child: Text('DELETE', style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2))),
       ],
     ));
     if (ok == true) {
@@ -227,8 +227,8 @@ class _StudentsScreenState extends State<StudentsScreen> with SingleTickerProvid
           indicator: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10),
               boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)]),
           indicatorSize: TabBarIndicatorSize.tab, dividerColor: Colors.transparent,
-          labelStyle: GoogleFonts.plusJakartaSans(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
-          unselectedLabelStyle: GoogleFonts.plusJakartaSans(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
+          labelStyle: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
+          unselectedLabelStyle: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
           labelColor: AppColors.primary, unselectedLabelColor: AppColors.slate400,
           tabs: const [Tab(text: 'STUDENTS'), Tab(text: 'FEE MANAGEMENT')],
         ),
@@ -260,7 +260,7 @@ class _StudentsScreenState extends State<StudentsScreen> with SingleTickerProvid
         Padding(padding: const EdgeInsets.all(16), child: Row(children: [
           Expanded(child: TextField(
             onChanged: (v) => setState(() => _search = v),
-            style: GoogleFonts.plusJakartaSans(fontSize: 13, fontWeight: FontWeight.w700),
+            style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 13, fontWeight: FontWeight.w700),
             decoration: AppTheme.inputDecoration('SEARCH STUDENTS', icon: Icons.search_rounded),
           )),
           const SizedBox(width: 12),
@@ -308,7 +308,7 @@ class _StudentsScreenState extends State<StudentsScreen> with SingleTickerProvid
               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 16)))),
         const SizedBox(width: 12),
         Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(s.fullName.toUpperCase(), style: GoogleFonts.plusJakartaSans(
+          Text(s.fullName.toUpperCase(), style: TextStyle(fontFamily: 'PlusJakartaSans', 
             fontSize: 13, fontWeight: FontWeight.w900, letterSpacing: -0.3, color: AppColors.slate800)),
           Text('${s.admissionNumber} • ${s.displayGrade}'.toUpperCase(), style: AppTheme.labelXs.copyWith(color: AppColors.slate400)),
           if (s.routeName != null)
@@ -321,17 +321,17 @@ class _StudentsScreenState extends State<StudentsScreen> with SingleTickerProvid
             PopupMenuItem(value: 'fees', child: Row(children: [
               const Icon(Icons.receipt_long_rounded, size: 16, color: AppColors.primary),
               const SizedBox(width: 8),
-              Text('VIEW FEES', style: GoogleFonts.plusJakartaSans(fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1)),
+              Text('VIEW FEES', style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1)),
             ])),
             PopupMenuItem(value: 'edit', child: Row(children: [
               const Icon(Icons.edit_rounded, size: 16, color: AppColors.slate500),
               const SizedBox(width: 8),
-              Text('EDIT', style: GoogleFonts.plusJakartaSans(fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1)),
+              Text('EDIT', style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1)),
             ])),
             PopupMenuItem(value: 'delete', child: Row(children: [
               const Icon(Icons.delete_rounded, size: 16, color: AppColors.danger),
               const SizedBox(width: 8),
-              Text('DELETE', style: GoogleFonts.plusJakartaSans(fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1, color: AppColors.danger)),
+              Text('DELETE', style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1, color: AppColors.danger)),
             ])),
           ],
           onSelected: (v) {
@@ -355,7 +355,7 @@ class _StudentsScreenState extends State<StudentsScreen> with SingleTickerProvid
     return SingleChildScrollView(padding: const EdgeInsets.all(16), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Row(children: [
         IconButton(onPressed: () => setState(() => _viewingFees = null), icon: const Icon(Icons.arrow_back_rounded)),
-        Expanded(child: Text('${s.fullName.toUpperCase()} — FEES', style: GoogleFonts.plusJakartaSans(
+        Expanded(child: Text('${s.fullName.toUpperCase()} — FEES', style: TextStyle(fontFamily: 'PlusJakartaSans', 
           fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: -0.5, color: AppColors.slate800))),
       ]),
       const SizedBox(height: 12),
@@ -373,13 +373,13 @@ class _StudentsScreenState extends State<StudentsScreen> with SingleTickerProvid
         decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14), border: Border.all(color: AppColors.slate100)),
         child: Row(children: [
           Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(d.fullMonthLabel.toUpperCase(), style: GoogleFonts.plusJakartaSans(
+            Text(d.fullMonthLabel.toUpperCase(), style: TextStyle(fontFamily: 'PlusJakartaSans', 
               fontSize: 12, fontWeight: FontWeight.w900, color: AppColors.slate800)),
             const SizedBox(height: 4),
             StatusBadge.fromStatus(d.isPaid ? 'PAID' : d.isOverdue ? 'OVERDUE' : 'PENDING'),
           ])),
           Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-            Text(Formatters.currencyFull(d.totalDue), style: GoogleFonts.plusJakartaSans(
+            Text(Formatters.currencyFull(d.totalDue), style: TextStyle(fontFamily: 'PlusJakartaSans', 
               fontSize: 13, fontWeight: FontWeight.w900, color: AppColors.slate800)),
             if (d.lateFee > 0) Text('LATE: ${Formatters.currencyFull(d.lateFee)}',
                 style: AppTheme.labelXs.copyWith(color: AppColors.danger)),
@@ -410,7 +410,7 @@ class _StudentsScreenState extends State<StudentsScreen> with SingleTickerProvid
           border: Border.all(color: color.withOpacity(0.1))),
       child: Column(children: [
         Text(label, style: AppTheme.labelXs), const SizedBox(height: 4),
-        Text(value, style: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.w900, color: color)),
+        Text(value, style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 14, fontWeight: FontWeight.w900, color: color)),
       ]),
     );
   }
@@ -449,7 +449,7 @@ class _StudentsScreenState extends State<StudentsScreen> with SingleTickerProvid
           SwitchListTile(
             value: _generateFees,
             onChanged: (v) => setState(() => _generateFees = v),
-            title: Text('GENERATE FEE RECORDS', style: GoogleFonts.plusJakartaSans(
+            title: Text('GENERATE FEE RECORDS', style: TextStyle(fontFamily: 'PlusJakartaSans', 
               fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1, color: AppColors.slate700)),
             subtitle: Text('CREATE BILLING DURING REGISTRATION', style: AppTheme.labelXs.copyWith(color: AppColors.slate400)),
             contentPadding: EdgeInsets.zero,
@@ -460,7 +460,7 @@ class _StudentsScreenState extends State<StudentsScreen> with SingleTickerProvid
                 onTap: () => setState(() => _yearlyMode = false),
                 child: Container(padding: const EdgeInsets.symmetric(vertical: 10),
                   decoration: BoxDecoration(color: !_yearlyMode ? AppColors.primary : AppColors.slate100, borderRadius: BorderRadius.circular(10)),
-                  child: Center(child: Text('MONTHLY', style: GoogleFonts.plusJakartaSans(
+                  child: Center(child: Text('MONTHLY', style: TextStyle(fontFamily: 'PlusJakartaSans', 
                     fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2, color: !_yearlyMode ? Colors.white : AppColors.slate500)))),
               )),
               const SizedBox(width: 8),
@@ -468,7 +468,7 @@ class _StudentsScreenState extends State<StudentsScreen> with SingleTickerProvid
                 onTap: () => setState(() => _yearlyMode = true),
                 child: Container(padding: const EdgeInsets.symmetric(vertical: 10),
                   decoration: BoxDecoration(color: _yearlyMode ? AppColors.primary : AppColors.slate100, borderRadius: BorderRadius.circular(10)),
-                  child: Center(child: Text('FINANCIAL YEAR', style: GoogleFonts.plusJakartaSans(
+                  child: Center(child: Text('FINANCIAL YEAR', style: TextStyle(fontFamily: 'PlusJakartaSans', 
                     fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2, color: _yearlyMode ? Colors.white : AppColors.slate500)))),
               )),
             ]),
@@ -494,7 +494,7 @@ class _StudentsScreenState extends State<StudentsScreen> with SingleTickerProvid
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), boxShadow: AppTheme.primaryButtonShadow()),
           child: ElevatedButton(onPressed: _saveStudent, style: AppTheme.primaryButton,
             child: Text(_editing != null ? 'UPDATE STUDENT' : 'REGISTER STUDENT',
-                style: GoogleFonts.plusJakartaSans(fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2))),
+                style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2))),
         )),
       ],
     )));
@@ -538,13 +538,13 @@ class _StudentsScreenState extends State<StudentsScreen> with SingleTickerProvid
             Text('FINE PREVIEW', style: AppTheme.labelSmall.copyWith(color: AppColors.amber600)),
             const SizedBox(height: 8),
             Text('Day 1: ₹0  •  Day ${_fineAfterC + 1}: ₹${_finePerDayC.toInt()}  •  Day ${_fineAfterC + 7}: ₹${(_finePerDayC * 7).toInt()}',
-                style: GoogleFonts.plusJakartaSans(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.amber600)),
+                style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.amber600)),
           ]),
         ),
         const SizedBox(height: 16),
         SizedBox(width: double.infinity, height: 52, child: ElevatedButton(
           onPressed: _createSingleFee, style: AppTheme.primaryButton,
-          child: Text('CREATE FEE', style: GoogleFonts.plusJakartaSans(fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)))),
+          child: Text('CREATE FEE', style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)))),
       ]));
     }
 
@@ -559,7 +559,7 @@ class _StudentsScreenState extends State<StudentsScreen> with SingleTickerProvid
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(12), boxShadow: AppTheme.primaryButtonShadow()),
-              child: Text('+ CREATE FEE', style: GoogleFonts.plusJakartaSans(
+              child: Text('+ CREATE FEE', style: TextStyle(fontFamily: 'PlusJakartaSans', 
                 fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2, color: Colors.white)),
             ),
           ),
@@ -582,7 +582,7 @@ class _StudentsScreenState extends State<StudentsScreen> with SingleTickerProvid
                     decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(10)),
                     child: Center(child: Text((student?.fullName ?? 'S')[0].toUpperCase(),
                         style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900)))),
-                  title: Text(student?.fullName.toUpperCase() ?? 'UNKNOWN', style: GoogleFonts.plusJakartaSans(
+                  title: Text(student?.fullName.toUpperCase() ?? 'UNKNOWN', style: TextStyle(fontFamily: 'PlusJakartaSans', 
                     fontSize: 12, fontWeight: FontWeight.w900, color: AppColors.slate800)),
                   subtitle: Row(children: [
                     Text('DUE: ${Formatters.currencyFull(totalDue)}', style: AppTheme.labelXs.copyWith(color: AppColors.primary)),
@@ -597,11 +597,11 @@ class _StudentsScreenState extends State<StudentsScreen> with SingleTickerProvid
                     decoration: BoxDecoration(color: AppColors.slate50, borderRadius: BorderRadius.circular(10)),
                     child: Row(children: [
                       Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Text(d.monthLabel.toUpperCase(), style: GoogleFonts.plusJakartaSans(
+                        Text(d.monthLabel.toUpperCase(), style: TextStyle(fontFamily: 'PlusJakartaSans', 
                           fontSize: 11, fontWeight: FontWeight.w900, color: AppColors.slate700)),
                         StatusBadge.fromStatus(d.isPaid ? 'PAID' : d.isOverdue ? 'OVERDUE' : 'PENDING'),
                       ])),
-                      Text(Formatters.currencyFull(d.totalDue), style: GoogleFonts.plusJakartaSans(
+                      Text(Formatters.currencyFull(d.totalDue), style: TextStyle(fontFamily: 'PlusJakartaSans', 
                         fontSize: 12, fontWeight: FontWeight.w900, color: AppColors.slate800)),
                       if (!d.isPaid) PopupMenuButton<String>(
                         icon: const Icon(Icons.more_vert_rounded, size: 16, color: AppColors.slate400),
@@ -632,14 +632,14 @@ class _StudentsScreenState extends State<StudentsScreen> with SingleTickerProvid
     child: Container(
       padding: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(border: Border(bottom: BorderSide(color: color.withOpacity(0.1)))),
-      child: Text(text, style: GoogleFonts.plusJakartaSans(fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 3, color: color)),
+      child: Text(text, style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 3, color: color)),
     ),
   );
 
   Widget _f(String l, TextEditingController c, bool req, [TextInputType t = TextInputType.text]) => Padding(
     padding: const EdgeInsets.only(bottom: 12),
     child: TextFormField(controller: c, keyboardType: t,
-      style: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate800),
+      style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate800),
       decoration: AppTheme.inputDecoration(l),
       validator: req ? (v) => v?.isEmpty ?? true ? 'Required' : null : null),
   );
@@ -648,8 +648,8 @@ class _StudentsScreenState extends State<StudentsScreen> with SingleTickerProvid
     padding: const EdgeInsets.only(bottom: 12),
     child: DropdownButtonFormField<String>(
       value: value, decoration: AppTheme.inputDecoration(label),
-      style: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate800),
-      items: [DropdownMenuItem(value: null, child: Text('SELECT...', style: GoogleFonts.plusJakartaSans(color: AppColors.slate400))), ...items],
+      style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.slate800),
+      items: [DropdownMenuItem(value: null, child: Text('SELECT...', style: TextStyle(fontFamily: 'PlusJakartaSans', color: AppColors.slate400))), ...items],
       onChanged: onChanged),
   );
 
@@ -663,7 +663,7 @@ class _StudentsScreenState extends State<StudentsScreen> with SingleTickerProvid
       Row(children: [
         IconButton(icon: const Icon(Icons.remove_rounded, size: 16), onPressed: () => onChanged(value - 1), padding: EdgeInsets.zero, constraints: const BoxConstraints()),
         Padding(padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Text('$value', style: GoogleFonts.plusJakartaSans(fontSize: 14, fontWeight: FontWeight.w900, color: AppColors.slate800))),
+          child: Text('$value', style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 14, fontWeight: FontWeight.w900, color: AppColors.slate800))),
         IconButton(icon: const Icon(Icons.add_rounded, size: 16), onPressed: () => onChanged(value + 1), padding: EdgeInsets.zero, constraints: const BoxConstraints()),
       ]),
     ]),

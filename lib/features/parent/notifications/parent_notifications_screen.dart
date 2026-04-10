@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/notification_provider.dart';
 import '../../../core/theme/app_theme.dart';
@@ -97,17 +97,17 @@ class _ParentNotificationsScreenState extends State<ParentNotificationsScreen> {
                               const SizedBox(width: 12),
                               Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                                 Row(children: [
-                                  Expanded(child: Text(n.title, style: GoogleFonts.plusJakartaSans(
+                                  Expanded(child: Text(n.title, style: TextStyle(fontFamily: 'PlusJakartaSans', 
                                     fontSize: 12, fontWeight: n.isRead ? FontWeight.w700 : FontWeight.w900, color: AppColors.slate800))),
                                   if (!n.isRead) Container(width: 8, height: 8,
                                       decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle)),
                                 ]),
                                 const SizedBox(height: 4),
                                 Text(n.message, maxLines: 2, overflow: TextOverflow.ellipsis,
-                                    style: GoogleFonts.plusJakartaSans(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.slate500)),
+                                    style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.slate500)),
                                 const SizedBox(height: 6),
                                 Text(Formatters.relativeTime(n.createdAt).toUpperCase(),
-                                    style: GoogleFonts.plusJakartaSans(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2, color: AppColors.slate300)),
+                                    style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2, color: AppColors.slate300)),
                               ])),
                             ]),
                           ),
@@ -128,7 +128,7 @@ class _ParentNotificationsScreenState extends State<ParentNotificationsScreen> {
           color: selected ? AppColors.primary : AppColors.slate100,
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Text(label, style: GoogleFonts.plusJakartaSans(
+        child: Text(label, style: TextStyle(fontFamily: 'PlusJakartaSans', 
           fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 1.5,
           color: selected ? Colors.white : AppColors.slate500)),
       ),

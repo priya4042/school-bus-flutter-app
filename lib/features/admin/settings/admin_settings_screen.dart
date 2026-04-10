@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../../../core/providers/auth_provider.dart';
@@ -92,8 +92,8 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> with SingleTi
           indicator: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10),
               boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)]),
           indicatorSize: TabBarIndicatorSize.tab, dividerColor: Colors.transparent,
-          labelStyle: GoogleFonts.plusJakartaSans(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
-          unselectedLabelStyle: GoogleFonts.plusJakartaSans(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
+          labelStyle: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
+          unselectedLabelStyle: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2),
           labelColor: AppColors.primary, unselectedLabelColor: AppColors.slate400,
           tabs: const [Tab(text: 'FEE ENGINE'), Tab(text: 'SECURITY')],
         ),
@@ -111,7 +111,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> with SingleTi
                   style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w900)))),
               const SizedBox(width: 14),
               Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(auth.user?.fullName ?? '', style: GoogleFonts.plusJakartaSans(
+                Text(auth.user?.fullName ?? '', style: TextStyle(fontFamily: 'PlusJakartaSans', 
                   fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: -0.5, color: AppColors.slate800)),
                 Text(auth.user?.isSuperAdmin ?? false ? 'SUPER ADMIN' : 'ADMIN',
                     style: AppTheme.labelXs.copyWith(color: AppColors.primary)),
@@ -128,7 +128,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> with SingleTi
               const Divider(height: 24),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text('NO-SKIP CONSTRAINT', style: GoogleFonts.plusJakartaSans(
+                  Text('NO-SKIP CONSTRAINT', style: TextStyle(fontFamily: 'PlusJakartaSans', 
                     fontSize: 11, fontWeight: FontWeight.w900, color: AppColors.slate800)),
                   Text(_strictNoSkip ? 'STRICT — PARENTS MUST PAY IN ORDER' : 'LAX — ANY MONTH IN ANY ORDER',
                       style: AppTheme.labelXs.copyWith(color: AppColors.slate500)),
@@ -158,11 +158,11 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> with SingleTi
           Container(padding: const EdgeInsets.all(20), decoration: AppTheme.cardLargeDecoration,
             child: Column(children: [
               TextField(controller: _qrUrlCtrl,
-                style: GoogleFonts.plusJakartaSans(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.slate800),
+                style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.slate800),
                 decoration: AppTheme.inputDecoration('ADMIN QR IMAGE URL', icon: Icons.qr_code_rounded)),
               const SizedBox(height: 12),
               TextField(controller: _upiIdCtrl,
-                style: GoogleFonts.plusJakartaSans(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.slate800),
+                style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.slate800),
                 decoration: AppTheme.inputDecoration('ADMIN UPI ID', icon: Icons.account_balance_rounded)),
               if (_qrUrlCtrl.text.isNotEmpty) ...[
                 const SizedBox(height: 12),
@@ -184,11 +184,11 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> with SingleTi
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), boxShadow: AppTheme.primaryButtonShadow()),
               child: ElevatedButton.icon(onPressed: _saveSettings, style: AppTheme.primaryButton,
                 icon: const Icon(Icons.cloud_upload_rounded, size: 16),
-                label: Text('COMMIT GLOBAL CHANGES', style: GoogleFonts.plusJakartaSans(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2))),
+                label: Text('COMMIT GLOBAL CHANGES', style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2))),
             ))),
             const SizedBox(width: 12),
             SizedBox(height: 52, child: ElevatedButton(onPressed: _resetDefaults, style: AppTheme.secondaryButton,
-              child: Text('RESET', style: GoogleFonts.plusJakartaSans(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2)))),
+              child: Text('RESET', style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 2)))),
           ]),
           const SizedBox(height: 20),
 
@@ -215,7 +215,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> with SingleTi
               decoration: BoxDecoration(color: AppColors.slate50, borderRadius: BorderRadius.circular(16)),
               child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text('ENFORCE 2FA', style: GoogleFonts.plusJakartaSans(
+                  Text('ENFORCE 2FA', style: TextStyle(fontFamily: 'PlusJakartaSans', 
                     fontSize: 12, fontWeight: FontWeight.w900, color: AppColors.slate800)),
                   Text('DRIVERS & TEACHERS REQUIRE OTP LOGIN', style: AppTheme.labelXs.copyWith(color: AppColors.slate500)),
                 ])),
@@ -236,11 +236,11 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> with SingleTi
   Widget _settingRow(String label, TextEditingController ctrl, String hint) {
     return Row(children: [
       Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(label, style: GoogleFonts.plusJakartaSans(fontSize: 11, fontWeight: FontWeight.w900, color: AppColors.slate800)),
+        Text(label, style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 11, fontWeight: FontWeight.w900, color: AppColors.slate800)),
         Text(hint.toUpperCase(), style: AppTheme.labelXs.copyWith(color: AppColors.slate400)),
       ])),
       SizedBox(width: 80, child: TextField(controller: ctrl, keyboardType: TextInputType.number, textAlign: TextAlign.center,
-        style: GoogleFonts.plusJakartaSans(fontSize: 16, fontWeight: FontWeight.w900, color: AppColors.primary),
+        style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 16, fontWeight: FontWeight.w900, color: AppColors.primary),
         decoration: InputDecoration(filled: true, fillColor: AppColors.primary.withOpacity(0.05),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: AppColors.primary.withOpacity(0.2))),
           enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: AppColors.primary.withOpacity(0.2))),
@@ -252,7 +252,7 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> with SingleTi
     padding: const EdgeInsets.symmetric(vertical: 4),
     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       Text(label, style: AppTheme.labelXs.copyWith(color: AppColors.slate400)),
-      Text(value, style: GoogleFonts.plusJakartaSans(fontSize: 11, fontWeight: FontWeight.w900, color: AppColors.slate800)),
+      Text(value, style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 11, fontWeight: FontWeight.w900, color: AppColors.slate800)),
     ]),
   );
 
