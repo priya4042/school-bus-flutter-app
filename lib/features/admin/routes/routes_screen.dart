@@ -97,7 +97,7 @@ class _RoutesScreenState extends State<RoutesScreen> {
     return RefreshIndicator(
       onRefresh: () => prov.fetchRoutes(),
       child: prov.isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const MiniLoader()
           : prov.routes.isEmpty
               ? const EmptyState(icon: Icons.route_outlined, title: 'No routes yet')
               : ListView.builder(
