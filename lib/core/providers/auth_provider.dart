@@ -25,17 +25,25 @@ class AppAuthProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
+      // Wait for Supabase to restore session (with timeout)
       final session = _supabase.auth.currentSession;
       if (session != null) {
-        await _loadProfile(session.user.id);
+        await _loadProfile(session.user.id).timeout(
+          const Duration(seconds: 8),
+          onTimeout: () {
+            debugPrint('[Auth] Profile load timed out');
+          },
+        );
       }
     } catch (e) {
       _error = e.toString();
+      debugPrint('[Auth] Init error: $e');
     }
 
     _isLoading = false;
     notifyListeners();
 
+    // Listen for future auth changes
     _supabase.auth.onAuthStateChange.listen((data) async {
       if (data.event == AuthChangeEvent.signedIn && data.session != null) {
         await _loadProfile(data.session!.user.id);
@@ -53,13 +61,35 @@ class AppAuthProvider extends ChangeNotifier {
           .from('profiles')
           .select()
           .eq('id', userId)
-          .maybeSingle();
+          .maybeSingle()
+          .timeout(const Duration(seconds: 6));
 
       if (res != null) {
         _user = AppUser.fromMap(res);
+      } else {
+        // Fallback: build minimal user from auth session
+        final authUser = _supabase.auth.currentUser;
+        if (authUser != null) {
+          _user = AppUser(
+            id: authUser.id,
+            email: authUser.email ?? '',
+            fullName: authUser.userMetadata?['full_name'] ?? authUser.email ?? 'User',
+            role: UserRole.parent,
+          );
+        }
       }
     } catch (e) {
-      _error = 'Failed to load profile: $e';
+      debugPrint('[Auth] Failed to load profile: $e');
+      // Fallback: build minimal user from auth session
+      final authUser = _supabase.auth.currentUser;
+      if (authUser != null) {
+        _user = AppUser(
+          id: authUser.id,
+          email: authUser.email ?? '',
+          fullName: authUser.email ?? 'User',
+          role: UserRole.parent,
+        );
+      }
     }
   }
 
