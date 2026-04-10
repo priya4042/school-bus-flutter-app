@@ -97,7 +97,15 @@ class AppColors {
 }
 
 class AppTheme {
-  static TextStyle get _baseTextStyle => GoogleFonts.plusJakartaSans();
+  // Use the font preloaded in index.html — GoogleFonts.plusJakartaSans() as primary,
+  // with CSS fallback 'Plus Jakarta Sans' if runtime download fails
+  static TextStyle get _baseTextStyle {
+    try {
+      return GoogleFonts.plusJakartaSans();
+    } catch (_) {
+      return const TextStyle(fontFamily: 'Plus Jakarta Sans');
+    }
+  }
 
   // Exact label style: text-[10px] font-black uppercase tracking-widest
   static TextStyle get labelStyle => _baseTextStyle.copyWith(
@@ -278,10 +286,17 @@ class AppTheme {
   );
 
   static ThemeData get lightTheme {
-    final textTheme = GoogleFonts.plusJakartaSansTextTheme();
+    // Build text theme with Plus Jakarta Sans — works both on web (preloaded via HTML)
+    // and on mobile (downloaded by GoogleFonts package)
+    final baseTheme = ThemeData(brightness: Brightness.light);
+    final textTheme = GoogleFonts.plusJakartaSansTextTheme(baseTheme.textTheme).apply(
+      bodyColor: AppColors.slate800,
+      displayColor: AppColors.slate800,
+    );
 
     return ThemeData(
       useMaterial3: true,
+      fontFamily: GoogleFonts.plusJakartaSans().fontFamily,
       colorScheme: ColorScheme.fromSeed(
         seedColor: AppColors.primary,
         brightness: Brightness.light,
